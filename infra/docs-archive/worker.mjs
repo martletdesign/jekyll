@@ -1,6 +1,8 @@
 // A deliberately narrow R2 gateway: only the Worker may possess bucket write
 // access. R2 conditional writes provide create-only object creation; the
 // public endpoint exposes only the immutable committed manifest's inventory.
+import {catalogRequest} from './catalog.mjs';
+import {promotionRequest} from './promotion.mjs';
 const encoder = new TextEncoder();
 const versionRE = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
 const digestRE = /^[a-f0-9]{64}$/;
@@ -9,6 +11,10 @@ const maxBytes = 16 * 1024 * 1024;
 function fail(status, message) { return new Response(message, {status, headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}}); }
 function validVersion(v) { const m = versionRE.exec(v); return !!m && !(m[4] && m[4].split('.').some(x => /^\d+$/.test(x) && x.length > 1 && x[0] === '0')); }
 function validPath(p) { return !!p && pathRE.test(p) && p.split('/').every(x => x && x !== '.' && x !== '..'); }
+function htmlNoindex(bytes) {
+  const tags=new TextDecoder().decode(bytes).match(/<meta\b[^>]*>/gi)||[];
+  return tags.some(tag=>/\bname\s*=\s*["']robots["']/i.test(tag)&&/\bcontent\s*=\s*["'][^"']*\bnoindex\b/i.test(tag));
+}
 async function digest(bytes) { return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', bytes)), b => b.toString(16).padStart(2, '0')).join(''); }
 async function authorized(request, env) {
   if (typeof env.ARCHIVE_WRITE_TOKEN !== 'string' || env.ARCHIVE_WRITE_TOKEN.length < 32) return false;
@@ -19,10 +25,16 @@ async function authorized(request, env) {
 }
 function parseManifest(bytes, env, version) {
   let m; try { m = JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes)); } catch { throw Error('invalid manifest'); }
+  const integrity = value => typeof value==='string' && /^sha512-[A-Za-z0-9+/]{86}==$/.test(value);
+  const dependency = m.core===null
+    ? m.legacyTheme?.name===`@${env.FAMILY}/theme` && validVersion(m.legacyTheme?.version||'') && integrity(m.legacyTheme?.integrity) && digestRE.test(m.legacyTheme?.sourceShellSha256||'')
+    : m.legacyTheme===undefined && m.core?.name===`@${env.FAMILY}/core` && validVersion(m.core?.version||'') && integrity(m.core?.integrity);
   if (m.schemaVersion !== 1 || m.family !== env.FAMILY || m.framework !== 'jekyll' || m.docsVersion !== version || m.basePath !== `/docs/v/${version}/` ||
       m.implementation?.kind !== 'git' || m.implementation.name !== `${env.FAMILY}design/jekyll` || m.implementation.version !== version || m.implementation.tag !== `v${version}` ||
       m.source?.repository !== `${env.FAMILY}design/jekyll` || m.source.tag !== `v${version}` || !/^[a-f0-9]{40}$/.test(m.source.commit || '') ||
-      m.core !== null || m.legacyTheme?.name !== `@${env.FAMILY}/theme` || !validVersion(m.legacyTheme?.version || '') || !/^sha512-[A-Za-z0-9+/]{86}==$/.test(m.legacyTheme?.integrity || '') || !digestRE.test(m.legacyTheme?.sourceShellSha256 || '') ||
+      !dependency || !(m.fixtures?.source==='repository' && m.fixtures.workbenchCommit===undefined || (m.fixtures?.source===undefined || m.fixtures.source==='workbench') && /^[a-f0-9]{40}$/.test(m.fixtures?.workbenchCommit||'')) ||
+      !m.toolchain || typeof m.toolchain!=='object' || Array.isArray(m.toolchain) || typeof m.toolchain.ruby!=='string' || !Object.values(m.toolchain).every(x=>typeof x==='string'&&/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(x)) ||
+      typeof m.createdAt!=='string' || Number.isNaN(Date.parse(m.createdAt)) || new Date(m.createdAt).toISOString()!==m.createdAt ||
       m.indexing !== 'noindex' || !Array.isArray(m.files) || m.files.length === 0 || m.files.length > 10000) throw Error('invalid manifest identity');
   const seen = new Set();
   for (const f of m.files) {
@@ -30,6 +42,7 @@ function parseManifest(bytes, env, version) {
     seen.add(f.path);
   }
   if (!seen.has('index.html')) throw Error('missing index');
+  if(m.core===null&&!m.files.some(f=>f.path==='assets/css/shell.css'&&f.sha256===m.legacyTheme.sourceShellSha256))throw Error('legacy shell digest mismatch');
   return m;
 }
 async function readObject(bucket, key) {
@@ -50,9 +63,8 @@ export default { async fetch(request, env) {
   if(prefixPath && (!/^\/(?:[A-Za-z0-9._~-]+)(?:\/[A-Za-z0-9._~-]+)*$/.test(prefixPath)||prefixPath.split('/').some(x=>x==='.'||x==='..')))return fail(503,'invalid deployment prefix');
   if(prefixPath&&!url.pathname.startsWith(prefixPath+'/'))return fail(404,'not found');
   const pathname=url.pathname.slice(prefixPath.length);
-  // The shared catalog contract currently requires a /core identity and cannot
-  // represent this legacy-theme snapshot honestly. Keep promotion unavailable.
-  if(pathname==='/_archive/catalog'||pathname==='/docs/catalog.json'||pathname.startsWith('/docs/catalog-history/')||pathname==='/_archive/promotion'||pathname==='/docs/latest.json'||pathname==='/docs/'||pathname.startsWith('/docs/promotion-history/'))return fail(503,'Jekyll catalog and promotion are not configured');
+  if(pathname==='/_archive/catalog'||pathname==='/docs/catalog.json'||pathname.startsWith('/docs/catalog-history/'))return catalogRequest(request,env,authorized,pathname);
+  if(pathname==='/_archive/promotion'||pathname==='/docs/latest.json'||pathname==='/docs/'||pathname.startsWith('/docs/promotion-history/'))return promotionRequest(request,env,authorized,pathname,prefixPath);
   const segments = pathname.split('/');
   const upload = segments[1] === '_archive' && segments[2] === 'v';
   const read = segments[1] === 'docs' && segments[2] === 'v';
@@ -77,7 +89,7 @@ export default { async fetch(request, env) {
       if (request.headers.get('x-manifest-sha256') !== await digest(bytes)) return fail(400,'manifest digest mismatch');
       for (const file of manifest.files) {
         const object = await readObject(env.ARCHIVES,prefix+file.path);
-        if (!object || object.length !== file.size || await digest(object) !== file.sha256) return fail(409,'archive object missing or corrupt');
+        if (!object || object.length !== file.size || await digest(object) !== file.sha256 || (file.path.endsWith('.html')&&!htmlNoindex(object))) return fail(409,'archive object missing, corrupt or indexable');
       }
     }
     if (!await create(env.ARCHIVES,prefix+path,bytes)) return fail(409,'object already exists');

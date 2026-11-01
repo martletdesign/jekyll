@@ -17,8 +17,9 @@ export async function createSnapshot({buildRoot,archiveRoot,metadata,coreLock,ba
   }
   if(baseline.versions.some(x=>x.version===metadata.docsVersion))throw Error('Version already exists in baseline');
   parseVersion(metadata.docsVersion);
-  const core=coreLock?.packages?.[`node_modules/${metadata.core?.name}`];
-  if(core?.version!==metadata.core?.version||core?.integrity!==metadata.core?.integrity)throw Error('Exact core package and integrity do not match build lock');
+  const dependency=metadata.core===null?metadata.legacyTheme:metadata.core;
+  const locked=coreLock?.packages?.[`node_modules/${dependency?.name}`];
+  if(locked?.version!==dependency?.version||locked?.integrity!==dependency?.integrity)throw Error('Exact core or legacy design package and integrity do not match build lock');
   const destination=join(archiveRoot,metadata.docsVersion);
   await mkdir(destination); // Atomic no-clobber reservation; existing snapshots are never replaced.
   try {

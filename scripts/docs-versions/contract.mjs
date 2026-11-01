@@ -19,8 +19,13 @@ export function validateManifest(m){
   need(m.implementation?.version===m.docsVersion && m.implementation?.tag===`v${m.docsVersion}`,'Implementation version or tag mismatch');
   if(m.framework==='jekyll') need(m.implementation.kind==='git' && m.implementation.name===`${m.family}design/jekyll`,'Invalid Jekyll authority');
   else need(m.implementation?.kind==='npm' && m.implementation.name===`@${m.family}/${m.framework}`,'Invalid npm implementation');
-  need(m.core?.name===`@${m.family}/core`,'Invalid core identity');parseVersion(m.core?.version);
-  need(typeof m.core.integrity==='string' && /^sha512-[A-Za-z0-9+/]{86}==$/.test(m.core.integrity),'Invalid core integrity');
+  if(m.core===null){
+    need(m.framework==='jekyll' && m.legacyTheme?.name===`@${m.family}/theme`,'Invalid legacy theme identity');parseVersion(m.legacyTheme?.version);
+    need(typeof m.legacyTheme.integrity==='string' && /^sha512-[A-Za-z0-9+/]{86}==$/.test(m.legacyTheme.integrity) && validDigest(m.legacyTheme.sourceShellSha256),'Invalid legacy theme integrity');
+  } else {
+    need(m.legacyTheme===undefined && m.core?.name===`@${m.family}/core`,'Invalid or ambiguous core identity');parseVersion(m.core?.version);
+    need(typeof m.core.integrity==='string' && /^sha512-[A-Za-z0-9+/]{86}==$/.test(m.core.integrity),'Invalid core integrity');
+  }
   need(m.source?.repository===`${m.family}design/${m.framework}` && /^[a-f0-9]{40}$/.test(m.source?.commit??'') && m.source.tag===m.implementation.tag,'Invalid source provenance');
   need((m.fixtures?.source==='repository' && m.fixtures.workbenchCommit===undefined) || ((m.fixtures?.source===undefined || m.fixtures.source==='workbench') && /^[a-f0-9]{40}$/.test(m.fixtures?.workbenchCommit??'')),'Unpinned or ambiguous fixtures');
   need(m.toolchain && typeof m.toolchain==='object' && !Array.isArray(m.toolchain) && Object.keys(m.toolchain).length>0 && Object.values(m.toolchain).every(x=>typeof x==='string'&&/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(x)),'Missing or unpinned build toolchain');
@@ -30,6 +35,7 @@ export function validateManifest(m){
   need(Array.isArray(m.files)&&m.files.length>0,'Missing archive inventory');
   const names=new Set();for(const file of m.files){need(validPath(file.path)&&file.path!=='manifest.json'&&!names.has(file.path)&&Number.isSafeInteger(file.size)&&file.size>=0&&validDigest(file.sha256),'Invalid archive entry');names.add(file.path);}
   need(names.has('index.html'),'Archive must include an index');
+  if(m.core===null)need(m.files.some(f=>f.path==='assets/css/shell.css'&&f.sha256===m.legacyTheme.sourceShellSha256),'Legacy shell digest does not match archive');
   return m;
 }
 
@@ -74,9 +80,12 @@ export function validateCatalog(catalog,previous){
     const parsed=parseVersion(entry.version);need(!seen.has(entry.version)&&parsed.channel===entry.channel&&validDigest(entry.manifestSha256)&&typeof entry.supported==='boolean','Invalid catalog entry');seen.add(entry.version);
     need(Array.isArray(entry.topics)&&entry.topics.every(validPath)&&new Set(entry.topics).size===entry.topics.length,'Invalid topic list');
   }
-  const latest=catalog.versions.find(x=>x.version===catalog.latestStable);need(latest?.channel==='stable'&&latest.supported,'Latest must be a supported stable release');
+  const supported=catalog.versions.filter(x=>x.channel==='stable'&&x.supported);
+  const latest=catalog.versions.find(x=>x.version===catalog.latestStable);
+  if(supported.length)need(latest?.channel==='stable'&&latest.supported,'Latest must be a supported stable release');
+  else need(catalog.latestStable===null,'Catalog without supported stable releases must have no latest');
   const compare=(a,b)=>{const x=a.split('.').map(BigInt),y=b.split('.').map(BigInt);for(let i=0;i<3;i++)if(x[i]!==y[i])return x[i]>y[i]?1:-1;return 0;};
-  need(catalog.versions.filter(x=>x.channel==='stable'&&x.supported).every(x=>compare(latest.version,x.version)>=0),'Latest does not identify the newest supported stable release');
+  need(supported.every(x=>compare(latest.version,x.version)>=0),'Latest does not identify the newest supported stable release');
   if(previous){
     need(previous.family===catalog.family&&previous.framework===catalog.framework,'Catalog authority changed');
     for(const old of previous.versions){const now=catalog.versions.find(x=>x.version===old.version);need(now&&now.manifestSha256===old.manifestSha256&&now.channel===old.channel&&isDeepStrictEqual(now.topics,old.topics),'Historical snapshot removed or rewritten');}

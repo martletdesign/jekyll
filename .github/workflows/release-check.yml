@@ -11,7 +11,7 @@ jobs:
           persist-credentials: false
       - run: python3 -m unittest discover -s tests -p 'test_release_guard.py'
       - run: python3 -m unittest discover -s tests -p 'test_docs_gate.py'
-      - run: node --test scripts/docs-versions/jekyll.test.mjs
+      - run: node --test scripts/docs-versions/*.test.mjs
 
   archive-build:
     runs-on: ubuntu-latest

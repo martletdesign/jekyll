@@ -6,6 +6,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import worker from '../infra/docs-archive/worker.mjs';
+import {validateManifest,validateCatalog} from '../scripts/docs-versions/contract.mjs';
 
 // In-memory R2 models conditional puts only; this does not prove R2 IAM or WORM.
 crypto.subtle.timingSafeEqual=(a,b)=>timingSafeEqual(Buffer.from(a),Buffer.from(b));
@@ -29,11 +30,10 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    const dir=join(dest,'docs','v',version), evidence=JSON.parse(await readFile(join(dir,'nightjar-local-evidence.json'),'utf8'));
    const extra=await readFile(join(dir,'nightjar-local-evidence.json'));const files=[...evidence.files,{path:'nightjar-local-evidence.json',size:extra.length,sha256:sha(extra)}];
    const family=evidence.family, legacy=evidence.source_shell, tag=`v${version}`;
-   const manifest={schemaVersion:1,family,framework:'jekyll',docsVersion:version,basePath:`/docs/v/${version}/`,implementation:{kind:'git',name:`${family}design/jekyll`,version,tag},source:{repository:`${family}design/jekyll`,commit,tag},core:null,legacyTheme:{name:legacy.legacy_package,version:legacy.legacy_version,integrity:legacy.legacy_registry_integrity,sourceShellSha256:legacy.sha256},indexing:'noindex',files};
+   const manifest={schemaVersion:1,family,framework:'jekyll',docsVersion:version,basePath:`/docs/v/${version}/`,implementation:{kind:'git',name:`${family}design/jekyll`,version,tag},source:{repository:`${family}design/jekyll`,commit,tag},core:null,legacyTheme:{name:legacy.legacy_package,version:legacy.legacy_version,integrity:legacy.legacy_registry_integrity,sourceShellSha256:legacy.sha256},fixtures:{source:'repository'},toolchain:{ruby:'3.2.3'},createdAt:'2026-11-01T00:00:00.000Z',indexing:'noindex',files};
+   assert.equal(validateManifest(manifest),manifest);
    const env={FAMILY:family,ARCHIVES:new MockR2(),ARCHIVE_WRITE_TOKEN:token,DEPLOY_PREFIX:prefix};
    const call=(path,method='GET',body,headers={})=>worker.fetch(new Request(`https://example.invalid${prefix}${path}`,{method,body,headers:{authorization:`Bearer ${token}`,...headers}}),env);
-   assert.equal((await call('/docs/catalog.json')).status,503);
-   assert.equal((await call('/_archive/promotion','PUT','{}')).status,503);
    const root=`/_archive/v/${version}/`;const index=await readFile(join(dir,'index.html'));
    assert.equal((await worker.fetch(new Request(`https://example.invalid${prefix}${root}index.html`,{method:'PUT',body:index}),env)).status,401);
    for(const file of files){const bytes=await readFile(join(dir,file.path));assert.equal((await call(root+file.path,'PUT',bytes)).status,201,file.path);}
@@ -41,6 +41,7 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
     {...manifest,core:{name:`@${family}/core`}},
     {...manifest,legacyTheme:{...manifest.legacyTheme,name:`@${family}/core`}},
     {...manifest,legacyTheme:{...manifest.legacyTheme,integrity:'unverified'}},
+    {...manifest,legacyTheme:{...manifest.legacyTheme,sourceShellSha256:'f'.repeat(64)}},
     {...manifest,source:{...manifest.source,commit:'unverified'}}
    ]){
     const bad=Buffer.from(JSON.stringify(invalid));
@@ -48,6 +49,18 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    }
    const m=Buffer.from(JSON.stringify(manifest));assert.equal((await call(root+'manifest.json','PUT',m,{'x-manifest-sha256':sha(m)})).status,201);
    assert.equal((await call(root+'index.html','PUT',index)).status,409,'committed file cannot be overwritten');
+   const firstCatalog={schemaVersion:1,family,framework:'jekyll',previousSha256:null,latestStable:null,versions:[{version,channel:'prerelease',manifestSha256:sha(m),supported:false,topics:files.filter(x=>x.path.endsWith('.html')).map(x=>x.path)}]};
+   assert.equal(validateCatalog(firstCatalog),firstCatalog);
+   const catalog=Buffer.from(JSON.stringify(firstCatalog));
+   assert.equal((await call('/_archive/catalog','PUT',catalog,{'x-previous-catalog-sha256':'none'})).status,201);
+   assert.equal(sha(Buffer.from(await (await call('/docs/catalog.json')).arrayBuffer())),sha(catalog));
+   const rewritten=Buffer.from(JSON.stringify({...firstCatalog,previousSha256:sha(catalog),versions:[{...firstCatalog.versions[0],manifestSha256:'f'.repeat(64)}]}));
+   assert.equal((await call('/_archive/catalog','PUT',rewritten,{'x-previous-catalog-sha256':sha(catalog)})).status,409);
+   const advance=description=>call('/_archive/catalog','PUT',Buffer.from(JSON.stringify({...firstCatalog,previousSha256:sha(catalog),description})),{'x-previous-catalog-sha256':sha(catalog)});
+   assert.deepEqual((await Promise.all([advance('one'),advance('two')])).map(x=>x.status).sort(),[201,409]);
+   assert.equal(sha(Buffer.from(await (await call(`/docs/catalog-history/${sha(catalog)}.json`)).arrayBuffer())),sha(catalog));
+   const promotion=Buffer.from(JSON.stringify({schemaVersion:1,family,framework:'jekyll',previousSha256:null,catalogSha256:sha(catalog),version,operation:'promote',reason:''}));
+   assert.notEqual((await call('/_archive/promotion','PUT',promotion,{'x-previous-promotion-sha256':'none'})).status,201,'prerelease must never become latest stable');
    for(const file of files){const response=await call(`/docs/v/${version}/${file.path}`);assert.equal(response.status,200,file.path);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(bytes.length,file.size);assert.equal(sha(bytes),file.sha256,file.path);}
    const html=await (await call(`/docs/v/${version}/`)).text();assert.match(html,/Documentation versions/);assert.match(html,/noindex/);
    env.ARCHIVES.data.set(`${family}/jekyll/${version}/index.html`,Buffer.from('tampered'));
@@ -55,4 +68,63 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    console.log(`${family} ${prefix||'/'}: ${files.length} actual files verified through the local R2 test double`);
   }
  }finally{await rm(tmp,{recursive:true,force:true});}
+});
+
+test('stable promotion, concurrency and explicit rollback use verified immutable catalog history',async()=>{
+ const provenance=JSON.parse(await readFile('scripts/source-shell-provenance.json','utf8')),family=provenance.family;
+ const env={FAMILY:family,ARCHIVES:new MockR2(),ARCHIVE_WRITE_TOKEN:token,DEPLOY_PREFIX:'/preview'};
+ const call=(path,method='GET',body,headers={})=>worker.fetch(new Request(`https://example.invalid/preview${path}`,{method,body,headers:{authorization:`Bearer ${token}`,...headers}}),env);
+ const shell=await readFile('assets/css/shell.css');assert.equal(sha(shell),provenance.source_shell_sha256);
+ const fixture=async(version)=>{
+  const html=Buffer.from('<meta name="robots" content="noindex"><h1>Fixture</h1>'),tag=`v${version}`;
+  const files=[{path:'index.html',size:html.length,sha256:sha(html)},{path:'assets/css/shell.css',size:shell.length,sha256:sha(shell)}];
+  const manifest={schemaVersion:1,family,framework:'jekyll',docsVersion:version,basePath:`/docs/v/${version}/`,implementation:{kind:'git',name:`${family}design/jekyll`,version,tag},source:{repository:`${family}design/jekyll`,commit:'a'.repeat(40),tag},core:null,legacyTheme:{name:provenance.legacy_package,version:provenance.legacy_version,integrity:provenance.legacy_registry_integrity,sourceShellSha256:sha(shell)},fixtures:{source:'repository'},toolchain:{ruby:'3.2.3'},createdAt:'2026-11-01T00:00:00.000Z',indexing:'noindex',files};
+  validateManifest(manifest);const root=`/_archive/v/${version}/`;
+  assert.equal((await call(root+'index.html','PUT',html)).status,201);assert.equal((await call(root+'assets/css/shell.css','PUT',shell)).status,201);
+  const bytes=Buffer.from(JSON.stringify(manifest));assert.equal((await call(root+'manifest.json','PUT',bytes,{'x-manifest-sha256':sha(bytes)})).status,201);
+  return {version,channel:'stable',manifestSha256:sha(bytes),supported:true,topics:['index.html']};
+ };
+ const first=await fixture('1.0.0'),second=await fixture('2.0.0');
+ const c1={schemaVersion:1,family,framework:'jekyll',previousSha256:null,latestStable:'1.0.0',versions:[first]}, b1=Buffer.from(JSON.stringify(c1));
+ assert.equal((await call('/_archive/catalog','PUT',b1,{'x-previous-catalog-sha256':'none'})).status,201);
+ const p1={schemaVersion:1,family,framework:'jekyll',previousSha256:null,catalogSha256:sha(b1),version:'1.0.0',operation:'promote',reason:''},q1=Buffer.from(JSON.stringify(p1));
+ assert.equal((await call('/_archive/promotion','PUT',q1,{'x-previous-promotion-sha256':'none'})).status,201);
+ assert.equal((await call('/docs/')).headers.get('location'),'/preview/docs/v/1.0.0/');
+ const c2={...c1,previousSha256:sha(b1),latestStable:'2.0.0',versions:[first,second]},b2=Buffer.from(JSON.stringify(c2));
+ assert.equal((await call('/_archive/catalog','PUT',b2,{'x-previous-catalog-sha256':sha(b1)})).status,201);
+ const p2={...p1,previousSha256:sha(q1),catalogSha256:sha(b2),version:'2.0.0'},q2=Buffer.from(JSON.stringify(p2));
+ assert.equal((await call('/_archive/promotion','PUT',q2,{'x-previous-promotion-sha256':sha(q1)})).status,201);
+ assert.equal((await call('/docs/')).headers.get('location'),'/preview/docs/v/2.0.0/');
+ const c3={...c2,previousSha256:sha(b2),latestStable:'1.0.0',versions:[first,{...second,supported:false}]},b3=Buffer.from(JSON.stringify(c3));
+ assert.equal((await call('/_archive/catalog','PUT',b3,{'x-previous-catalog-sha256':sha(b2)})).status,201);
+ assert.equal((await call('/docs/')).status,503,'withdrawn latest requires reconciliation');
+ const bad={...p2,previousSha256:sha(q2),catalogSha256:sha(b3),version:'1.0.0',operation:'promote'},badBytes=Buffer.from(JSON.stringify(bad));
+ assert.equal((await call('/_archive/promotion','PUT',badBytes,{'x-previous-promotion-sha256':sha(q2)})).status,409);
+ const rollback={...bad,operation:'rollback',reason:'Bad release withdrawn'},back=Buffer.from(JSON.stringify(rollback));
+ assert.equal((await call('/_archive/promotion','PUT',back,{'x-previous-promotion-sha256':sha(q2)})).status,201);
+ assert.equal((await call('/docs/')).headers.get('location'),'/preview/docs/v/1.0.0/');
+ assert.equal(sha(Buffer.from(await (await call(`/docs/promotion-history/${sha(q2)}.json`)).arrayBuffer())),sha(q2));
+});
+
+test('indexable HTML and core-plus-legacy ambiguity are rejected before commit',async()=>{
+ const p=JSON.parse(await readFile('scripts/source-shell-provenance.json','utf8')),family=p.family,version='9.9.9',tag=`v${version}`;
+ const env={FAMILY:family,ARCHIVES:new MockR2(),ARCHIVE_WRITE_TOKEN:token};
+ const call=(path,body,extra={})=>worker.fetch(new Request(`https://example.invalid${path}`,{method:'PUT',body,headers:{authorization:`Bearer ${token}`,...extra}}),env);
+ const html=Buffer.from('<h1>Indexable</h1>'),shell=await readFile('assets/css/shell.css'),root=`/_archive/v/${version}/`;
+ const files=[{path:'index.html',size:html.length,sha256:sha(html)},{path:'assets/css/shell.css',size:shell.length,sha256:sha(shell)}];
+ const m={schemaVersion:1,family,framework:'jekyll',docsVersion:version,basePath:`/docs/v/${version}/`,implementation:{kind:'git',name:`${family}design/jekyll`,version,tag},source:{repository:`${family}design/jekyll`,commit:'a'.repeat(40),tag},core:null,legacyTheme:{name:p.legacy_package,version:p.legacy_version,integrity:p.legacy_registry_integrity,sourceShellSha256:sha(shell)},fixtures:{source:'repository'},toolchain:{ruby:'3.2.3'},createdAt:'2026-11-01T00:00:00.000Z',indexing:'noindex',files};
+ assert.equal((await call(root+'index.html',html)).status,201);assert.equal((await call(root+'assets/css/shell.css',shell)).status,201);
+ const bytes=Buffer.from(JSON.stringify(m));assert.equal((await call(root+'manifest.json',bytes,{'x-manifest-sha256':sha(bytes)})).status,409);
+ const ambiguous=Buffer.from(JSON.stringify({...m,core:{name:`@${family}/core`,version:'2.0.0',integrity:p.legacy_registry_integrity}}));
+ assert.equal((await call(root+'manifest.json',ambiguous,{'x-manifest-sha256':sha(ambiguous)})).status,400);
+ assert.equal((await worker.fetch(new Request(`https://example.invalid/docs/v/${version}/`),env)).status,404);
+});
+
+test('a truthful Jekyll Core manifest remains compatible',async()=>{
+ const family=JSON.parse(await readFile('scripts/source-shell-provenance.json','utf8')).family,version='9.9.9',tag=`v${version}`,html=Buffer.from('<meta name="robots" content="noindex"><h1>Fixture</h1>');
+ const env={FAMILY:family,ARCHIVES:new MockR2(),ARCHIVE_WRITE_TOKEN:token};
+ const call=(path,body,extra={})=>worker.fetch(new Request(`https://example.invalid${path}`,{method:'PUT',body,headers:{authorization:`Bearer ${token}`,...extra}}),env);
+ const m={schemaVersion:1,family,framework:'jekyll',docsVersion:version,basePath:`/docs/v/${version}/`,implementation:{kind:'git',name:`${family}design/jekyll`,version,tag},source:{repository:`${family}design/jekyll`,commit:'a'.repeat(40),tag},core:{name:`@${family}/core`,version:'2.2.3',integrity:`sha512-${Buffer.alloc(64,1).toString('base64')}`},fixtures:{source:'repository'},toolchain:{ruby:'3.2.3'},createdAt:'2026-11-01T00:00:00.000Z',indexing:'noindex',files:[{path:'index.html',size:html.length,sha256:sha(html)}]};
+ validateManifest(m);const root=`/_archive/v/${version}/`;assert.equal((await call(root+'index.html',html)).status,201);
+ const bytes=Buffer.from(JSON.stringify(m));assert.equal((await call(root+'manifest.json',bytes,{'x-manifest-sha256':sha(bytes)})).status,201);
 });
