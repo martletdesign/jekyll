@@ -73,7 +73,7 @@ export default { async fetch(request, env) {
     if(!catalog.ok)return fail(503,'version catalog unavailable');
     const data=await catalog.json();
     const entries=data.versions.map(entry=>{
-      const label=entry.channel==='prerelease'?' (prerelease)':entry.supported?'':' (unsupported)';
+      const label=(entry.channel==='prerelease'?' (prerelease)':'')+(entry.supported?'':' (unsupported)');
       return `<li><a href="${prefixPath}/docs/v/${entry.version}/">${entry.version}</a>${label}</li>`;
     }).join('');
     const body=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Documentation versions</title></head><body><main><h1>Documentation versions</h1><ul>${entries}</ul></main></body></html>`;

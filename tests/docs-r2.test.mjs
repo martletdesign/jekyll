@@ -61,7 +61,7 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    assert.equal((await call('/_archive/catalog','PUT',catalog,{'x-previous-catalog-sha256':'none'})).status,201);
    assert.equal(sha(Buffer.from(await (await call('/docs/catalog.json')).arrayBuffer())),sha(catalog));
    const catalogIndex=await call('/docs/versions/');assert.equal(catalogIndex.status,200);assert.match(catalogIndex.headers.get('content-type'),/text\/html/);assert.equal(catalogIndex.headers.get('cache-control'),'no-store');
-   const indexHtml=await catalogIndex.text();assert.match(indexHtml,/Documentation versions/);assert.ok(indexHtml.includes(`href="${prefix}/docs/v/${version}/"`));assert.match(indexHtml,/prerelease/);
+   const indexHtml=await catalogIndex.text();assert.match(indexHtml,/Documentation versions/);assert.ok(indexHtml.includes(`href="${prefix}/docs/v/${version}/"`));assert.match(indexHtml,/prerelease/);assert.match(indexHtml,/unsupported/);
    assert.equal((await call('/docs/versions/','HEAD')).status,200);
    const rewritten=Buffer.from(JSON.stringify({...firstCatalog,previousSha256:sha(catalog),versions:[{...firstCatalog.versions[0],manifestSha256:'f'.repeat(64)}]}));
    assert.equal((await call('/_archive/catalog','PUT',rewritten,{'x-previous-catalog-sha256':sha(catalog)})).status,409);
