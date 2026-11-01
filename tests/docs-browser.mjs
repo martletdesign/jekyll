@@ -28,9 +28,13 @@ try {
   const response=await page.goto(`http://127.0.0.1:${port}${prefix}/docs/v/1.1.0-rc.1/examples/home/`);assert.equal(response.status(),200);
   assert.match(await page.locator('meta[name="robots"]').getAttribute('content'),/noindex/);
   const nav=page.getByRole('navigation',{name:'Documentation versions'});assert.equal(await nav.count(),1);
+  const allVersions=nav.getByRole('link',{name:'Browse all documentation versions'});
+  assert.equal(await allVersions.getAttribute('href'),`${prefix}/docs/versions/`);
   assert.equal(await nav.getByRole('link',{name:/1\.1\.0-rc\.1/}).getAttribute('aria-current'),'page');
   assert.match(await nav.innerText(),/prerelease/);
   if(js){const axe=await new AxeBuilder({page}).analyze();assert.deepEqual(axe.violations.map(v=>v.id),[]);}
+  await allVersions.click();assert.equal(new URL(page.url()).pathname,`${prefix}/docs/versions/`);
+  await page.goBack();
   await nav.getByRole('link',{name:'1.0.0',exact:true}).click();assert.equal(new URL(page.url()).pathname,`${prefix}/docs/v/1.0.0/`);
   const dashboard=await page.goto(`http://127.0.0.1:${port}${prefix}/docs/v/1.1.0-rc.1/examples/dashboard-analytics/`);assert.equal(dashboard.status(),200);
   await page.getByRole('navigation',{name:'Documentation versions'}).getByRole('link',{name:'1.0.0',exact:true}).click();

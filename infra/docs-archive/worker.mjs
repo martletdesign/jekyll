@@ -64,6 +64,21 @@ export default { async fetch(request, env) {
   if(prefixPath && (!/^\/(?:[A-Za-z0-9._~-]+)(?:\/[A-Za-z0-9._~-]+)*$/.test(prefixPath)||prefixPath.split('/').some(x=>x==='.'||x==='..')))return fail(503,'invalid deployment prefix');
   if(prefixPath&&!url.pathname.startsWith(prefixPath+'/'))return fail(404,'not found');
   const pathname=url.pathname.slice(prefixPath.length);
+  if(pathname==='/docs/versions/'){
+    if(request.method!=='GET'&&request.method!=='HEAD')return fail(405,'method not allowed');
+    // catalogRequest validates the schema, version strings and content-addressed
+    // bytes before any value is rendered. The catalog itself still requires the
+    // independently protected off-bucket history checkpoint before production.
+    const catalog=await catalogRequest(new Request(request.url),env,authorized,'/docs/catalog.json');
+    if(!catalog.ok)return fail(503,'version catalog unavailable');
+    const data=await catalog.json();
+    const entries=data.versions.map(entry=>{
+      const label=entry.channel==='prerelease'?' (prerelease)':entry.supported?'':' (unsupported)';
+      return `<li><a href="${prefixPath}/docs/v/${entry.version}/">${entry.version}</a>${label}</li>`;
+    }).join('');
+    const body=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Documentation versions</title></head><body><main><h1>Documentation versions</h1><ul>${entries}</ul></main></body></html>`;
+    return new Response(request.method==='HEAD'?null:body,{headers:{'content-type':'text/html; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff','x-robots-tag':'noindex, follow'}});
+  }
   if(pathname==='/_archive/catalog'||pathname==='/docs/catalog.json'||pathname.startsWith('/docs/catalog-history/'))return catalogRequest(request,env,authorized,pathname);
   if(pathname==='/_archive/promotion'||pathname==='/docs/latest.json'||pathname==='/docs/'||pathname.startsWith('/docs/promotion-history/'))return promotionRequest(request,env,authorized,pathname,prefixPath);
   const segments = pathname.split('/');

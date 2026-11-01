@@ -3,4 +3,5 @@
   <ul>{% for version in site.archive_versions %}
     <li><a href="{{ site.archive_prefix }}/docs/v/{{ version | escape }}/"{% if version == site.archive_version %} aria-current="page"{% endif %}>{{ version | escape }}{% if version == site.archive_version %} (current){% endif %}</a></li>
   {% endfor %}</ul>
+  <p><a href="{{ site.archive_prefix }}/docs/versions/">Browse all documentation versions</a></p>
 </nav>

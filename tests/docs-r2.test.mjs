@@ -34,6 +34,7 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    assert.equal(validateManifest(manifest),manifest);
    const env={FAMILY:family,ARCHIVES:new MockR2(),ARCHIVE_WRITE_TOKEN:token,DEPLOY_PREFIX:prefix};
    const call=(path,method='GET',body,headers={})=>worker.fetch(new Request(`https://example.invalid${prefix}${path}`,{method,body,headers:{authorization:`Bearer ${token}`,...headers}}),env);
+   assert.equal((await call('/docs/versions/')).status,503,'missing catalog fails closed');
    const root=`/_archive/v/${version}/`;const index=await readFile(join(dir,'index.html'));
    assert.equal((await worker.fetch(new Request(`https://example.invalid${prefix}${root}index.html`,{method:'PUT',body:index}),env)).status,401);
    for(const file of files){const bytes=await readFile(join(dir,file.path));assert.equal((await call(root+file.path,'PUT',bytes)).status,201,file.path);}
@@ -59,6 +60,9 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    const catalog=Buffer.from(JSON.stringify(firstCatalog));
    assert.equal((await call('/_archive/catalog','PUT',catalog,{'x-previous-catalog-sha256':'none'})).status,201);
    assert.equal(sha(Buffer.from(await (await call('/docs/catalog.json')).arrayBuffer())),sha(catalog));
+   const catalogIndex=await call('/docs/versions/');assert.equal(catalogIndex.status,200);assert.match(catalogIndex.headers.get('content-type'),/text\/html/);assert.equal(catalogIndex.headers.get('cache-control'),'no-store');
+   const indexHtml=await catalogIndex.text();assert.match(indexHtml,/Documentation versions/);assert.ok(indexHtml.includes(`href="${prefix}/docs/v/${version}/"`));assert.match(indexHtml,/prerelease/);
+   assert.equal((await call('/docs/versions/','HEAD')).status,200);
    const rewritten=Buffer.from(JSON.stringify({...firstCatalog,previousSha256:sha(catalog),versions:[{...firstCatalog.versions[0],manifestSha256:'f'.repeat(64)}]}));
    assert.equal((await call('/_archive/catalog','PUT',rewritten,{'x-previous-catalog-sha256':sha(catalog)})).status,409);
    const advance=description=>call('/_archive/catalog','PUT',Buffer.from(JSON.stringify({...firstCatalog,previousSha256:sha(catalog),description})),{'x-previous-catalog-sha256':sha(catalog)});
@@ -107,6 +111,9 @@ test('stable promotion, concurrency and explicit rollback use verified immutable
  assert.equal((await call('/docs/')).headers.get('location'),'/preview/docs/v/1.0.0/');
  const c2={...c1,previousSha256:sha(b1),latestStable:'2.0.0',versions:[first,second]},b2=Buffer.from(JSON.stringify(c2));
  assert.equal((await call('/_archive/catalog','PUT',b2,{'x-previous-catalog-sha256':sha(b1)})).status,201);
+ const versions=await (await call('/docs/versions/')).text();
+ assert.ok(versions.includes('href="/preview/docs/v/1.0.0/"'));assert.ok(versions.includes('href="/preview/docs/v/2.0.0/"'));
+ assert.equal((await call('/docs/v/1.0.0/')).status,200,'old archive remains readable after newer catalog');
  const p2={...p1,previousSha256:sha(q1),catalogSha256:sha(b2),version:'2.0.0'},q2=Buffer.from(JSON.stringify(p2));
  assert.equal((await call('/_archive/promotion','PUT',q2,{'x-previous-promotion-sha256':sha(q1)})).status,201);
  assert.equal((await call('/docs/')).headers.get('location'),'/preview/docs/v/2.0.0/');

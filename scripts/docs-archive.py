@@ -88,6 +88,17 @@ try:
     workbench=json.loads((stage/'nightjar/PROVENANCE.json').read_text())
     evidence={'format':'local-jekyll-docs-prototype-v1','framework':'jekyll','family':shell['family'],'version':args.version,'base_path':base+'/', 'implementation_commit':None,'implementation_commit_reason':'Local prototype does not authenticate a release commit','workbench_export_commit':workbench['workbench_commit'], 'core':None,'core_reason':'This shell predates the npm core migration', 'source_shell':{**provenance,'sha256':digest,'contract_source':shell['contract_source'],'contract_sha256':shell['contract_sha256']},'files':files}
     (target/'nightjar-local-evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
+    # A local, honest fallback keeps archived links usable without a deployed
+    # catalog service. It lives outside immutable snapshots and is never replaced
+    # by subsequent builds or used to advance the production latest pointer.
+    versions_dir=parent/'docs'/'versions'
+    if versions_dir.is_symlink() or (versions_dir.exists() and not versions_dir.is_dir()):raise SystemExit('Unsafe versions index directory')
+    versions_dir.mkdir(parents=True,exist_ok=True)
+    index=versions_dir/'index.html'
+    if index.is_symlink() or (index.exists() and not index.is_file()):raise SystemExit('Unsafe versions index')
+    if not index.exists():
+      with index.open('x',encoding='utf-8') as out:
+        out.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Documentation versions</title></head><body><main><h1>Documentation versions</h1><p>The live version catalog is unavailable in this offline archive. Use the version links in the snapshot.</p></main></body></html>\n')
     print(f'Built {len(files)} local documentation files for {args.version} at {target}')
 except BaseException:
   shutil.rmtree(target)
