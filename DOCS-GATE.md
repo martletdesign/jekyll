@@ -1,0 +1,7 @@
+# Jekyll documentation release gate
+
+The source-release proposal must not produce a GitHub Release until the exact Jekyll version's documentation is built, archived and independently verified in immutable remote storage. `scripts/verify_docs.py` intentionally fails in both release jobs. It must be replaced by a reviewed implementation that authenticates stored archive and catalog history, verifies complete bytes and exact core dependency integrity, prevents overwrites, and proves stable historical URLs before activation.
+
+`scripts/docs-versions/{contract,snapshot}.mjs` are copied from workbench commit `658698c6b5b0469a04f1722819f20320277421f8`. Their local test uses synthetic Jekyll/Core identities and a fake integrity value to check both languages, successive snapshot preservation, core-lock mismatch, overwrites and tampering. It exercises the shared contract only. It does not demonstrate a Jekyll documentation build, prove that the existing vendored shell derives from the synthetic Core version, provide remote immutability, or establish live URL serving. Determine and verify the real source-shell/Core provenance before recording any exact Core dependency.
+
+The current static reference contains 50 canonical examples, but it lacks the version selector, archive-specific indexing and canonical URLs, immutable storage, protected catalog/pointer updates and recovery. Preserve the explicit fail-closed gate until those gaps are closed.
