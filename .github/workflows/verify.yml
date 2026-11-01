@@ -16,3 +16,5 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
       - run: BUNDLE_FROZEN=true python3 nightjar/verify.py
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
