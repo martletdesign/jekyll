@@ -31,3 +31,11 @@ jobs:
         env:
           BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
           BUNDLE_FROZEN: 'true'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --prefix infra/docs-archive --ignore-scripts --no-audit --no-fund
+      - run: node infra/docs-archive/smoke.mjs
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+          BUNDLE_FROZEN: 'true'
