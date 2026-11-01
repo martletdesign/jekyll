@@ -1,0 +1,7 @@
+# Jekyll source-release recovery
+
+This is an inactive proposal. The tracked `VERSION` is a development sentinel, not an authorization to tag. A reviewed release must update it, follow GitFlow, and point a protected immutable tag at the approved first-parent `main` commit. The `verify` and `release` jobs remain explicitly disabled pending separate activation authorization. No npm publication is involved.
+
+If a run stops before GitHub Release creation, preserve the run and its source archive and investigate the failing check. Never replace a tag. If creation might have succeeded, inspect the existing release and download both `source.zip` and `SHA256SUMS` from GitHub; verify the checksum against the source archive retained by the original run, confirm the exact repository, tag, commit, version and approved build. If any result differs or cannot be established, stop and investigate; never overwrite assets or retry publication automatically. If the release and assets are present and exactly match, record the run and recovery evidence. If a release exists with missing assets, coordinate manual recovery only after comparing the retained build, immutable tag and existing assets. Re-running the release job is intentionally rejected whenever a release already exists.
+
+The workflow does not yet implement immutable documentation archives or public historical documentation; release activation remains blocked until those requirements are met and tag rulesets are enforced.
