@@ -27,3 +27,7 @@ jobs:
         env:
           BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
           BUNDLE_FROZEN: 'true'
+      - run: node --test tests/docs-r2.test.mjs
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+          BUNDLE_FROZEN: 'true'
