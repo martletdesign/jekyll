@@ -1,10 +1,14 @@
 import os
+import runpy
 from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
+from urllib.error import HTTPError, URLError
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'scripts/release_guard.py'
+LOOKUP = SCRIPT.with_name('check_release_absent.py')
 
 def run(*args, cwd, env=None):
     return subprocess.run(args, cwd=cwd, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=True).stdout.strip()
@@ -75,5 +79,35 @@ class ReleaseGuardTests(unittest.TestCase):
         result=self.guard()
         self.assertNotEqual(result.returncode,0)
         self.assertIn('checked-out commit',result.stderr)
+
+class ReleaseLookupTests(unittest.TestCase):
+    def lookup(self, responses):
+        calls=iter(responses)
+        class Response:
+            def __init__(self, body): self.body=body
+            def __enter__(self): return self
+            def __exit__(self, *_): pass
+            def read(self, *_): return self.body
+        def open_url(*_args, **_kwargs):
+            result=next(calls)
+            if isinstance(result, Exception): raise result
+            return Response(result)
+        env={'GITHUB_REPOSITORY':'martletdesign/jekyll','GITHUB_REF_NAME':'v1.2.3','GH_TOKEN':'test-only'}
+        with patch.dict(os.environ,env), patch('urllib.request.urlopen',side_effect=open_url):
+            return runpy.run_path(str(LOOKUP),run_name='__main__')
+    @staticmethod
+    def http(status):
+        return HTTPError('https://api.github.invalid/',status,'test',{},None)
+    def test_only_verified_repository_and_missing_release_pass(self):
+        self.lookup([b'{"full_name":"martletdesign/jekyll"}',self.http(404)])
+    def test_existing_or_ambiguous_release_responses_fail_closed(self):
+        identity=b'{"full_name":"martletdesign/jekyll"}'
+        for response in (b'{}',self.http(401),self.http(403),self.http(500),URLError('offline')):
+            with self.subTest(response=response):
+                with self.assertRaises(SystemExit): self.lookup([identity,response])
+    def test_repository_identity_errors_and_mismatch_fail_closed(self):
+        for response in (b'{"full_name":"other/repository"}',b'not-json',self.http(404),self.http(403),URLError('offline')):
+            with self.subTest(response=response):
+                with self.assertRaises(SystemExit): self.lookup([response])
 
 if __name__ == '__main__': unittest.main()

@@ -1,5 +1,6 @@
 // Append-only promotion decisions with a separately CAS-protected live pointer.
 // No pointer update can delete historical records or snapshot objects.
+import {readLimited} from './read-limited.mjs';
 const enc=new TextEncoder(),hex=/^[a-f0-9]{64}$/;
 const sha=async b=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',b)),x=>x.toString(16).padStart(2,'0')).join('');
 const fail=(status,msg)=>new Response(msg,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}});
@@ -11,7 +12,7 @@ export async function promotionRequest(request,env,authorize,pathname,prefixPath
  try{
   if(pathname==='/_archive/promotion'){
    if(request.method!=='PUT')return fail(405,'method not allowed');if(!await authorize(request,env))return fail(401,'unauthorized');
-   const bytes=new Uint8Array(await request.arrayBuffer());if(bytes.length>65536)return fail(413,'too large');
+   const bytes=await readLimited(request,65536);if(!bytes)return fail(413,'too large');
    const x=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
    if(x.schemaVersion!==1||x.family!==env.FAMILY||x.framework!=='jekyll'||!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(x.version||'')||!hex.test(x.catalogSha256||'')||!(x.previousSha256===null||hex.test(x.previousSha256||''))||!['promote','rollback'].includes(x.operation)||typeof x.reason!=='string'||x.reason.length>500||(x.operation==='rollback'&&x.reason.trim().length<10))return fail(400,'invalid promotion');
    const catalogPointer=await pointer(bucket,base+'catalog-pointer.json');if(!catalogPointer||catalogPointer.hash!==x.catalogSha256)return fail(409,'catalog changed');

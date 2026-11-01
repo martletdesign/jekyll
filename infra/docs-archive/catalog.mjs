@@ -1,5 +1,6 @@
 // Append-only catalog objects plus a CAS-protected pointer. A bucket owner can
 // still bypass this code, so clients must pin an independently trusted digest.
+import {readLimited} from './read-limited.mjs';
 const enc=new TextEncoder(),hex=/^[a-f0-9]{64}$/;
 const version=/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
 const path=/^[A-Za-z0-9._~/-]+$/;
@@ -23,7 +24,7 @@ export async function catalogRequest(request,env,authorize,pathname){
  const url=new URL(request.url),base=`${env.FAMILY}/jekyll/`,bucket=env.ARCHIVES;
  if(pathname==='/_archive/catalog'){
   if(request.method!=='PUT')return bad(405,'method not allowed');if(!await authorize(request,env))return bad(401,'unauthorized');
-  const bytes=new Uint8Array(await request.arrayBuffer());if(bytes.length>1024*1024)return bad(413,'too large');
+  const bytes=await readLimited(request,1024*1024);if(!bytes)return bad(413,'too large');
   let c;try{c=parse(bytes,env);}catch{return bad(400,'invalid catalog');}
   try{
    const cur=await pointer(bucket,base),current=cur?await load(bucket,base+`catalogs/${cur.hash}.json`,cur.hash,env):null,digest=await sha(bytes);

@@ -3,6 +3,7 @@
 // public endpoint exposes only the immutable committed manifest's inventory.
 import {catalogRequest} from './catalog.mjs';
 import {promotionRequest} from './promotion.mjs';
+import {readLimited} from './read-limited.mjs';
 const encoder = new TextEncoder();
 const versionRE = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/;
 const digestRE = /^[a-f0-9]{64}$/;
@@ -54,7 +55,7 @@ async function create(bucket, key, bytes) {
 }
 function contentType(path) {
   const ext = path.slice(path.lastIndexOf('.')+1).toLowerCase();
-  return ({html:'text/html; charset=utf-8',css:'text/css; charset=utf-8',js:'text/javascript; charset=utf-8',json:'application/json; charset=utf-8',svg:'image/svg+xml',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',woff:'font/woff',woff2:'font/woff2',ttf:'font/ttf',pdf:'application/pdf',txt:'text/plain; charset=utf-8'})[ext] || 'application/octet-stream';
+  return ({html:'text/html; charset=utf-8',css:'text/css; charset=utf-8',js:'text/javascript; charset=utf-8',mjs:'text/javascript; charset=utf-8',json:'application/json; charset=utf-8',map:'application/json; charset=utf-8',webmanifest:'application/manifest+json; charset=utf-8',xml:'application/xml; charset=utf-8',svg:'image/svg+xml',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',ico:'image/x-icon',webp:'image/webp',woff:'font/woff',woff2:'font/woff2',ttf:'font/ttf',wasm:'application/wasm',zip:'application/zip',tgz:'application/gzip',pdf:'application/pdf',txt:'text/plain; charset=utf-8'})[ext] || 'application/octet-stream';
 }
 export default { async fetch(request, env) {
   if (!['martlet','krigsvold'].includes(env.FAMILY) || !env.ARCHIVES) return fail(503,'archive configuration unavailable');
@@ -82,7 +83,7 @@ export default { async fetch(request, env) {
       return bytes ? new Response(bytes,{headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}}) : fail(404,'not found');
     }
     if (request.headers.get('content-length') && Number(request.headers.get('content-length')) > maxBytes) return fail(413,'too large');
-    const bytes = new Uint8Array(await request.arrayBuffer()); if (bytes.length > maxBytes) return fail(413,'too large');
+    const bytes = await readLimited(request,maxBytes); if (!bytes) return fail(413,'too large');
     if (await env.ARCHIVES.head(markerKey)) return fail(409,'snapshot already committed');
     if (path === 'manifest.json') {
       let manifest; try { manifest = parseManifest(bytes,env,version); } catch { return fail(400,'invalid manifest'); }
@@ -100,6 +101,12 @@ export default { async fetch(request, env) {
   if (request.method !== 'GET' && request.method !== 'HEAD') return fail(405,'method not allowed');
   const manifestBytes=await readObject(env.ARCHIVES,markerKey); if(!manifestBytes)return fail(404,'not found');
   let manifest; try {manifest=parseManifest(manifestBytes,env,version);}catch{return fail(503,'archive integrity failure');}
+  // Resolve relative assets against the versioned directory, including subpaths.
+  if (!pathname.endsWith('/')) {
+    const directoryIndex=segments.slice(4).join('/');
+    const target=directoryIndex ? `${directoryIndex}/index.html` : 'index.html';
+    if (!manifest.files.some(x=>x.path===directoryIndex) && manifest.files.some(x=>x.path===target)) return new Response(null,{status:308,headers:{location:`${url.pathname}/`,'cache-control':'public, max-age=31536000, immutable','x-content-type-options':'nosniff'}});
+  }
   if(path==='manifest.json') return new Response(request.method==='HEAD'?null:manifestBytes,{headers:{'content-type':'application/json; charset=utf-8','cache-control':'public, max-age=31536000, immutable','x-content-type-options':'nosniff','x-robots-tag':'noindex, follow'}});
   const entry=manifest.files.find(x=>x.path===path); if(!entry)return fail(404,'not found');
   const bytes=await readObject(env.ARCHIVES,prefix+path);

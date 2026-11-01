@@ -48,6 +48,11 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
     assert.equal((await call(root+'manifest.json','PUT',bad,{'x-manifest-sha256':sha(bad)})).status,400,'incorrect provenance must fail');
    }
    const m=Buffer.from(JSON.stringify(manifest));assert.equal((await call(root+'manifest.json','PUT',m,{'x-manifest-sha256':sha(m)})).status,201);
+   for(const path of [`/docs/v/${version}`,`/docs/v/${version}/examples/home`]){
+    const response=await call(path);assert.equal(response.status,308);assert.equal(response.headers.get('location'),prefix+path+'/');
+    assert.equal((await call(path,'HEAD')).status,308);
+   }
+   assert.equal((await call(`/docs/v/${version}/template.zip`)).headers.get('content-type'),'application/zip');
    assert.equal((await call(root+'index.html','PUT',index)).status,409,'committed file cannot be overwritten');
    const firstCatalog={schemaVersion:1,family,framework:'jekyll',previousSha256:null,latestStable:null,versions:[{version,channel:'prerelease',manifestSha256:sha(m),supported:false,topics:files.filter(x=>x.path.endsWith('.html')).map(x=>x.path)}]};
    assert.equal(validateCatalog(firstCatalog),firstCatalog);
@@ -68,6 +73,16 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    console.log(`${family} ${prefix||'/'}: ${files.length} actual files verified through the local R2 test double`);
   }
  }finally{await rm(tmp,{recursive:true,force:true});}
+});
+
+test('oversized chunked requests are cancelled before buffering entire bodies',async()=>{
+ const family=JSON.parse(await readFile('scripts/source-shell-provenance.json','utf8')).family;
+ for(const [path,chunkSize,chunks] of [['/_archive/v/2.0.0/large.bin',1024*1024,24],['/_archive/catalog',256*1024,8],['/_archive/promotion',32*1024,8]]){
+  const env={FAMILY:family,ARCHIVES:new MockR2(),ARCHIVE_WRITE_TOKEN:token};let produced=0,cancelled=false;
+  const body=new ReadableStream({pull(controller){produced++;controller.enqueue(new Uint8Array(chunkSize));if(produced===chunks)controller.close();},cancel(){cancelled=true;}});
+  const request=new Request(`https://example.invalid${path}`,{method:'PUT',body,duplex:'half',headers:{authorization:`Bearer ${token}`}});
+  assert.equal((await worker.fetch(request,env)).status,413,path);assert.ok(cancelled,path);assert.ok(produced<chunks,path);assert.equal(env.ARCHIVES.data.size,0,path);
+ }
 });
 
 test('stable promotion, concurrency and explicit rollback use verified immutable catalog history',async()=>{
