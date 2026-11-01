@@ -12,3 +12,18 @@ jobs:
       - run: python3 -m unittest discover -s tests -p 'test_release_guard.py'
       - run: python3 -m unittest discover -s tests -p 'test_docs_gate.py'
       - run: node --test scripts/docs-versions/jekyll.test.mjs
+
+  archive-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - run: python3 -m unittest discover -s tests -p 'test_docs_archive.py'
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+          BUNDLE_FROZEN: 'true'

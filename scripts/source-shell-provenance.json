@@ -1,0 +1,9 @@
+{
+  "family": "martlet",
+  "source_repository_at_capture": "martlettheme/martlettheme",
+  "source_commit": "b588542b36cb67ed84a57700ce26ce845d475df9",
+  "source_shell_sha256": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45",
+  "legacy_package": "@martlet/theme",
+  "legacy_version": "2.2.2",
+  "legacy_registry_integrity": "sha512-rCj2xwimGy8AbFVqWWU7QfWgamHaVL5E41KaA1/s3XGC69iHZdHWV2POKtBKC+CAmPHCptmHD8I5u3BLoqUFBw=="
+}

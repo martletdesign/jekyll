@@ -27,3 +27,8 @@ jobs:
         env:
           BROWSER: ${{ matrix.browser }}
           BUNDLE_FROZEN: 'true'
+      - run: node tests/docs-browser.mjs
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle

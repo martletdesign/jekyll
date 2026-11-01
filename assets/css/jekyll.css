@@ -27,3 +27,6 @@ html[data-appearance=dark] .page-index a {color:var(--color-gold-300,var(--ice-4
    The exported global shell already owns .pill-list and its pill typography. */
 .post-tags { padding: .8rem 0; color: #fff; background: var(--color-navy-950); }
 .post-tags .pill-list { justify-content: flex-start; margin: 0; }
+
+/* The Krigsvold source shell overlays its header on dashboard pages. */
+.krigsvold .docs-version-nav--dashboard { padding-top: 7rem; }
