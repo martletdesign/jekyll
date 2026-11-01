@@ -1,0 +1,12 @@
+title: Martlet Jekyll
+family: martlet
+description: A reference shell for publishing with Martlet, rendered by Jekyll.
+url: ""
+baseurl: ""
+markdown: kramdown
+highlighter: rouge
+permalink: /journal/:title/
+exclude: [Gemfile, Gemfile.lock, README.md, scripts, dist, vendor, node_modules, package.json, docs, template.zip]
+defaults:
+  - scope: {path: "", type: posts}
+    values: {layout: post}

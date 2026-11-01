@@ -1,0 +1,9 @@
+{
+  "family": "martlet",
+  "format": 1,
+  "sha256": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45",
+  "stylesheet": "martlet-shell.css",
+  "contract": "docs/source-shell/CONTRACT.md",
+  "contract_source": "https://github.com/martlettheme/martlettheme/blob/b588542b36cb67ed84a57700ce26ce845d475df9/docs/source-shell/CONTRACT.md",
+  "contract_sha256": "6eb74f3e3de2071386c8c0822ce3ea65e7b0fa61d41cb0a3670a0b68c54fc1d5"
+}

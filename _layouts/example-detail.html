@@ -1,0 +1,11 @@
+---
+layout: default
+---
+{% assign record = site.data.examples.pages | where: 'id', page.record_id | first %}
+<div class="example-root example-frame--detail" data-example="{{ page.record_id | escape }}" data-semantic-class="{{ record.semantic_class | escape }}">
+  <div class="example-wrap ">
+    <nav class="example-breadcrumb" aria-label="Breadcrumb"><a href="{{ '/' | relative_url }}">Overview</a><span aria-hidden="true">/</span><a href="{{ '/examples/' | relative_url }}">Examples</a><span aria-hidden="true">/</span><span aria-current="page">{{ record.semantic_class | replace: '-', ' ' | capitalize }}</span></nav>
+    <article aria-labelledby="page-title">{% include examples/recipe.html %}{{ content }}</article>
+    <p class="example-port-note">A {{ record.semantic_class | replace: '-', ' ' | escape }} recipe in {{ site.family | capitalize }}. <a href="{{ '/examples/integrations/' | relative_url }}">Capabilities and integration boundaries</a> · <a href="{{ '/examples/' | relative_url }}">All examples</a></p>
+  </div>
+</div>

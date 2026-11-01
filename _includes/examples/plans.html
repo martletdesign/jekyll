@@ -1,0 +1,3 @@
+<div class="example-cards example-plans">
+  {% for plan in include.items %}<article class="example-card"><h3>{{ plan.title | escape }}</h3><p class="example-price">{{ plan.price | escape }}</p><p>{{ plan.summary | escape }}</p><ul>{% for feature in plan.features %}<li>{{ feature | escape }}</li>{% endfor %}</ul><a class="{% include examples/button-classes.html %}" href="{% include examples/url.html url=plan.action.url %}"{% if plan.action.download %} download="{{ plan.action.download | escape }}"{% endif %}>{{ plan.action.label | escape }}</a></article>{% endfor %}
+</div>

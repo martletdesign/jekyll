@@ -1,0 +1,5 @@
+<div data-sensors>
+  <dl class="example-stats"><div><dt>Illustrative indoor temperature</dt><dd><output data-temperature>18 °C</output></dd></div><div><dt>Illustrative battery charge</dt><dd>72%</dd></div><div><dt>Data source</dt><dd>Simulation</dd></div></dl>
+  <div class="example-form"><label for="_simulation-{{ include.id | escape }}-mode">Simulated conditions</label><select id="_simulation-{{ include.id | escape }}-mode" disabled><option value="18">Normal day</option><option value="12">Cool morning</option><option value="24">Warm afternoon</option></select><label class="example-checkbox"><input type="checkbox" disabled> Preview ventilation enabled</label><p role="status" data-sensor-status>No real device is connected. Controls affect this preview only.</p></div>
+</div>
+<noscript><p>Changing simulated conditions requires JavaScript.</p></noscript>

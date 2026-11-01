@@ -1,0 +1,2321 @@
+{
+  "schema_version": 1,
+  "synthetic": true,
+  "as_of": "2026-10-28T20:00:00+00:00",
+  "categories": [
+    "Research",
+    "Publications",
+    "Workshops"
+  ],
+  "analytics": [
+    {
+      "date": "2026-09-03",
+      "category": "Research",
+      "sessions": 140,
+      "downloads": 18,
+      "completions": 8,
+      "duration_seconds": 16800
+    },
+    {
+      "date": "2026-09-03",
+      "category": "Publications",
+      "sessions": 177,
+      "downloads": 25,
+      "completions": 11,
+      "duration_seconds": 22833
+    },
+    {
+      "date": "2026-09-03",
+      "category": "Workshops",
+      "sessions": 214,
+      "downloads": 32,
+      "completions": 14,
+      "duration_seconds": 29532
+    },
+    {
+      "date": "2026-09-04",
+      "category": "Research",
+      "sessions": 154,
+      "downloads": 21,
+      "completions": 9,
+      "duration_seconds": 18634
+    },
+    {
+      "date": "2026-09-04",
+      "category": "Publications",
+      "sessions": 191,
+      "downloads": 28,
+      "completions": 12,
+      "duration_seconds": 24830
+    },
+    {
+      "date": "2026-09-04",
+      "category": "Workshops",
+      "sessions": 228,
+      "downloads": 35,
+      "completions": 15,
+      "duration_seconds": 31692
+    },
+    {
+      "date": "2026-09-05",
+      "category": "Research",
+      "sessions": 168,
+      "downloads": 24,
+      "completions": 10,
+      "duration_seconds": 20496
+    },
+    {
+      "date": "2026-09-05",
+      "category": "Publications",
+      "sessions": 205,
+      "downloads": 31,
+      "completions": 13,
+      "duration_seconds": 26855
+    },
+    {
+      "date": "2026-09-05",
+      "category": "Workshops",
+      "sessions": 242,
+      "downloads": 38,
+      "completions": 16,
+      "duration_seconds": 33880
+    },
+    {
+      "date": "2026-09-06",
+      "category": "Research",
+      "sessions": 182,
+      "downloads": 27,
+      "completions": 11,
+      "duration_seconds": 22386
+    },
+    {
+      "date": "2026-09-06",
+      "category": "Publications",
+      "sessions": 219,
+      "downloads": 34,
+      "completions": 14,
+      "duration_seconds": 28908
+    },
+    {
+      "date": "2026-09-06",
+      "category": "Workshops",
+      "sessions": 256,
+      "downloads": 41,
+      "completions": 17,
+      "duration_seconds": 36096
+    },
+    {
+      "date": "2026-09-07",
+      "category": "Research",
+      "sessions": 196,
+      "downloads": 30,
+      "completions": 12,
+      "duration_seconds": 24304
+    },
+    {
+      "date": "2026-09-07",
+      "category": "Publications",
+      "sessions": 233,
+      "downloads": 37,
+      "completions": 15,
+      "duration_seconds": 30989
+    },
+    {
+      "date": "2026-09-07",
+      "category": "Workshops",
+      "sessions": 270,
+      "downloads": 44,
+      "completions": 18,
+      "duration_seconds": 38340
+    },
+    {
+      "date": "2026-09-08",
+      "category": "Research",
+      "sessions": 210,
+      "downloads": 33,
+      "completions": 13,
+      "duration_seconds": 26250
+    },
+    {
+      "date": "2026-09-08",
+      "category": "Publications",
+      "sessions": 247,
+      "downloads": 40,
+      "completions": 16,
+      "duration_seconds": 33098
+    },
+    {
+      "date": "2026-09-08",
+      "category": "Workshops",
+      "sessions": 284,
+      "downloads": 47,
+      "completions": 19,
+      "duration_seconds": 40612
+    },
+    {
+      "date": "2026-09-09",
+      "category": "Research",
+      "sessions": 224,
+      "downloads": 36,
+      "completions": 14,
+      "duration_seconds": 28224
+    },
+    {
+      "date": "2026-09-09",
+      "category": "Publications",
+      "sessions": 261,
+      "downloads": 43,
+      "completions": 17,
+      "duration_seconds": 35235
+    },
+    {
+      "date": "2026-09-09",
+      "category": "Workshops",
+      "sessions": 298,
+      "downloads": 50,
+      "completions": 20,
+      "duration_seconds": 42912
+    },
+    {
+      "date": "2026-09-10",
+      "category": "Research",
+      "sessions": 161,
+      "downloads": 39,
+      "completions": 15,
+      "duration_seconds": 20447
+    },
+    {
+      "date": "2026-09-10",
+      "category": "Publications",
+      "sessions": 198,
+      "downloads": 46,
+      "completions": 18,
+      "duration_seconds": 26928
+    },
+    {
+      "date": "2026-09-10",
+      "category": "Workshops",
+      "sessions": 235,
+      "downloads": 53,
+      "completions": 21,
+      "duration_seconds": 34075
+    },
+    {
+      "date": "2026-09-11",
+      "category": "Research",
+      "sessions": 175,
+      "downloads": 42,
+      "completions": 16,
+      "duration_seconds": 22400
+    },
+    {
+      "date": "2026-09-11",
+      "category": "Publications",
+      "sessions": 212,
+      "downloads": 49,
+      "completions": 19,
+      "duration_seconds": 29044
+    },
+    {
+      "date": "2026-09-11",
+      "category": "Workshops",
+      "sessions": 249,
+      "downloads": 56,
+      "completions": 22,
+      "duration_seconds": 36354
+    },
+    {
+      "date": "2026-09-12",
+      "category": "Research",
+      "sessions": 189,
+      "downloads": 45,
+      "completions": 17,
+      "duration_seconds": 24381
+    },
+    {
+      "date": "2026-09-12",
+      "category": "Publications",
+      "sessions": 226,
+      "downloads": 52,
+      "completions": 20,
+      "duration_seconds": 31188
+    },
+    {
+      "date": "2026-09-12",
+      "category": "Workshops",
+      "sessions": 263,
+      "downloads": 59,
+      "completions": 23,
+      "duration_seconds": 38661
+    },
+    {
+      "date": "2026-09-13",
+      "category": "Research",
+      "sessions": 203,
+      "downloads": 48,
+      "completions": 18,
+      "duration_seconds": 26390
+    },
+    {
+      "date": "2026-09-13",
+      "category": "Publications",
+      "sessions": 240,
+      "downloads": 55,
+      "completions": 21,
+      "duration_seconds": 33360
+    },
+    {
+      "date": "2026-09-13",
+      "category": "Workshops",
+      "sessions": 277,
+      "downloads": 62,
+      "completions": 24,
+      "duration_seconds": 40996
+    },
+    {
+      "date": "2026-09-14",
+      "category": "Research",
+      "sessions": 217,
+      "downloads": 51,
+      "completions": 19,
+      "duration_seconds": 28427
+    },
+    {
+      "date": "2026-09-14",
+      "category": "Publications",
+      "sessions": 254,
+      "downloads": 58,
+      "completions": 22,
+      "duration_seconds": 35560
+    },
+    {
+      "date": "2026-09-14",
+      "category": "Workshops",
+      "sessions": 291,
+      "downloads": 65,
+      "completions": 25,
+      "duration_seconds": 43359
+    },
+    {
+      "date": "2026-09-15",
+      "category": "Research",
+      "sessions": 231,
+      "downloads": 54,
+      "completions": 20,
+      "duration_seconds": 30492
+    },
+    {
+      "date": "2026-09-15",
+      "category": "Publications",
+      "sessions": 268,
+      "downloads": 61,
+      "completions": 23,
+      "duration_seconds": 37788
+    },
+    {
+      "date": "2026-09-15",
+      "category": "Workshops",
+      "sessions": 305,
+      "downloads": 68,
+      "completions": 26,
+      "duration_seconds": 45750
+    },
+    {
+      "date": "2026-09-16",
+      "category": "Research",
+      "sessions": 245,
+      "downloads": 57,
+      "completions": 21,
+      "duration_seconds": 32585
+    },
+    {
+      "date": "2026-09-16",
+      "category": "Publications",
+      "sessions": 282,
+      "downloads": 64,
+      "completions": 24,
+      "duration_seconds": 40044
+    },
+    {
+      "date": "2026-09-16",
+      "category": "Workshops",
+      "sessions": 319,
+      "downloads": 71,
+      "completions": 27,
+      "duration_seconds": 48169
+    },
+    {
+      "date": "2026-09-17",
+      "category": "Research",
+      "sessions": 182,
+      "downloads": 60,
+      "completions": 22,
+      "duration_seconds": 24388
+    },
+    {
+      "date": "2026-09-17",
+      "category": "Publications",
+      "sessions": 219,
+      "downloads": 67,
+      "completions": 25,
+      "duration_seconds": 31317
+    },
+    {
+      "date": "2026-09-17",
+      "category": "Workshops",
+      "sessions": 256,
+      "downloads": 19,
+      "completions": 28,
+      "duration_seconds": 38912
+    },
+    {
+      "date": "2026-09-18",
+      "category": "Research",
+      "sessions": 196,
+      "downloads": 63,
+      "completions": 23,
+      "duration_seconds": 26460
+    },
+    {
+      "date": "2026-09-18",
+      "category": "Publications",
+      "sessions": 233,
+      "downloads": 70,
+      "completions": 26,
+      "duration_seconds": 33552
+    },
+    {
+      "date": "2026-09-18",
+      "category": "Workshops",
+      "sessions": 270,
+      "downloads": 22,
+      "completions": 8,
+      "duration_seconds": 41310
+    },
+    {
+      "date": "2026-09-19",
+      "category": "Research",
+      "sessions": 210,
+      "downloads": 66,
+      "completions": 24,
+      "duration_seconds": 28560
+    },
+    {
+      "date": "2026-09-19",
+      "category": "Publications",
+      "sessions": 247,
+      "downloads": 18,
+      "completions": 27,
+      "duration_seconds": 35815
+    },
+    {
+      "date": "2026-09-19",
+      "category": "Workshops",
+      "sessions": 284,
+      "downloads": 25,
+      "completions": 9,
+      "duration_seconds": 43736
+    },
+    {
+      "date": "2026-09-20",
+      "category": "Research",
+      "sessions": 224,
+      "downloads": 69,
+      "completions": 25,
+      "duration_seconds": 30688
+    },
+    {
+      "date": "2026-09-20",
+      "category": "Publications",
+      "sessions": 261,
+      "downloads": 21,
+      "completions": 28,
+      "duration_seconds": 38106
+    },
+    {
+      "date": "2026-09-20",
+      "category": "Workshops",
+      "sessions": 298,
+      "downloads": 28,
+      "completions": 10,
+      "duration_seconds": 46190
+    },
+    {
+      "date": "2026-09-21",
+      "category": "Research",
+      "sessions": 238,
+      "downloads": 72,
+      "completions": 26,
+      "duration_seconds": 32844
+    },
+    {
+      "date": "2026-09-21",
+      "category": "Publications",
+      "sessions": 275,
+      "downloads": 24,
+      "completions": 8,
+      "duration_seconds": 40425
+    },
+    {
+      "date": "2026-09-21",
+      "category": "Workshops",
+      "sessions": 312,
+      "downloads": 31,
+      "completions": 11,
+      "duration_seconds": 48672
+    },
+    {
+      "date": "2026-09-22",
+      "category": "Research",
+      "sessions": 252,
+      "downloads": 20,
+      "completions": 27,
+      "duration_seconds": 35028
+    },
+    {
+      "date": "2026-09-22",
+      "category": "Publications",
+      "sessions": 289,
+      "downloads": 27,
+      "completions": 9,
+      "duration_seconds": 42772
+    },
+    {
+      "date": "2026-09-22",
+      "category": "Workshops",
+      "sessions": 326,
+      "downloads": 34,
+      "completions": 12,
+      "duration_seconds": 51182
+    },
+    {
+      "date": "2026-09-23",
+      "category": "Research",
+      "sessions": 266,
+      "downloads": 23,
+      "completions": 28,
+      "duration_seconds": 37240
+    },
+    {
+      "date": "2026-09-23",
+      "category": "Publications",
+      "sessions": 303,
+      "downloads": 30,
+      "completions": 10,
+      "duration_seconds": 45147
+    },
+    {
+      "date": "2026-09-23",
+      "category": "Workshops",
+      "sessions": 340,
+      "downloads": 37,
+      "completions": 13,
+      "duration_seconds": 53720
+    },
+    {
+      "date": "2026-09-24",
+      "category": "Research",
+      "sessions": 203,
+      "downloads": 26,
+      "completions": 8,
+      "duration_seconds": 28623
+    },
+    {
+      "date": "2026-09-24",
+      "category": "Publications",
+      "sessions": 240,
+      "downloads": 33,
+      "completions": 11,
+      "duration_seconds": 36000
+    },
+    {
+      "date": "2026-09-24",
+      "category": "Workshops",
+      "sessions": 277,
+      "downloads": 40,
+      "completions": 14,
+      "duration_seconds": 44043
+    },
+    {
+      "date": "2026-09-25",
+      "category": "Research",
+      "sessions": 217,
+      "downloads": 29,
+      "completions": 9,
+      "duration_seconds": 30814
+    },
+    {
+      "date": "2026-09-25",
+      "category": "Publications",
+      "sessions": 254,
+      "downloads": 36,
+      "completions": 12,
+      "duration_seconds": 38354
+    },
+    {
+      "date": "2026-09-25",
+      "category": "Workshops",
+      "sessions": 291,
+      "downloads": 43,
+      "completions": 15,
+      "duration_seconds": 46560
+    },
+    {
+      "date": "2026-09-26",
+      "category": "Research",
+      "sessions": 231,
+      "downloads": 32,
+      "completions": 10,
+      "duration_seconds": 33033
+    },
+    {
+      "date": "2026-09-26",
+      "category": "Publications",
+      "sessions": 268,
+      "downloads": 39,
+      "completions": 13,
+      "duration_seconds": 40736
+    },
+    {
+      "date": "2026-09-26",
+      "category": "Workshops",
+      "sessions": 305,
+      "downloads": 46,
+      "completions": 16,
+      "duration_seconds": 49105
+    },
+    {
+      "date": "2026-09-27",
+      "category": "Research",
+      "sessions": 245,
+      "downloads": 35,
+      "completions": 11,
+      "duration_seconds": 35280
+    },
+    {
+      "date": "2026-09-27",
+      "category": "Publications",
+      "sessions": 282,
+      "downloads": 42,
+      "completions": 14,
+      "duration_seconds": 43146
+    },
+    {
+      "date": "2026-09-27",
+      "category": "Workshops",
+      "sessions": 319,
+      "downloads": 49,
+      "completions": 17,
+      "duration_seconds": 51678
+    },
+    {
+      "date": "2026-09-28",
+      "category": "Research",
+      "sessions": 259,
+      "downloads": 38,
+      "completions": 12,
+      "duration_seconds": 37555
+    },
+    {
+      "date": "2026-09-28",
+      "category": "Publications",
+      "sessions": 296,
+      "downloads": 45,
+      "completions": 15,
+      "duration_seconds": 45584
+    },
+    {
+      "date": "2026-09-28",
+      "category": "Workshops",
+      "sessions": 333,
+      "downloads": 52,
+      "completions": 18,
+      "duration_seconds": 54279
+    },
+    {
+      "date": "2026-09-29",
+      "category": "Research",
+      "sessions": 273,
+      "downloads": 41,
+      "completions": 13,
+      "duration_seconds": 39858
+    },
+    {
+      "date": "2026-09-29",
+      "category": "Publications",
+      "sessions": 310,
+      "downloads": 48,
+      "completions": 16,
+      "duration_seconds": 48050
+    },
+    {
+      "date": "2026-09-29",
+      "category": "Workshops",
+      "sessions": 347,
+      "downloads": 55,
+      "completions": 19,
+      "duration_seconds": 56908
+    },
+    {
+      "date": "2026-09-30",
+      "category": "Research",
+      "sessions": 287,
+      "downloads": 44,
+      "completions": 14,
+      "duration_seconds": 42189
+    },
+    {
+      "date": "2026-09-30",
+      "category": "Publications",
+      "sessions": 324,
+      "downloads": 51,
+      "completions": 17,
+      "duration_seconds": 50544
+    },
+    {
+      "date": "2026-09-30",
+      "category": "Workshops",
+      "sessions": 361,
+      "downloads": 58,
+      "completions": 20,
+      "duration_seconds": 59565
+    },
+    {
+      "date": "2026-10-01",
+      "category": "Research",
+      "sessions": 224,
+      "downloads": 47,
+      "completions": 15,
+      "duration_seconds": 33152
+    },
+    {
+      "date": "2026-10-01",
+      "category": "Publications",
+      "sessions": 261,
+      "downloads": 54,
+      "completions": 18,
+      "duration_seconds": 40977
+    },
+    {
+      "date": "2026-10-01",
+      "category": "Workshops",
+      "sessions": 298,
+      "downloads": 61,
+      "completions": 21,
+      "duration_seconds": 49468
+    },
+    {
+      "date": "2026-10-02",
+      "category": "Research",
+      "sessions": 238,
+      "downloads": 50,
+      "completions": 16,
+      "duration_seconds": 35462
+    },
+    {
+      "date": "2026-10-02",
+      "category": "Publications",
+      "sessions": 275,
+      "downloads": 57,
+      "completions": 19,
+      "duration_seconds": 43450
+    },
+    {
+      "date": "2026-10-02",
+      "category": "Workshops",
+      "sessions": 312,
+      "downloads": 64,
+      "completions": 22,
+      "duration_seconds": 52104
+    },
+    {
+      "date": "2026-10-03",
+      "category": "Research",
+      "sessions": 252,
+      "downloads": 53,
+      "completions": 17,
+      "duration_seconds": 37800
+    },
+    {
+      "date": "2026-10-03",
+      "category": "Publications",
+      "sessions": 289,
+      "downloads": 60,
+      "completions": 20,
+      "duration_seconds": 45951
+    },
+    {
+      "date": "2026-10-03",
+      "category": "Workshops",
+      "sessions": 326,
+      "downloads": 67,
+      "completions": 23,
+      "duration_seconds": 54768
+    },
+    {
+      "date": "2026-10-04",
+      "category": "Research",
+      "sessions": 266,
+      "downloads": 56,
+      "completions": 18,
+      "duration_seconds": 40166
+    },
+    {
+      "date": "2026-10-04",
+      "category": "Publications",
+      "sessions": 303,
+      "downloads": 63,
+      "completions": 21,
+      "duration_seconds": 48480
+    },
+    {
+      "date": "2026-10-04",
+      "category": "Workshops",
+      "sessions": 340,
+      "downloads": 70,
+      "completions": 24,
+      "duration_seconds": 57460
+    },
+    {
+      "date": "2026-10-05",
+      "category": "Research",
+      "sessions": 280,
+      "downloads": 59,
+      "completions": 19,
+      "duration_seconds": 42560
+    },
+    {
+      "date": "2026-10-05",
+      "category": "Publications",
+      "sessions": 317,
+      "downloads": 66,
+      "completions": 22,
+      "duration_seconds": 51037
+    },
+    {
+      "date": "2026-10-05",
+      "category": "Workshops",
+      "sessions": 354,
+      "downloads": 18,
+      "completions": 25,
+      "duration_seconds": 60180
+    },
+    {
+      "date": "2026-10-06",
+      "category": "Research",
+      "sessions": 294,
+      "downloads": 62,
+      "completions": 20,
+      "duration_seconds": 44982
+    },
+    {
+      "date": "2026-10-06",
+      "category": "Publications",
+      "sessions": 331,
+      "downloads": 69,
+      "completions": 23,
+      "duration_seconds": 53622
+    },
+    {
+      "date": "2026-10-06",
+      "category": "Workshops",
+      "sessions": 368,
+      "downloads": 21,
+      "completions": 26,
+      "duration_seconds": 62928
+    },
+    {
+      "date": "2026-10-07",
+      "category": "Research",
+      "sessions": 308,
+      "downloads": 65,
+      "completions": 21,
+      "duration_seconds": 47432
+    },
+    {
+      "date": "2026-10-07",
+      "category": "Publications",
+      "sessions": 345,
+      "downloads": 72,
+      "completions": 24,
+      "duration_seconds": 56235
+    },
+    {
+      "date": "2026-10-07",
+      "category": "Workshops",
+      "sessions": 382,
+      "downloads": 24,
+      "completions": 27,
+      "duration_seconds": 65704
+    },
+    {
+      "date": "2026-10-08",
+      "category": "Research",
+      "sessions": 245,
+      "downloads": 68,
+      "completions": 22,
+      "duration_seconds": 37975
+    },
+    {
+      "date": "2026-10-08",
+      "category": "Publications",
+      "sessions": 282,
+      "downloads": 20,
+      "completions": 25,
+      "duration_seconds": 46248
+    },
+    {
+      "date": "2026-10-08",
+      "category": "Workshops",
+      "sessions": 319,
+      "downloads": 27,
+      "completions": 28,
+      "duration_seconds": 55187
+    },
+    {
+      "date": "2026-10-09",
+      "category": "Research",
+      "sessions": 259,
+      "downloads": 71,
+      "completions": 23,
+      "duration_seconds": 40404
+    },
+    {
+      "date": "2026-10-09",
+      "category": "Publications",
+      "sessions": 296,
+      "downloads": 23,
+      "completions": 26,
+      "duration_seconds": 48840
+    },
+    {
+      "date": "2026-10-09",
+      "category": "Workshops",
+      "sessions": 333,
+      "downloads": 30,
+      "completions": 8,
+      "duration_seconds": 57942
+    },
+    {
+      "date": "2026-10-10",
+      "category": "Research",
+      "sessions": 273,
+      "downloads": 19,
+      "completions": 24,
+      "duration_seconds": 42861
+    },
+    {
+      "date": "2026-10-10",
+      "category": "Publications",
+      "sessions": 310,
+      "downloads": 26,
+      "completions": 27,
+      "duration_seconds": 51460
+    },
+    {
+      "date": "2026-10-10",
+      "category": "Workshops",
+      "sessions": 347,
+      "downloads": 33,
+      "completions": 9,
+      "duration_seconds": 60725
+    },
+    {
+      "date": "2026-10-11",
+      "category": "Research",
+      "sessions": 287,
+      "downloads": 22,
+      "completions": 25,
+      "duration_seconds": 45346
+    },
+    {
+      "date": "2026-10-11",
+      "category": "Publications",
+      "sessions": 324,
+      "downloads": 29,
+      "completions": 28,
+      "duration_seconds": 54108
+    },
+    {
+      "date": "2026-10-11",
+      "category": "Workshops",
+      "sessions": 361,
+      "downloads": 36,
+      "completions": 10,
+      "duration_seconds": 63536
+    },
+    {
+      "date": "2026-10-12",
+      "category": "Research",
+      "sessions": 301,
+      "downloads": 25,
+      "completions": 26,
+      "duration_seconds": 47859
+    },
+    {
+      "date": "2026-10-12",
+      "category": "Publications",
+      "sessions": 338,
+      "downloads": 32,
+      "completions": 8,
+      "duration_seconds": 56784
+    },
+    {
+      "date": "2026-10-12",
+      "category": "Workshops",
+      "sessions": 375,
+      "downloads": 39,
+      "completions": 11,
+      "duration_seconds": 66375
+    },
+    {
+      "date": "2026-10-13",
+      "category": "Research",
+      "sessions": 315,
+      "downloads": 28,
+      "completions": 27,
+      "duration_seconds": 50400
+    },
+    {
+      "date": "2026-10-13",
+      "category": "Publications",
+      "sessions": 352,
+      "downloads": 35,
+      "completions": 9,
+      "duration_seconds": 59488
+    },
+    {
+      "date": "2026-10-13",
+      "category": "Workshops",
+      "sessions": 389,
+      "downloads": 42,
+      "completions": 12,
+      "duration_seconds": 69242
+    },
+    {
+      "date": "2026-10-14",
+      "category": "Research",
+      "sessions": 329,
+      "downloads": 31,
+      "completions": 28,
+      "duration_seconds": 52969
+    },
+    {
+      "date": "2026-10-14",
+      "category": "Publications",
+      "sessions": 366,
+      "downloads": 38,
+      "completions": 10,
+      "duration_seconds": 62220
+    },
+    {
+      "date": "2026-10-14",
+      "category": "Workshops",
+      "sessions": 403,
+      "downloads": 45,
+      "completions": 13,
+      "duration_seconds": 72137
+    },
+    {
+      "date": "2026-10-15",
+      "category": "Research",
+      "sessions": 266,
+      "downloads": 34,
+      "completions": 8,
+      "duration_seconds": 43092
+    },
+    {
+      "date": "2026-10-15",
+      "category": "Publications",
+      "sessions": 303,
+      "downloads": 41,
+      "completions": 11,
+      "duration_seconds": 51813
+    },
+    {
+      "date": "2026-10-15",
+      "category": "Workshops",
+      "sessions": 340,
+      "downloads": 48,
+      "completions": 14,
+      "duration_seconds": 61200
+    },
+    {
+      "date": "2026-10-16",
+      "category": "Research",
+      "sessions": 280,
+      "downloads": 37,
+      "completions": 9,
+      "duration_seconds": 45640
+    },
+    {
+      "date": "2026-10-16",
+      "category": "Publications",
+      "sessions": 317,
+      "downloads": 44,
+      "completions": 12,
+      "duration_seconds": 54524
+    },
+    {
+      "date": "2026-10-16",
+      "category": "Workshops",
+      "sessions": 354,
+      "downloads": 51,
+      "completions": 15,
+      "duration_seconds": 64074
+    },
+    {
+      "date": "2026-10-17",
+      "category": "Research",
+      "sessions": 294,
+      "downloads": 40,
+      "completions": 10,
+      "duration_seconds": 48216
+    },
+    {
+      "date": "2026-10-17",
+      "category": "Publications",
+      "sessions": 331,
+      "downloads": 47,
+      "completions": 13,
+      "duration_seconds": 57263
+    },
+    {
+      "date": "2026-10-17",
+      "category": "Workshops",
+      "sessions": 368,
+      "downloads": 54,
+      "completions": 16,
+      "duration_seconds": 66976
+    },
+    {
+      "date": "2026-10-18",
+      "category": "Research",
+      "sessions": 308,
+      "downloads": 43,
+      "completions": 11,
+      "duration_seconds": 50820
+    },
+    {
+      "date": "2026-10-18",
+      "category": "Publications",
+      "sessions": 345,
+      "downloads": 50,
+      "completions": 14,
+      "duration_seconds": 60030
+    },
+    {
+      "date": "2026-10-18",
+      "category": "Workshops",
+      "sessions": 382,
+      "downloads": 57,
+      "completions": 17,
+      "duration_seconds": 69906
+    },
+    {
+      "date": "2026-10-19",
+      "category": "Research",
+      "sessions": 322,
+      "downloads": 46,
+      "completions": 12,
+      "duration_seconds": 53452
+    },
+    {
+      "date": "2026-10-19",
+      "category": "Publications",
+      "sessions": 359,
+      "downloads": 53,
+      "completions": 15,
+      "duration_seconds": 62825
+    },
+    {
+      "date": "2026-10-19",
+      "category": "Workshops",
+      "sessions": 396,
+      "downloads": 60,
+      "completions": 18,
+      "duration_seconds": 72864
+    },
+    {
+      "date": "2026-10-20",
+      "category": "Research",
+      "sessions": 336,
+      "downloads": 49,
+      "completions": 13,
+      "duration_seconds": 56112
+    },
+    {
+      "date": "2026-10-20",
+      "category": "Publications",
+      "sessions": 373,
+      "downloads": 56,
+      "completions": 16,
+      "duration_seconds": 65648
+    },
+    {
+      "date": "2026-10-20",
+      "category": "Workshops",
+      "sessions": 410,
+      "downloads": 63,
+      "completions": 19,
+      "duration_seconds": 75850
+    },
+    {
+      "date": "2026-10-21",
+      "category": "Research",
+      "sessions": 350,
+      "downloads": 52,
+      "completions": 14,
+      "duration_seconds": 58800
+    },
+    {
+      "date": "2026-10-21",
+      "category": "Publications",
+      "sessions": 387,
+      "downloads": 59,
+      "completions": 17,
+      "duration_seconds": 68499
+    },
+    {
+      "date": "2026-10-21",
+      "category": "Workshops",
+      "sessions": 424,
+      "downloads": 66,
+      "completions": 20,
+      "duration_seconds": 78864
+    },
+    {
+      "date": "2026-10-22",
+      "category": "Research",
+      "sessions": 287,
+      "downloads": 55,
+      "completions": 15,
+      "duration_seconds": 48503
+    },
+    {
+      "date": "2026-10-22",
+      "category": "Publications",
+      "sessions": 324,
+      "downloads": 62,
+      "completions": 18,
+      "duration_seconds": 57672
+    },
+    {
+      "date": "2026-10-22",
+      "category": "Workshops",
+      "sessions": 361,
+      "downloads": 69,
+      "completions": 21,
+      "duration_seconds": 67507
+    },
+    {
+      "date": "2026-10-23",
+      "category": "Research",
+      "sessions": 301,
+      "downloads": 58,
+      "completions": 16,
+      "duration_seconds": 51170
+    },
+    {
+      "date": "2026-10-23",
+      "category": "Publications",
+      "sessions": 338,
+      "downloads": 65,
+      "completions": 19,
+      "duration_seconds": 60502
+    },
+    {
+      "date": "2026-10-23",
+      "category": "Workshops",
+      "sessions": 375,
+      "downloads": 72,
+      "completions": 22,
+      "duration_seconds": 70500
+    },
+    {
+      "date": "2026-10-24",
+      "category": "Research",
+      "sessions": 315,
+      "downloads": 61,
+      "completions": 17,
+      "duration_seconds": 53865
+    },
+    {
+      "date": "2026-10-24",
+      "category": "Publications",
+      "sessions": 352,
+      "downloads": 68,
+      "completions": 20,
+      "duration_seconds": 63360
+    },
+    {
+      "date": "2026-10-24",
+      "category": "Workshops",
+      "sessions": 389,
+      "downloads": 20,
+      "completions": 23,
+      "duration_seconds": 73521
+    },
+    {
+      "date": "2026-10-25",
+      "category": "Research",
+      "sessions": 329,
+      "downloads": 64,
+      "completions": 18,
+      "duration_seconds": 56588
+    },
+    {
+      "date": "2026-10-25",
+      "category": "Publications",
+      "sessions": 366,
+      "downloads": 71,
+      "completions": 21,
+      "duration_seconds": 66246
+    },
+    {
+      "date": "2026-10-25",
+      "category": "Workshops",
+      "sessions": 403,
+      "downloads": 23,
+      "completions": 24,
+      "duration_seconds": 76570
+    },
+    {
+      "date": "2026-10-26",
+      "category": "Research",
+      "sessions": 343,
+      "downloads": 67,
+      "completions": 19,
+      "duration_seconds": 59339
+    },
+    {
+      "date": "2026-10-26",
+      "category": "Publications",
+      "sessions": 380,
+      "downloads": 19,
+      "completions": 22,
+      "duration_seconds": 69160
+    },
+    {
+      "date": "2026-10-26",
+      "category": "Workshops",
+      "sessions": 417,
+      "downloads": 26,
+      "completions": 25,
+      "duration_seconds": 79647
+    },
+    {
+      "date": "2026-10-27",
+      "category": "Research",
+      "sessions": 357,
+      "downloads": 70,
+      "completions": 20,
+      "duration_seconds": 62118
+    },
+    {
+      "date": "2026-10-27",
+      "category": "Publications",
+      "sessions": 394,
+      "downloads": 22,
+      "completions": 23,
+      "duration_seconds": 72102
+    },
+    {
+      "date": "2026-10-27",
+      "category": "Workshops",
+      "sessions": 431,
+      "downloads": 29,
+      "completions": 26,
+      "duration_seconds": 82752
+    },
+    {
+      "date": "2026-10-28",
+      "category": "Research",
+      "sessions": 371,
+      "downloads": 18,
+      "completions": 21,
+      "duration_seconds": 64925
+    },
+    {
+      "date": "2026-10-28",
+      "category": "Publications",
+      "sessions": 408,
+      "downloads": 25,
+      "completions": 24,
+      "duration_seconds": 75072
+    },
+    {
+      "date": "2026-10-28",
+      "category": "Workshops",
+      "sessions": 445,
+      "downloads": 32,
+      "completions": 27,
+      "duration_seconds": 85885
+    }
+  ],
+  "people": [
+    {
+      "id": "P-001",
+      "name": "Mara Ellis",
+      "email": "mara.ellis@example.invalid",
+      "role": "Researcher",
+      "status": "Active"
+    },
+    {
+      "id": "P-002",
+      "name": "Rowan Park",
+      "email": "rowan.park@example.invalid",
+      "role": "Editor",
+      "status": "Active"
+    },
+    {
+      "id": "P-003",
+      "name": "Samira Chen",
+      "email": "samira.chen@example.invalid",
+      "role": "Coordinator",
+      "status": "Invited"
+    },
+    {
+      "id": "P-004",
+      "name": "Theo Okafor",
+      "email": "theo.okafor@example.invalid",
+      "role": "Researcher",
+      "status": "Suspended"
+    },
+    {
+      "id": "P-005",
+      "name": "Inez Patel",
+      "email": "inez.patel@example.invalid",
+      "role": "Editor",
+      "status": "Active"
+    },
+    {
+      "id": "P-006",
+      "name": "Elliot Reed",
+      "email": "elliot.reed@example.invalid",
+      "role": "Coordinator",
+      "status": "Active"
+    },
+    {
+      "id": "P-007",
+      "name": "Nadia Flores",
+      "email": "nadia.flores@example.invalid",
+      "role": "Researcher",
+      "status": "Invited"
+    },
+    {
+      "id": "P-008",
+      "name": "Jonas Ahmed",
+      "email": "jonas.ahmed@example.invalid",
+      "role": "Editor",
+      "status": "Suspended"
+    },
+    {
+      "id": "P-009",
+      "name": "Leila Brooks",
+      "email": "leila.brooks@example.invalid",
+      "role": "Coordinator",
+      "status": "Active"
+    },
+    {
+      "id": "P-010",
+      "name": "Owen Tan",
+      "email": "owen.tan@example.invalid",
+      "role": "Researcher",
+      "status": "Active"
+    },
+    {
+      "id": "P-011",
+      "name": "Amara Cole",
+      "email": "amara.cole@example.invalid",
+      "role": "Editor",
+      "status": "Invited"
+    },
+    {
+      "id": "P-012",
+      "name": "Felix Shah",
+      "email": "felix.shah@example.invalid",
+      "role": "Coordinator",
+      "status": "Suspended"
+    },
+    {
+      "id": "P-013",
+      "name": "Ari Morgan",
+      "email": "ari.morgan@example.invalid",
+      "role": "Researcher",
+      "status": "Active"
+    },
+    {
+      "id": "P-014",
+      "name": "Cleo James",
+      "email": "cleo.james@example.invalid",
+      "role": "Editor",
+      "status": "Active"
+    },
+    {
+      "id": "P-015",
+      "name": "Dev Lin",
+      "email": "dev.lin@example.invalid",
+      "role": "Coordinator",
+      "status": "Invited"
+    },
+    {
+      "id": "P-016",
+      "name": "Esme Grant",
+      "email": "esme.grant@example.invalid",
+      "role": "Researcher",
+      "status": "Suspended"
+    },
+    {
+      "id": "P-017",
+      "name": "Finn Roy",
+      "email": "finn.roy@example.invalid",
+      "role": "Editor",
+      "status": "Active"
+    },
+    {
+      "id": "P-018",
+      "name": "Gia Woods",
+      "email": "gia.woods@example.invalid",
+      "role": "Coordinator",
+      "status": "Active"
+    },
+    {
+      "id": "P-019",
+      "name": "Hugo Bell",
+      "email": "hugo.bell@example.invalid",
+      "role": "Researcher",
+      "status": "Invited"
+    },
+    {
+      "id": "P-020",
+      "name": "Indira Lane",
+      "email": "indira.lane@example.invalid",
+      "role": "Editor",
+      "status": "Suspended"
+    },
+    {
+      "id": "P-021",
+      "name": "Jules Fox",
+      "email": "jules.fox@example.invalid",
+      "role": "Coordinator",
+      "status": "Active"
+    },
+    {
+      "id": "P-022",
+      "name": "Kai Stone",
+      "email": "kai.stone@example.invalid",
+      "role": "Researcher",
+      "status": "Active"
+    },
+    {
+      "id": "P-023",
+      "name": "Lena Nash",
+      "email": "lena.nash@example.invalid",
+      "role": "Editor",
+      "status": "Invited"
+    },
+    {
+      "id": "P-024",
+      "name": "Micah Vale",
+      "email": "micah.vale@example.invalid",
+      "role": "Coordinator",
+      "status": "Suspended"
+    }
+  ],
+  "services": [
+    {
+      "id": "SVC-01",
+      "name": "Observation ingester",
+      "samples": [
+        {
+          "time": "2026-10-27T21:00:00+00:00",
+          "latency_ms": 65,
+          "queue": 0,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T22:00:00+00:00",
+          "latency_ms": 82,
+          "queue": 3,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T23:00:00+00:00",
+          "latency_ms": 99,
+          "queue": 6,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T00:00:00+00:00",
+          "latency_ms": 116,
+          "queue": 9,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T01:00:00+00:00",
+          "latency_ms": 133,
+          "queue": 12,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T02:00:00+00:00",
+          "latency_ms": 150,
+          "queue": 15,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T03:00:00+00:00",
+          "latency_ms": 77,
+          "queue": 18,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T04:00:00+00:00",
+          "latency_ms": 94,
+          "queue": 21,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T05:00:00+00:00",
+          "latency_ms": 111,
+          "queue": 24,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T06:00:00+00:00",
+          "latency_ms": 128,
+          "queue": 27,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T07:00:00+00:00",
+          "latency_ms": 145,
+          "queue": 30,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T08:00:00+00:00",
+          "latency_ms": 72,
+          "queue": 33,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T09:00:00+00:00",
+          "latency_ms": 89,
+          "queue": 36,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T10:00:00+00:00",
+          "latency_ms": 106,
+          "queue": 1,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T11:00:00+00:00",
+          "latency_ms": 123,
+          "queue": 4,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T12:00:00+00:00",
+          "latency_ms": 140,
+          "queue": 7,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T13:00:00+00:00",
+          "latency_ms": 67,
+          "queue": 10,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T14:00:00+00:00",
+          "latency_ms": 84,
+          "queue": 13,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T15:00:00+00:00",
+          "latency_ms": 101,
+          "queue": 16,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T16:00:00+00:00",
+          "latency_ms": 118,
+          "queue": 19,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T17:00:00+00:00",
+          "latency_ms": 135,
+          "queue": 22,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T18:00:00+00:00",
+          "latency_ms": 152,
+          "queue": 25,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T19:00:00+00:00",
+          "latency_ms": 79,
+          "queue": 28,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T20:00:00+00:00",
+          "latency_ms": 96,
+          "queue": 31,
+          "availability": 100
+        }
+      ]
+    },
+    {
+      "id": "SVC-02",
+      "name": "Catalogue API",
+      "samples": [
+        {
+          "time": "2026-10-27T21:00:00+00:00",
+          "latency_ms": 103,
+          "queue": 11,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T22:00:00+00:00",
+          "latency_ms": 120,
+          "queue": 14,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T23:00:00+00:00",
+          "latency_ms": 137,
+          "queue": 17,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T00:00:00+00:00",
+          "latency_ms": 154,
+          "queue": 20,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T01:00:00+00:00",
+          "latency_ms": 171,
+          "queue": 23,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T02:00:00+00:00",
+          "latency_ms": 98,
+          "queue": 26,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T03:00:00+00:00",
+          "latency_ms": 115,
+          "queue": 29,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T04:00:00+00:00",
+          "latency_ms": 132,
+          "queue": 32,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T05:00:00+00:00",
+          "latency_ms": 149,
+          "queue": 35,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T06:00:00+00:00",
+          "latency_ms": 166,
+          "queue": 0,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T07:00:00+00:00",
+          "latency_ms": 93,
+          "queue": 3,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T08:00:00+00:00",
+          "latency_ms": 110,
+          "queue": 6,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T09:00:00+00:00",
+          "latency_ms": 127,
+          "queue": 9,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T10:00:00+00:00",
+          "latency_ms": 144,
+          "queue": 12,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T11:00:00+00:00",
+          "latency_ms": 161,
+          "queue": 15,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T12:00:00+00:00",
+          "latency_ms": 178,
+          "queue": 18,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T13:00:00+00:00",
+          "latency_ms": 105,
+          "queue": 21,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T14:00:00+00:00",
+          "latency_ms": 122,
+          "queue": 24,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T15:00:00+00:00",
+          "latency_ms": 139,
+          "queue": 27,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T16:00:00+00:00",
+          "latency_ms": 156,
+          "queue": 30,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T17:00:00+00:00",
+          "latency_ms": 173,
+          "queue": 33,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T18:00:00+00:00",
+          "latency_ms": 100,
+          "queue": 36,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T19:00:00+00:00",
+          "latency_ms": 117,
+          "queue": 1,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T20:00:00+00:00",
+          "latency_ms": 134,
+          "queue": 4,
+          "availability": 100
+        }
+      ]
+    },
+    {
+      "id": "SVC-03",
+      "name": "Search index",
+      "samples": [
+        {
+          "time": "2026-10-27T21:00:00+00:00",
+          "latency_ms": 141,
+          "queue": 22,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T22:00:00+00:00",
+          "latency_ms": 158,
+          "queue": 25,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T23:00:00+00:00",
+          "latency_ms": 175,
+          "queue": 28,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T00:00:00+00:00",
+          "latency_ms": 192,
+          "queue": 31,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T01:00:00+00:00",
+          "latency_ms": 119,
+          "queue": 34,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T02:00:00+00:00",
+          "latency_ms": 136,
+          "queue": 37,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T03:00:00+00:00",
+          "latency_ms": 153,
+          "queue": 2,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T04:00:00+00:00",
+          "latency_ms": 170,
+          "queue": 5,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T05:00:00+00:00",
+          "latency_ms": 187,
+          "queue": 8,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T06:00:00+00:00",
+          "latency_ms": 204,
+          "queue": 11,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T07:00:00+00:00",
+          "latency_ms": 131,
+          "queue": 14,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T08:00:00+00:00",
+          "latency_ms": 148,
+          "queue": 17,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T09:00:00+00:00",
+          "latency_ms": 165,
+          "queue": 20,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T10:00:00+00:00",
+          "latency_ms": 182,
+          "queue": 23,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T11:00:00+00:00",
+          "latency_ms": 199,
+          "queue": 26,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T12:00:00+00:00",
+          "latency_ms": 126,
+          "queue": 29,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T13:00:00+00:00",
+          "latency_ms": 143,
+          "queue": 32,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T14:00:00+00:00",
+          "latency_ms": 160,
+          "queue": 35,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T15:00:00+00:00",
+          "latency_ms": 177,
+          "queue": 0,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T16:00:00+00:00",
+          "latency_ms": 194,
+          "queue": 3,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T17:00:00+00:00",
+          "latency_ms": 121,
+          "queue": 6,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T18:00:00+00:00",
+          "latency_ms": 138,
+          "queue": 9,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T19:00:00+00:00",
+          "latency_ms": 155,
+          "queue": 12,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T20:00:00+00:00",
+          "latency_ms": 172,
+          "queue": 15,
+          "availability": 100
+        }
+      ]
+    },
+    {
+      "id": "SVC-04",
+      "name": "Export worker",
+      "samples": [
+        {
+          "time": "2026-10-27T21:00:00+00:00",
+          "latency_ms": 179,
+          "queue": 33,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T22:00:00+00:00",
+          "latency_ms": 196,
+          "queue": 36,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T23:00:00+00:00",
+          "latency_ms": 213,
+          "queue": 1,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T00:00:00+00:00",
+          "latency_ms": 140,
+          "queue": 4,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T01:00:00+00:00",
+          "latency_ms": 157,
+          "queue": 7,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T02:00:00+00:00",
+          "latency_ms": 174,
+          "queue": 10,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T03:00:00+00:00",
+          "latency_ms": 191,
+          "queue": 13,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T04:00:00+00:00",
+          "latency_ms": 208,
+          "queue": 16,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T05:00:00+00:00",
+          "latency_ms": 225,
+          "queue": 19,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T06:00:00+00:00",
+          "latency_ms": 152,
+          "queue": 22,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T07:00:00+00:00",
+          "latency_ms": 169,
+          "queue": 25,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T08:00:00+00:00",
+          "latency_ms": 186,
+          "queue": 28,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T09:00:00+00:00",
+          "latency_ms": 203,
+          "queue": 31,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T10:00:00+00:00",
+          "latency_ms": 220,
+          "queue": 34,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T11:00:00+00:00",
+          "latency_ms": 147,
+          "queue": 37,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T12:00:00+00:00",
+          "latency_ms": 164,
+          "queue": 2,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T13:00:00+00:00",
+          "latency_ms": 181,
+          "queue": 5,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T14:00:00+00:00",
+          "latency_ms": 198,
+          "queue": 8,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T15:00:00+00:00",
+          "latency_ms": 215,
+          "queue": 11,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T16:00:00+00:00",
+          "latency_ms": 292,
+          "queue": 14,
+          "availability": 99.6
+        },
+        {
+          "time": "2026-10-28T17:00:00+00:00",
+          "latency_ms": 309,
+          "queue": 17,
+          "availability": 99.6
+        },
+        {
+          "time": "2026-10-28T18:00:00+00:00",
+          "latency_ms": 326,
+          "queue": 20,
+          "availability": 99.6
+        },
+        {
+          "time": "2026-10-28T19:00:00+00:00",
+          "latency_ms": 343,
+          "queue": 23,
+          "availability": 99.6
+        },
+        {
+          "time": "2026-10-28T20:00:00+00:00",
+          "latency_ms": 360,
+          "queue": 26,
+          "availability": 99.6
+        }
+      ]
+    },
+    {
+      "id": "SVC-05",
+      "name": "Metrics relay",
+      "samples": [
+        {
+          "time": "2026-10-27T21:00:00+00:00",
+          "latency_ms": 217,
+          "queue": 6,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T22:00:00+00:00",
+          "latency_ms": 234,
+          "queue": 9,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-27T23:00:00+00:00",
+          "latency_ms": 251,
+          "queue": 12,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T00:00:00+00:00",
+          "latency_ms": 178,
+          "queue": 15,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T01:00:00+00:00",
+          "latency_ms": 195,
+          "queue": 18,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T02:00:00+00:00",
+          "latency_ms": 212,
+          "queue": 21,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T03:00:00+00:00",
+          "latency_ms": 229,
+          "queue": 24,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T04:00:00+00:00",
+          "latency_ms": 246,
+          "queue": 27,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T05:00:00+00:00",
+          "latency_ms": 173,
+          "queue": 30,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T06:00:00+00:00",
+          "latency_ms": 190,
+          "queue": 33,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T07:00:00+00:00",
+          "latency_ms": 207,
+          "queue": 36,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T08:00:00+00:00",
+          "latency_ms": 224,
+          "queue": 1,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T09:00:00+00:00",
+          "latency_ms": 241,
+          "queue": 4,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T10:00:00+00:00",
+          "latency_ms": 168,
+          "queue": 7,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T11:00:00+00:00",
+          "latency_ms": 185,
+          "queue": 10,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T12:00:00+00:00",
+          "latency_ms": 202,
+          "queue": 13,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T13:00:00+00:00",
+          "latency_ms": 219,
+          "queue": 16,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T14:00:00+00:00",
+          "latency_ms": 236,
+          "queue": 19,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T15:00:00+00:00",
+          "latency_ms": 253,
+          "queue": 22,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T16:00:00+00:00",
+          "latency_ms": 180,
+          "queue": 25,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T17:00:00+00:00",
+          "latency_ms": 197,
+          "queue": 28,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T18:00:00+00:00",
+          "latency_ms": 214,
+          "queue": 31,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T19:00:00+00:00",
+          "latency_ms": 231,
+          "queue": 34,
+          "availability": 100
+        },
+        {
+          "time": "2026-10-28T20:00:00+00:00",
+          "latency_ms": 248,
+          "queue": 37,
+          "availability": 100
+        }
+      ]
+    }
+  ],
+  "alerts": [
+    {
+      "id": "AL-001",
+      "service_id": "SVC-04",
+      "severity": "Critical",
+      "title": "Export latency above the target",
+      "time": "2026-10-28T19:40:00+00:00",
+      "acknowledged": false
+    },
+    {
+      "id": "AL-002",
+      "service_id": "SVC-03",
+      "severity": "Warning",
+      "title": "Index refresh needs review",
+      "time": "2026-10-28T18:25:00+00:00",
+      "acknowledged": false
+    },
+    {
+      "id": "AL-003",
+      "service_id": "SVC-01",
+      "severity": "Info",
+      "title": "Scheduled ingest completed",
+      "time": "2026-10-28T17:00:00+00:00",
+      "acknowledged": true
+    }
+  ],
+  "activity": [
+    {
+      "service_id": "SVC-04",
+      "time": "2026-10-28T19:40:00+00:00",
+      "title": "Export latency alert opened"
+    },
+    {
+      "service_id": "SVC-03",
+      "time": "2026-10-28T18:25:00+00:00",
+      "title": "Index refresh flagged for review"
+    },
+    {
+      "service_id": "SVC-01",
+      "time": "2026-10-28T17:00:00+00:00",
+      "title": "Scheduled observation ingest completed"
+    }
+  ]
+}

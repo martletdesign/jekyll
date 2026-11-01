@@ -1,0 +1,29 @@
+/* Jekyll host composition; shared objects stay in shell.css. */
+.section {padding-block:3rem;}
+.jekyll-document {display:grid;grid-template-columns:16rem minmax(0,48rem);gap:clamp(2rem,4vw,4rem);align-items:start;}
+.jekyll-document:not(:has(.page-index)) {display:block;max-width:50rem;}
+.jekyll-document .page-index {position:sticky;top:6rem;}
+.jekyll-document .page-index .toc {margin:0;padding:1rem;background:transparent;}
+.reading-container {width:calc(100% - 2rem);max-width:48rem;margin-inline:auto;}
+.editorial-content {min-width:0;overflow-wrap:anywhere;}
+.masthead-tags {display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem;}
+.masthead-tags a {font-size:.9rem;}
+.toc {font-family:var(--font-sans,var(--sans));padding:1.25rem;background:var(--color-cream,var(--paper));margin-bottom:2rem;}
+.toc ul {margin:.75rem 0 0;padding-left:1.25rem;}
+html[data-appearance=dark] .editorial-content {color:#eef8fa;}
+html[data-appearance=dark] .editorial-content :is(h2,h3,h4,th,code) {color:inherit;}
+html[data-appearance=dark] .editorial-content a {color:var(--color-gold-300,var(--ice-400));}
+html[data-appearance=dark] .toc {color:var(--color-navy-900,var(--ink));}
+html[data-appearance=dark] .toc a {color:inherit;}
+html[data-appearance=dark] .jekyll-document .page-index {background:transparent;}
+@media(max-width:74rem),(max-aspect-ratio:4/5){.jekyll-document{display:block;}.jekyll-document .page-index{position:static;}.jekyll-document .page-index .toc{margin-bottom:2rem;}}
+
+html[data-appearance=dark] .editorial-content :not(pre)>code {background:var(--martlet-panel2);color:var(--martlet-text);}
+html[data-appearance=dark] .editorial-content pre,html[data-appearance=dark] .editorial-content pre code {background:var(--martlet-code-bg);color:var(--martlet-code-text);}
+
+html[data-appearance=dark] .page-index a {color:var(--color-gold-300,var(--ice-400));}
+
+/* Verbatim post-tag strip from jameshoward.us src/pages/[...route].astro.
+   The exported global shell already owns .pill-list and its pill typography. */
+.post-tags { padding: .8rem 0; color: #fff; background: var(--color-navy-950); }
+.post-tags .pill-list { justify-content: flex-start; margin: 0; }

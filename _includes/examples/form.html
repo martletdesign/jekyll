@@ -1,0 +1,17 @@
+{% assign kind = include.kind %}
+{% capture form_id %}form:{{ include.id }}:{% endcapture %}
+<p class="example-notice" id="{{ form_id }}notice">Local interface demonstration. Use invented values only. Nothing is sent, saved, subscribed, or authenticated.</p>
+<form class="example-form" data-demo-form="{{ kind }}" aria-describedby="{{ form_id }}notice">
+  <fieldset disabled data-demo-fields><legend>{{ kind | replace: '-', ' ' | capitalize }}</legend>
+    {% if kind == 'contact' or kind == 'sign-up' %}<label for="{{ form_id }}name">Name</label><input id="{{ form_id }}name" name="name" autocomplete="off" required maxlength="120">{% endif %}
+    {% if kind != 'two-factor' %}<label for="{{ form_id }}email">Email address</label><input id="{{ form_id }}email" name="email" type="email" autocomplete="off" required maxlength="254">{% endif %}
+    {% if kind == 'sign-in' or kind == 'sign-up' %}<label for="{{ form_id }}password">Example password</label><input id="{{ form_id }}password" name="password" type="password" autocomplete="off" required minlength="8" maxlength="128" aria-describedby="{{ form_id }}password-help"><p id="{{ form_id }}password-help" class="example-help">Use an invented password of at least eight characters.</p>{% endif %}
+    {% if kind == 'two-factor' %}<label for="{{ form_id }}code">Six-digit example code</label><input id="{{ form_id }}code" name="code" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="off" required aria-describedby="{{ form_id }}code-help"><p id="{{ form_id }}code-help" class="example-help">Any six digits demonstrate local format validation.</p>{% endif %}
+    {% if kind == 'contact' %}<label for="{{ form_id }}topic">Topic</label><select id="{{ form_id }}topic" name="topic"><option>Research</option><option>Visits</option><option>Corrections</option></select><label for="{{ form_id }}message">Message</label><textarea id="{{ form_id }}message" name="message" required rows="6" maxlength="4000"></textarea>{% endif %}
+    {% if kind == 'newsletter' or kind == 'sign-up' %}<label class="example-checkbox"><input type="checkbox" required name="consent"> I understand this is a local demonstration.</label>{% endif %}
+    <button class="{% include examples/button-classes.html %}" type="submit">Validate example</button><button type="reset" class="{% include examples/button-classes.html secondary=true %}">Clear</button>
+  </fieldset>
+  <p role="status" data-form-status></p>
+</form>
+<p data-form-fallback>This local form is unavailable.</p>
+<noscript><p>JavaScript is needed for local form validation. The demonstration form is disabled to prevent accidental submission.</p></noscript>

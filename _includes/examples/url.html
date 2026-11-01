@@ -1,0 +1,2 @@
+{%- assign first = include.url | slice: 0, 1 -%}
+{%- if first == '/' -%}{{- include.url | relative_url | escape -}}{%- else -%}{{- include.url | escape -}}{%- endif -%}

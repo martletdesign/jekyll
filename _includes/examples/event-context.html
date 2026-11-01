@@ -1,0 +1,3 @@
+{%- capture start_markup -%}{%- include examples/event-time.html value=include.event.start display=include.event.display_start kind='start' -%}{%- endcapture -%}
+{%- capture end_markup -%}{%- include examples/event-time.html value=include.event.end display=include.event.display_end kind='end' -%}{%- endcapture -%}
+<div class="example-notice"><p><strong>Event details</strong></p><p>{{ start_markup }} to {{ end_markup }} · {{ include.event.timezone | escape }}</p>{% include examples/event-order.html start=include.event.start end=include.event.end start_markup=start_markup end_markup=end_markup %}<p>{{ include.event.location | escape }} · {{ include.event.registration | escape }}</p></div>

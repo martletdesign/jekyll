@@ -1,0 +1,43 @@
+{%- assign raw = include.value | default: '' -%}
+{%- assign valid = true -%}
+{%- assign length = raw | size -%}
+{%- assign last = raw | slice: -1, 1 -%}
+{%- if last == 'Z' -%}
+  {%- assign zone_length = 1 -%}
+  {%- assign zone = '+00:00' -%}
+{%- else -%}
+  {%- assign zone_length = 6 -%}
+  {%- assign zone = raw | slice: -6, 6 -%}
+  {%- assign sign = zone | slice: 0, 1 -%}
+  {%- assign separator = zone | slice: 3, 1 -%}
+  {%- assign zone_hour = zone | slice: 1, 2 -%}
+  {%- assign zone_minute = zone | slice: 4, 2 -%}
+  {%- assign zone_digits = zone_hour | append: zone_minute | remove: '0' | remove: '1' | remove: '2' | remove: '3' | remove: '4' | remove: '5' | remove: '6' | remove: '7' | remove: '8' | remove: '9' -%}
+  {%- assign hours = zone_hour | plus: 0 -%}
+  {%- assign minutes = zone_minute | plus: 0 -%}
+  {%- unless sign == '+' or sign == '-' -%}{%- assign valid = false -%}{%- endunless -%}
+  {%- unless separator == ':' and zone_digits == '' and hours < 24 and minutes < 60 -%}{%- assign valid = false -%}{%- endunless -%}
+  {%- if zone == '-00:00' -%}{%- assign valid = false -%}{%- endif -%}
+{%- endif -%}
+{%- assign body_length = length | minus: zone_length -%}
+{%- assign body = raw | slice: 0, body_length | replace: ' ', 'T' -%}
+{%- if body_length == 16 -%}
+  {%- assign canonical_body = body | append: ':00' -%}
+{%- elsif body_length == 19 -%}
+  {%- assign canonical_body = body -%}
+{%- elsif body_length > 20 -%}
+  {%- assign decimal = body | slice: 19, 1 -%}
+  {%- assign fraction_length = body_length | minus: 20 -%}
+  {%- assign fraction = body | slice: 20, fraction_length -%}
+  {%- assign fraction_rest = fraction | remove: '0' | remove: '1' | remove: '2' | remove: '3' | remove: '4' | remove: '5' | remove: '6' | remove: '7' | remove: '8' | remove: '9' -%}
+  {%- unless decimal == '.' and fraction_rest == '' and fraction_length <= 3 -%}{%- assign valid = false -%}{%- endunless -%}
+  {%- assign canonical_body = body | slice: 0, 19 -%}
+{%- else -%}
+  {%- assign valid = false -%}
+  {%- assign canonical_body = '' -%}
+{%- endif -%}
+{%- assign year = raw | slice: 0, 4 -%}
+{%- assign actual = raw | date: '%Y-%m-%dT%H:%M:%S%:z' -%}
+{%- assign expected = canonical_body | append: zone -%}
+{%- if year == '0000' or actual != expected -%}{%- assign valid = false -%}{%- endif -%}
+{%- if valid -%}<time datetime="{{ include.value | escape }}">{{ include.display | escape }}</time>{%- else -%}<span>{{ include.display | escape }} (invalid {{ include.kind | escape }} time)</span>{%- endif -%}
