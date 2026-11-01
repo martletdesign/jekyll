@@ -20,6 +20,16 @@ try {
  const m={schemaVersion:1,family,framework:'jekyll',docsVersion:version,basePath:`/docs/v/${version}/`,implementation:{kind:'git',name:`${family}design/jekyll`,version,tag},source:{repository:`${family}design/jekyll`,commit,tag},core:null,legacyTheme:{name:legacy.legacy_package,version:legacy.legacy_version,integrity:legacy.legacy_registry_integrity,sourceShellSha256:legacy.sha256},fixtures:{source:'repository'},toolchain:{ruby:'3.2.3'},createdAt:'2026-11-01T00:00:00.000Z',indexing:'noindex',files};
  mf=new Miniflare({modules:true,scriptPath:fileURLToPath(new URL('./worker.mjs',import.meta.url)),compatibilityDate:'2026-08-06',r2Buckets:['ARCHIVES'],bindings:{FAMILY:family,ARCHIVE_WRITE_TOKEN:token,DEPLOY_PREFIX:prefix}});
  const call=(path,method='GET',body,extra={})=>mf.dispatchFetch(`https://example.invalid${prefix}${path}`,{method,body,redirect:'manual',headers:{authorization:`Bearer ${token}`,...extra}});
+ // Omit Content-Length and deliver bounded chunks through the real Workers
+ // runtime. The server must reject each endpoint before accepting an object.
+ for(const [path,chunkSize,count] of [[`/_archive/v/${version}/oversized.bin`,1024*1024,20],['/_archive/catalog',256*1024,6],['/_archive/promotion',32*1024,4]]){
+  let produced=0,cancelled=false;
+  const stream=new ReadableStream({pull(controller){produced++;controller.enqueue(new Uint8Array(chunkSize));if(produced===count)controller.close();},cancel(){cancelled=true;}});
+  const response=await mf.dispatchFetch(`https://example.invalid${prefix}${path}`,{method:'PUT',body:stream,duplex:'half',redirect:'manual',headers:{authorization:`Bearer ${token}`}});
+  assert.equal(response.status,413,path);
+  console.log(`${path}: oversized chunked request rejected (source chunks ${produced}/${count}, cancelled=${cancelled})`);
+ }
+ assert.equal((await call(`/_archive/v/${version}/oversized.bin`)).status,404,'oversized upload must not create an object');
  const root=`/_archive/v/${version}/`;
  for(const file of files){const bytes=await readFile(join(dir,file.path));assert.equal((await call(root+file.path,'PUT',bytes)).status,201,file.path);}
  const manifest=Buffer.from(JSON.stringify(m));assert.equal((await call(root+'manifest.json','PUT',manifest,{'x-manifest-sha256':sha(manifest)})).status,201);
