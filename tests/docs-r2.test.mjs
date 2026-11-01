@@ -37,8 +37,15 @@ test('real source-built Jekyll archive uploads create-only and round-trips verif
    const root=`/_archive/v/${version}/`;const index=await readFile(join(dir,'index.html'));
    assert.equal((await worker.fetch(new Request(`https://example.invalid${prefix}${root}index.html`,{method:'PUT',body:index}),env)).status,401);
    for(const file of files){const bytes=await readFile(join(dir,file.path));assert.equal((await call(root+file.path,'PUT',bytes)).status,201,file.path);}
-   const bad=Buffer.from(JSON.stringify({...manifest,core:{name:`@${family}/core`}}));
-   assert.equal((await call(root+'manifest.json','PUT',bad,{'x-manifest-sha256':sha(bad)})).status,400,'incorrect core identity must fail');
+   for(const invalid of [
+    {...manifest,core:{name:`@${family}/core`}},
+    {...manifest,legacyTheme:{...manifest.legacyTheme,name:`@${family}/core`}},
+    {...manifest,legacyTheme:{...manifest.legacyTheme,integrity:'unverified'}},
+    {...manifest,source:{...manifest.source,commit:'unverified'}}
+   ]){
+    const bad=Buffer.from(JSON.stringify(invalid));
+    assert.equal((await call(root+'manifest.json','PUT',bad,{'x-manifest-sha256':sha(bad)})).status,400,'incorrect provenance must fail');
+   }
    const m=Buffer.from(JSON.stringify(manifest));assert.equal((await call(root+'manifest.json','PUT',m,{'x-manifest-sha256':sha(m)})).status,201);
    assert.equal((await call(root+'index.html','PUT',index)).status,409,'committed file cannot be overwritten');
    for(const file of files){const response=await call(`/docs/v/${version}/${file.path}`);assert.equal(response.status,200,file.path);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(bytes.length,file.size);assert.equal(sha(bytes),file.sha256,file.path);}
