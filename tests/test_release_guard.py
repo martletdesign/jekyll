@@ -64,6 +64,16 @@ class ReleaseGuardTests(unittest.TestCase):
         run('git','checkout','main',cwd=self.repo)
         run('git','merge','--no-ff','feature','-m','merge feature',cwd=self.repo)
         run('git','push','--force','origin','main','v1.2.3',cwd=self.repo)
-        self.assertNotEqual(self.guard(GITHUB_SHA=side).returncode,0)
+        run('git','checkout','--detach',side,cwd=self.repo)
+        result=self.guard(GITHUB_SHA=side)
+        self.assertNotEqual(result.returncode,0)
+        self.assertIn('first-parent main history',result.stderr)
+    def test_wrong_checkout(self):
+        (self.repo/'other').write_text('other')
+        run('git','add','other',cwd=self.repo)
+        run('git','commit','-m','other',cwd=self.repo)
+        result=self.guard()
+        self.assertNotEqual(result.returncode,0)
+        self.assertIn('checked-out commit',result.stderr)
 
 if __name__ == '__main__': unittest.main()

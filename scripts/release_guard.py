@@ -29,6 +29,7 @@ def main():
     sha = os.environ.get('GITHUB_SHA', '')
     require(re.fullmatch(r'[0-9a-f]{40}', sha) is not None, 'invalid event SHA')
     require(git('rev-parse', ref+'^{commit}') == sha, 'tag commit does not match event')
+    require(git('rev-parse', 'HEAD') == sha, 'checked-out commit does not match event')
     require(sha in git('rev-list', '--first-parent', 'refs/remotes/origin/main').splitlines(), 'commit is not on first-parent main history')
     local = git('rev-parse', ref)
     remote = git('ls-remote', '--exit-code', 'origin', ref).splitlines()
