@@ -34,6 +34,24 @@ class ReleaseGuardTests(unittest.TestCase):
     def guard(self, **env):
         return subprocess.run(['python3',str(SCRIPT)],cwd=self.repo,env={**self.env,**env},text=True,capture_output=True)
     def test_approved_tag(self): self.assertEqual(self.guard().returncode,0)
+    def test_stale_production_tracking_ref(self):
+        # Change the actual remote without updating the caller's tracking ref.
+        (self.repo/'new').write_text('new production revision')
+        run('git','add','new',cwd=self.repo)
+        run('git','commit','-m','advance main',cwd=self.repo)
+        newer=run('git','rev-parse','HEAD',cwd=self.repo)
+        run('git','push',str(self.root/'remote.git'),f'{newer}:refs/heads/main',cwd=self.repo)
+        run('git','checkout','--detach',self.sha,cwd=self.repo)
+        result=self.guard()
+        self.assertNotEqual(result.returncode,0)
+        self.assertIn('production tracking ref is stale',result.stderr)
+        run('git','fetch','origin','main',cwd=self.repo)
+        self.assertEqual(self.guard().returncode,0)
+    def test_missing_production_ref(self):
+        run('git','--git-dir',str(self.root/'remote.git'),'update-ref','-d','refs/heads/main',cwd=self.repo)
+        result=self.guard()
+        self.assertNotEqual(result.returncode,0)
+        self.assertIn('production tracking ref is stale or unavailable',result.stderr)
     def test_annotated_tag(self):
         run('git','tag','-fa','v1.2.3','-m','annotated',cwd=self.repo)
         run('git','push','--force','origin','v1.2.3',cwd=self.repo)

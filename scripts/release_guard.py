@@ -30,6 +30,10 @@ def main():
     require(re.fullmatch(r'[0-9a-f]{40}', sha) is not None, 'invalid event SHA')
     require(git('rev-parse', ref+'^{commit}') == sha, 'tag commit does not match event')
     require(git('rev-parse', 'HEAD') == sha, 'checked-out commit does not match event')
+    tracking_tip = git('rev-parse', 'refs/remotes/origin/main')
+    remote_main = git('ls-remote', '--refs', 'origin', 'refs/heads/main').splitlines()
+    require(re.fullmatch(r'[0-9a-f]{40}', tracking_tip) is not None and remote_main == [f'{tracking_tip}\trefs/heads/main'],
+            'production tracking ref is stale or unavailable; fetch main before verification')
     require(sha in git('rev-list', '--first-parent', 'refs/remotes/origin/main').splitlines(), 'commit is not on first-parent main history')
     local = git('rev-parse', ref)
     remote = git('ls-remote', '--exit-code', 'origin', ref).splitlines()
