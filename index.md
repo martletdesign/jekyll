@@ -2,6 +2,7 @@
 layout: page
 title: Martlet, in plain sight.
 eyebrow: The Jekyll reference
+hero_variant: signature
 hero_image: /assets/images/heroes/martlet-hero-2172.webp
 hero_image_width: 2172
 hero_image_height: 724

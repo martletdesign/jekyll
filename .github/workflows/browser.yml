@@ -38,6 +38,12 @@ jobs:
         env:
           BROWSER: ${{ matrix.browser }}
           BUNDLE_FROZEN: 'true'
+      - run: npm run test:identity
+        timeout-minutes: 6
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
       - run: node tests/docs-browser.mjs
         env:
           BROWSER: ${{ matrix.browser }}

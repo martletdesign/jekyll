@@ -23,6 +23,7 @@ assert len(entries)==len(set(entries)) and entries
 out=ROOT/".cloudflare-source"
 site=ROOT/".cloudflare-site"
 if out.exists() or site.exists(): sys.exit("Refusing to reuse an old preview build")
+inputs=[]
 for name in entries:
     p=pathlib.PurePosixPath(name)
     if p.is_absolute() or ".." in p.parts or str(p)!=name: sys.exit("Unsafe source path")
@@ -34,8 +35,10 @@ for name in entries:
     dst=out/name
     dst.parent.mkdir(parents=True,exist_ok=True)
     shutil.copyfile(src,dst)
-(ROOT/".cloudflare-render.yml").write_text("source_archive: false\n")
-slug=re.sub(r"[^a-z0-9-]+","-",branch.lower()).strip("-")[:24].strip("-")
+    inputs.append({"path":name,"sha256":hashlib.sha256(src.read_bytes()).hexdigest()})
+(ROOT/".cloudflare-source-inputs.json").write_text(json.dumps(inputs,sort_keys=True)+"\n")
+(ROOT/".cloudflare-render.yml").write_text("source_archive: true\n")
+slug=re.sub(r"[^a-z0-9-]+","-",branch.lower()).strip("-")[:12].strip("-")
 tag=hashlib.sha256(branch.encode()).hexdigest()[:10]
 name="pr-"+slug+"-"+tag
 assert re.fullmatch(r"pr-[a-z0-9-]{1,40}",name)

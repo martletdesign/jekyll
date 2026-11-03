@@ -1,0 +1,83 @@
+{
+  "examples": {
+    "hero_variant": "section",
+    "hero_image": "/assets/images/sections/martlet-architecture-1920.webp",
+    "hero_image_width": 1920,
+    "hero_image_height": 640,
+    "hero_image_variants": [
+      {
+        "url": "/assets/images/sections/martlet-architecture-640.webp",
+        "width": 640
+      },
+      {
+        "url": "/assets/images/sections/martlet-architecture-960.webp",
+        "width": 960
+      },
+      {
+        "url": "/assets/images/sections/martlet-architecture-1440.webp",
+        "width": 1440
+      },
+      {
+        "url": "/assets/images/sections/martlet-architecture-1920.webp",
+        "width": 1920
+      }
+    ],
+    "hero_focal_point": "center",
+    "asset_id": "martlet-architecture",
+    "provenance": "_hero_sources/provenance/martlet-architecture.json"
+  },
+  "language": {
+    "hero_variant": "section",
+    "hero_image": "/assets/images/sections/martlet-library-1920.webp",
+    "hero_image_width": 1920,
+    "hero_image_height": 640,
+    "hero_image_variants": [
+      {
+        "url": "/assets/images/sections/martlet-library-640.webp",
+        "width": 640
+      },
+      {
+        "url": "/assets/images/sections/martlet-library-960.webp",
+        "width": 960
+      },
+      {
+        "url": "/assets/images/sections/martlet-library-1440.webp",
+        "width": 1440
+      },
+      {
+        "url": "/assets/images/sections/martlet-library-1920.webp",
+        "width": 1920
+      }
+    ],
+    "hero_focal_point": "center",
+    "asset_id": "martlet-library",
+    "provenance": "_hero_sources/provenance/martlet-library.json"
+  },
+  "journal": {
+    "hero_variant": "section",
+    "hero_image": "/assets/images/sections/martlet-manuscript-1920.webp",
+    "hero_image_width": 1920,
+    "hero_image_height": 640,
+    "hero_image_variants": [
+      {
+        "url": "/assets/images/sections/martlet-manuscript-640.webp",
+        "width": 640
+      },
+      {
+        "url": "/assets/images/sections/martlet-manuscript-960.webp",
+        "width": 960
+      },
+      {
+        "url": "/assets/images/sections/martlet-manuscript-1440.webp",
+        "width": 1440
+      },
+      {
+        "url": "/assets/images/sections/martlet-manuscript-1920.webp",
+        "width": 1920
+      }
+    ],
+    "hero_focal_point": "center",
+    "asset_id": "martlet-manuscript",
+    "provenance": "_hero_sources/provenance/martlet-manuscript.json"
+  }
+}

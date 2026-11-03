@@ -74,8 +74,8 @@ try {
       const menu=page.locator('.menu-button');
       if(await menu.isVisible()) {
         await menu.click();assert.equal(await menu.getAttribute('aria-expanded'),'true');
-        assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.97)','Open home menu uses the approved burnished brown');
-        assert.equal(await page.locator('#site-nav').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.99)','Expanded menu stays opaque and readable');
+        assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(37, 23, 11)','Open home menu uses the approved burnished brown');
+        assert.equal(await page.locator('#site-nav').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(37, 23, 11)','Expanded menu stays opaque and readable');
         const homeLinkColors=await page.locator('#site-nav a').evaluateAll(links=>links.map(link=>getComputedStyle(link).color));
         assert.equal(homeLinkColors.length,4,'Every remaining primary destination is present');
         assert.deepEqual(homeLinkColors,Array(4).fill('rgb(248, 244, 233)'),'All homepage menu links retain legible cream');
@@ -83,7 +83,7 @@ try {
         assert.equal(await menu.evaluate(el=>document.activeElement===el),true);
       }
       await page.evaluate(()=>scrollTo(0,400));await page.waitForFunction(()=>document.querySelector('.site-header').classList.contains('is-scrolled'));
-      assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.97)','Scrolled home header uses the approved burnished brown');
+      assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(37, 23, 11)','Scrolled home header uses the approved burnished brown');
       assert.equal(await page.locator('.brand').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Scrolled home header keeps readable cream');
       await page.evaluate(()=>scrollTo(0,0));await page.waitForFunction(()=>!document.querySelector('.site-header').classList.contains('is-scrolled'));
       const result=await bounded(`${engineName} hero axe ${width} ${appearance}`,()=>new AxeBuilder({page}).analyze());
@@ -96,9 +96,9 @@ try {
       await page.emulateMedia({forcedColors:'none'});
       await page.emulateMedia({media:'print'});assert.equal(await art.isVisible(),false);assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(0, 0, 0)','Printing keeps legible title');await page.emulateMedia({media:'screen'});
       await page.goto(`http://127.0.0.1:${port}${base}/language/`,{waitUntil:'load'});
-      assert.equal(await page.locator('.page-intro--illustrated').count(),0,'Plain pages retain source masthead');
+      assert.equal(await page.locator('.page-intro--section.page-intro--illustrated').count(),1,'Major language page uses its explicit shorter section tier');
       await page.evaluate(()=>scrollTo(0,400));await page.waitForFunction(()=>document.querySelector('.site-header').classList.contains('is-scrolled'));
-      assert.equal(await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor),appearance==='dark'?'rgb(248, 244, 233)':'rgb(7, 17, 31)','Nonhero pages retain the canonical blue/cream header states');
+      assert.equal(await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(37, 23, 11)','Section navigation extends the requested warm reference-site composition');
       const innerMenu=page.locator('.menu-button');
       if(await innerMenu.isVisible())await innerMenu.click();
       const currentDestination=page.locator('#site-nav a[aria-current="page"]');
@@ -106,7 +106,7 @@ try {
       assert.equal(await currentDestination.getAttribute('href'),`${base}/language/`,'The Language is the actual current inner destination');
       assert.equal(await currentDestination.isVisible(),true,'Current destination is visible in the opened navigation');
       const currentCue=await currentDestination.evaluate(link=>{const cue=getComputedStyle(link,'::after');return {color:cue.backgroundColor,height:parseFloat(cue.height),scale:new DOMMatrixReadOnly(cue.transform).a}});
-      assert.equal(currentCue.color,appearance==='dark'?'rgb(128, 85, 15)':'rgb(230, 199, 125)','Actual inner destination retains its canonical appearance-specific gold cue');
+      assert.equal(currentCue.color,'rgb(230, 199, 125)','Actual inner destination keeps a legible canonical gold cue on the warm composition');
       assert.ok(currentCue.height>0&&Math.abs(currentCue.scale-1)<.001,'Current destination underline is rendered, not collapsed');
       if(await innerMenu.isVisible()) {await page.keyboard.press('Escape');assert.equal(await innerMenu.getAttribute('aria-expanded'),'false');assert.equal(await innerMenu.evaluate(el=>document.activeElement===el),true)}
       const homeUrl=`http://127.0.0.1:${port}${base}/`;

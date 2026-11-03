@@ -39,7 +39,7 @@ def run(args,timeout=300):subprocess.run(args,cwd=ROOT,check=True,timeout=timeou
 
 MAX_PREVIEW_OUTPUT_BYTES=2*1024*1024
 
-def parse_preview_output(raw):
+def parse_preview_output(raw, *, expected_name="develop"):
     """Parse one final JSON object after Wrangler's human asset-upload log."""
     assert isinstance(raw,str) and len(raw.encode('utf-8'))<=MAX_PREVIEW_OUTPUT_BYTES,'Preview output exceeds the bounded reporting limit'
     first=re.search(r'(?m)^[ \t]*([\{\[])',raw)
@@ -51,7 +51,7 @@ def parse_preview_output(raw):
     preview,deployment=data['preview'],data['deployment']
     assert isinstance(preview,dict) and isinstance(deployment,dict)
     assert isinstance(preview.get('id'),str) and re.fullmatch(r'[a-f0-9]{32}',preview['id'])
-    assert preview.get('name')=='develop' and preview.get('slug')=='develop'
+    assert preview.get('name')==expected_name and preview.get('slug')==expected_name
     assert isinstance(deployment.get('id'),str) and re.fullmatch(r'[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}',deployment['id'])
     assert isinstance(deployment.get('number'),int) and deployment['number']>=0
     assert isinstance(deployment.get('created_on'),str) and deployment['created_on']

@@ -1,0 +1,167 @@
+{
+  "id": "martlet-manuscript",
+  "family": "martlet",
+  "fileTitle": "File:Old-books-on-the-open-access-shelves. Ataide Municipal Library, Mapusa, Goa, India.jpg",
+  "sourcePage": "https://commons.wikimedia.org/wiki/File:Old-books-on-the-open-access-shelves._Ataide_Municipal_Library,_Mapusa,_Goa,_India.jpg",
+  "sourceImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Old-books-on-the-open-access-shelves._Ataide_Municipal_Library%2C_Mapusa%2C_Goa%2C_India.jpg",
+  "retrievedAt": "2026-11-03T18:53:18.344657+00:00",
+  "sourceMetadata": {
+    "DateTime": {
+      "value": "2018-11-11 17:40:13",
+      "source": "mediawiki-metadata",
+      "hidden": ""
+    },
+    "ObjectName": {
+      "value": "Old-books-on-the-open-access-shelves. Ataide Municipal Library, Mapusa, Goa, India",
+      "source": "mediawiki-metadata"
+    },
+    "CommonsMetadataExtension": {
+      "value": 1.2,
+      "source": "extension",
+      "hidden": ""
+    },
+    "Categories": {
+      "value": "Goa State Central Library|Self-published work|Files with coordinates missing SDC location of creation",
+      "source": "commons-categories",
+      "hidden": ""
+    },
+    "Assessments": {
+      "value": "",
+      "source": "commons-categories",
+      "hidden": ""
+    },
+    "GPSLatitude": {
+      "value": "15.542872",
+      "source": "commons-desc-page"
+    },
+    "GPSLongitude": {
+      "value": "73.790340",
+      "source": "commons-desc-page"
+    },
+    "GPSMapDatum": {
+      "value": "WGS-84",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "ImageDescription": {
+      "value": "Old-books-on-the-open-access-shelves. Ataide Municipal Library, Mapusa, Goa, India. Photo by Frederick Noronha, fredericknoronha2@gmail.com or +91-9822122436",
+      "source": "commons-desc-page"
+    },
+    "DateTimeOriginal": {
+      "value": "2018-01-16 11:40:41",
+      "source": "commons-desc-page"
+    },
+    "Credit": {
+      "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+      "source": "commons-desc-page"
+    },
+    "Artist": {
+      "value": "<a href=\"//commons.wikimedia.org/wiki/User:Fredericknoronha\" title=\"User:Fredericknoronha\">Fredericknoronha</a>",
+      "source": "commons-desc-page"
+    },
+    "LicenseShortName": {
+      "value": "CC BY-SA 4.0",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "UsageTerms": {
+      "value": "Creative Commons Attribution-Share Alike 4.0",
+      "source": "commons-desc-page"
+    },
+    "AttributionRequired": {
+      "value": "true",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "LicenseUrl": {
+      "value": "https://creativecommons.org/licenses/by-sa/4.0",
+      "source": "commons-desc-page"
+    },
+    "Copyrighted": {
+      "value": "True",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "Restrictions": {
+      "value": "",
+      "source": "commons-desc-page",
+      "hidden": ""
+    },
+    "License": {
+      "value": "cc-by-sa-4.0",
+      "source": "commons-templates",
+      "hidden": ""
+    }
+  },
+  "author": "Frederick Noronha",
+  "credit": "Frederick Noronha / Wikimedia Commons",
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "sourceSha256": "c5f6c09dae3d0c793fed09942afc7980062e1e3cdfa221d23ab6cd7a7beabc03",
+  "sourceBytes": 3649382,
+  "sourceWidth": 4160,
+  "sourceHeight": 3120,
+  "originalFile": "_hero_sources/originals/martlet-manuscript.jpg",
+  "originalBytesModified": false,
+  "derivatives": [
+    {
+      "path": "assets/images/sections/martlet-manuscript-640.webp",
+      "url": "/assets/images/sections/martlet-manuscript-640.webp",
+      "width": 640,
+      "height": 213,
+      "sha256": "dabe04f4d61a63f4afde56e1c49c67476703a020f75ea265143ac61645967ef7",
+      "bytes": 22722,
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "assets/images/sections/martlet-manuscript-960.webp",
+      "url": "/assets/images/sections/martlet-manuscript-960.webp",
+      "width": 960,
+      "height": 320,
+      "sha256": "0db48a82e3ac83ac71857e59d1f89ddb7412e32fe967b216b454372fe68e5077",
+      "bytes": 46176,
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "assets/images/sections/martlet-manuscript-1440.webp",
+      "url": "/assets/images/sections/martlet-manuscript-1440.webp",
+      "width": 1440,
+      "height": 480,
+      "sha256": "dd19de2203bea71645e68a35c2272dade46e56efedc023a98dc0a9b8db14deb5",
+      "bytes": 89790,
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "assets/images/sections/martlet-manuscript-1920.webp",
+      "url": "/assets/images/sections/martlet-manuscript-1920.webp",
+      "width": 1920,
+      "height": 640,
+      "sha256": "23be48a709d1b837d7856c398657a14f9b88ccfd443ee8def53b4956680798dd",
+      "bytes": 144182,
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  ],
+  "transformation": {
+    "cropBoxPixels": [
+      0,
+      600,
+      4160,
+      1987
+    ],
+    "orientedSourceWidth": 4160,
+    "orientedSourceHeight": 3120,
+    "method": "EXIF orientation, RGB conversion, explicit3:1crop, Lanczos resize, WebP quality88 method6; no tint/recolor/retouch",
+    "tintAppliedToSource": false
+  },
+  "focalPoint": "center",
+  "recommendedPage": "journal",
+  "attributionText": "Old-books-on-the-open-access-shelves. Ataide Municipal Library, Mapusa, Goa, India.jpg \u2014 Frederick Noronha; CC BY-SA 4.0. Cropped to3:1 and resized as WebP. Source: https://commons.wikimedia.org/wiki/File:Old-books-on-the-open-access-shelves._Ataide_Municipal_Library,_Mapusa,_Goa,_India.jpg. License: https://creativecommons.org/licenses/by-sa/4.0.",
+  "derivativeLicense": "CC BY-SA 4.0",
+  "derivativeLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "shareAlikeRequired": true,
+  "sourceSha256VerifiedAfterProcessing": true
+}
