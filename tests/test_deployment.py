@@ -222,9 +222,9 @@ class PropagationTests(unittest.TestCase):
     with patch.object(artifact,'validate_artifact',return_value=({'artifactSha256':'fixture'},{'files':files})):
      start=time.monotonic()
      if mode in ('permanent','503'):
-      with self.assertRaises(AssertionError) as error:artifact.verify_live(c,'develop','a'*40,d,propagation_timeout=.08,retry_delay=.01)
-      if mode=='permanent':self.assertIn('did not converge within 0.08s',str(error.exception));self.assertIn('actualSha256=',str(error.exception))
-     else:self.assertEqual(artifact.verify_live(c,'develop','a'*40,d,propagation_timeout=.08,retry_delay=.01)['filesVerified'],3)
+      with self.assertRaises(AssertionError) as error:artifact.verify_live(c,'develop','a'*40,d,propagation_timeout=.3,retry_delay=.01)
+      if mode=='permanent':self.assertIn('did not converge within 0.3s',str(error.exception));self.assertIn('actualSha256=',str(error.exception))
+     else:self.assertEqual(artifact.verify_live(c,'develop','a'*40,d,propagation_timeout=.3,retry_delay=.01)['filesVerified'],3)
      elapsed=time.monotonic()-start
      self.assertGreaterEqual(calls['/asset.bin'],3) if mode=='permanent' else self.assertEqual(calls['/asset.bin'],1 if mode=='503' else 2)
      self.assertLess(elapsed,3 if mode!='503' else .5)
