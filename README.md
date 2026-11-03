@@ -27,3 +27,7 @@ The source-download link is enabled only by the workbench archive build. Ordinar
 The repository ships reproducible `source.zip` and `SHA256SUMS` assets from protected `v1.0.0`-style tags on main first-parent history. Build root and `/preview` with `python3 nightjar/build.py --destination /absolute/output [--baseurl /preview]`; both builds contain identical source ZIP bytes. Source releases retain the vendored historical theme CSS, fonts, licenses and registry integrity recorded in `scripts/source-shell-provenance.json`; they do not invent a Core package dependency.
 
 The advanced remote R2 archive is explicitly disabled by `release-policy.json`. The normal static documentation and source-download path remains supported and verified. This release does not claim administrator-proof storage or independent anti-rollback protection.
+
+## Approved panoramic homepage
+
+The homepage opts into the locally hosted, original approved Martlet bird panorama. See [hero provenance and behavior](HERO-PROVENANCE.md) for original/derivative hashes, responsive cropping, dark/header behavior, fallback and review limits. Other mastheads retain the canonical image-free shell.

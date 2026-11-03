@@ -31,23 +31,60 @@ html[data-appearance=dark] .page-index a {color:var(--color-gold-300,var(--ice-4
 /* The Krigsvold source shell overlays its header on dashboard pages. */
 .krigsvold .docs-version-nav--dashboard { padding-top: 7rem; }
 
-/* Optional family-owned panoramic hero image. Canonical palette and type remain from
-   jameshoward.us; a host opts in with page.hero_image (no generic shared art). */
+/* Optional host artwork; source palette, type, spacing, and plain mastheads stay
+   in shell.css. The approved panorama is decorative, not the heraldic mark. */
 .page-intro--illustrated {
-  background-color: var(--color-navy-950,#07111f);
-  background-image: linear-gradient(105deg, rgb(7 17 31 / .94) 0%, rgb(11 28 51 / .81) 45%, rgb(11 28 51 / .24) 100%), var(--martlet-hero-art);
-  background-position: center, center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
   isolation: isolate;
+  background-color: var(--color-navy-950, #07111f);
+  background-image: none;
 }
-.page-intro--illustrated .page-intro__content { position:relative; z-index:1; }
-.page-intro--illustrated .page-intro__shade { background:transparent; }
-.page-intro--illustrated :is(h1,p) { color: #f8f4e9; text-shadow: 0 1px 2px rgb(7 17 31 / .3); }
+.page-intro--illustrated .page-intro__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 65% center;
+}
+.page-intro--illustrated::before {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  background: linear-gradient(105deg, rgb(7 17 31 / .94) 0%, rgb(11 28 51 / .81) 45%, rgb(11 28 51 / .24) 100%);
+}
+.page-intro--illustrated .page-intro__content { position: relative; z-index: 2; }
+.page-intro--illustrated .page-intro__shade { background: transparent; }
+.page-intro--illustrated :is(h1,p) { color: var(--color-cream, #f8f4e9); }
+/* The source's image-free dark masthead uses cream. Only this opt-in photograph
+   remains navy-backed in dark mode, with the same opaque, legible text scrim. */
+html[data-appearance="dark"] body .page-intro--illustrated { background-color: var(--color-navy-950, #07111f); }
+html[data-appearance="dark"] body .page-intro--illustrated :is(h1,p,a,code),
+html[data-appearance="dark"] body .page-intro--illustrated .page-intro__content { color: var(--color-cream, #f8f4e9) !important; }
+html[data-appearance="dark"] body .page-intro--illustrated .eyebrow { color: var(--color-gold-300, #e6c77d) !important; }
+html[data-appearance="dark"] body .page-intro--illustrated .page-intro__content::after { background: var(--color-gold-300, #e6c77d); }
+/* The source dark header uses ink over its cream masthead. The illustrated
+   homepage instead needs cream at the unscrolled transparent edge; opened and
+   scrolled cream surfaces retain the canonical ink treatment unchanged. */
+html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) :is(.brand,nav a,.menu-button,.appearance-toggle) { color: var(--color-cream, #f8f4e9); }
+html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) nav a:is([aria-current="page"],.is-active-section,:hover) { color: var(--color-gold-300, #e6c77d); }
+html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) nav a::after { background: var(--color-gold-300, #e6c77d); }
 @media(max-width:48rem) {
-  .page-intro--illustrated {
-    background-image:linear-gradient(90deg, rgb(7 17 31 / .97), rgb(11 28 51 / .8)), var(--martlet-hero-art);
-    background-position:center, 65% center;
-  }
+  .page-intro--illustrated .page-intro__art { object-position: 80% center; }
+  .page-intro--illustrated::before { background: linear-gradient(90deg, rgb(7 17 31 / .97), rgb(11 28 51 / .8)); }
 }
-@media(forced-colors:active) { .page-intro--illustrated { background-image:none; } }
+@media(forced-colors:active) {
+  html[data-appearance] body .page-intro--illustrated { background: Canvas; }
+  .page-intro--illustrated .page-intro__art,.page-intro--illustrated::before { display: none; }
+  html[data-appearance] body .page-intro--illustrated :is(h1,p,a,code,.eyebrow),
+  html[data-appearance] body .page-intro--illustrated .page-intro__content { color: CanvasText !important; }
+  html[data-appearance] body .page-intro--illustrated .page-intro__content::after { background: CanvasText; }
+}
+@media print {
+  .page-intro--illustrated .page-intro__art,.page-intro--illustrated::before { display:none; }
+  html[data-appearance] body .page-intro--illustrated :is(h1,p,a,code,.eyebrow),
+  html[data-appearance] body .page-intro--illustrated .page-intro__content { color:#000 !important; }
+}
