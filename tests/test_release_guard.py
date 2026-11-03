@@ -72,9 +72,11 @@ class ReleaseGuardTests(unittest.TestCase):
         for version in ('01.2.3', '1.2.3-01', '1.2.3+build'):
             (self.repo/'VERSION').write_text(version+'\n')
             self.assertNotEqual(self.guard(GITHUB_REF='refs/tags/v'+version).returncode,0)
-    def test_publication_jobs_remain_disabled(self):
+    def test_source_release_jobs_retain_guard_and_no_npm_authority(self):
         workflow = (SCRIPT.parents[1] / '.github/workflows/tag-release.yml').read_text()
-        self.assertEqual(workflow.count('if: ${{ false }}'), 2)
+        self.assertNotIn('if: ${{ false }}', workflow)
+        self.assertEqual(workflow.count('python3 scripts/release_guard.py'), 3)
+        self.assertIn('cancel-in-progress: false', workflow)
         self.assertNotIn('npm publish', workflow)
     def test_side_branch_commit_is_not_first_parent(self):
         run('git','checkout','-b','feature',cwd=self.repo)

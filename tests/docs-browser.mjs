@@ -6,6 +6,9 @@ import {spawn, spawnSync} from 'node:child_process';
 import {chromium, firefox, webkit} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+const watchdog=setTimeout(()=>{console.error('Overall Jekyll browser deadline exceeded');process.exit(1);},480000);
+async function bounded(label,operation,ms=20000){console.log(`START ${label}`);let timer;try{return await Promise.race([operation(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(`Timed out: ${label} after ${ms}ms`)),ms);})]);}finally{clearTimeout(timer);console.log(`END ${label}`);}}
+
 const browserName=process.env.BROWSER||'chromium', engine={chromium,firefox,webkit}[browserName];assert.ok(engine);
 const tmp=await mkdtemp(join(tmpdir(),'jekyll-version-browser-'));let server,browser;
 try {
@@ -17,22 +20,22 @@ try {
    await writeFile(join(source,'VERSION'),version+'\n');
    const args=['scripts/docs-archive.py','--destination',destination,'--prefix',prefix,'--version',version];
    if(version!=='1.0.0')args.push('--known-version','1.0.0');
-   const p=spawnSync('python3',args,{cwd:source,encoding:'utf8'});assert.equal(p.status,0,p.stdout+p.stderr);
+   const p=spawnSync('python3',args,{cwd:source,encoding:'utf8',timeout:120000});assert.equal(p.status,0,p.stdout+p.stderr);
   }
  }
  server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1','--directory',serve],{stdio:['ignore','pipe','pipe']});
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),10000);for(const stream of [server.stdout,server.stderr])stream.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('exit',()=>reject(Error('server stopped')));});
  browser=await engine.launch(browserName==='chromium'&&process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{});
  for(const prefix of ['','/preview'])for(const js of [false,true]){
-  const context=await browser.newContext({javaScriptEnabled:js,viewport:{width:320,height:900},reducedMotion:'reduce'});const page=await context.newPage();
-  const response=await page.goto(`http://127.0.0.1:${port}${prefix}/docs/v/1.1.0-rc.1/examples/home/`);assert.equal(response.status(),200);
+  const context=await browser.newContext({javaScriptEnabled:js,viewport:{width:320,height:900},reducedMotion:'reduce'});context.setDefaultTimeout(10000);context.setDefaultNavigationTimeout(15000);const page=await context.newPage();
+  console.log(`${browserName} ${prefix||'/'} js=${js} historical route navigation`);const response=await page.goto(`http://127.0.0.1:${port}${prefix}/docs/v/1.1.0-rc.1/examples/home/`);assert.equal(response.status(),200);
   assert.match(await page.locator('meta[name="robots"]').getAttribute('content'),/noindex/);
   const nav=page.getByRole('navigation',{name:'Documentation versions'});assert.equal(await nav.count(),1);
   const allVersions=nav.getByRole('link',{name:'Browse all documentation versions'});
   assert.equal(await allVersions.getAttribute('href'),`${prefix}/docs/versions/`);
   assert.equal(await nav.getByRole('link',{name:/1\.1\.0-rc\.1/}).getAttribute('aria-current'),'page');
   assert.match(await nav.innerText(),/prerelease/);
-  if(js){const axe=await new AxeBuilder({page}).analyze();assert.deepEqual(axe.violations.map(v=>v.id),[]);}
+  if(js){const axe=await bounded(`${browserName} ${prefix||'/'} historical accessibility`,()=>new AxeBuilder({page}).analyze());assert.deepEqual(axe.violations.map(v=>v.id),[]);}
   await allVersions.click();assert.equal(new URL(page.url()).pathname,`${prefix}/docs/versions/`);
   await page.goBack();
   await nav.getByRole('link',{name:'1.0.0',exact:true}).click();assert.equal(new URL(page.url()).pathname,`${prefix}/docs/v/1.0.0/`);
@@ -41,4 +44,4 @@ try {
   assert.equal(new URL(page.url()).pathname,`${prefix}/docs/v/1.0.0/`);
   await context.close();console.log(`${browserName} ${prefix||'/'} JavaScript ${js}: historical navigation passed`);
  }
-} finally {if(browser)await browser.close();if(server)server.kill();await rm(tmp,{recursive:true,force:true});}
+} finally {if(browser)await bounded(`${browserName} browser close`,()=>browser.close(),10000);if(server)server.kill();await rm(tmp,{recursive:true,force:true});clearTimeout(watchdog);}

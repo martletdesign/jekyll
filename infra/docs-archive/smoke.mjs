@@ -34,11 +34,11 @@ try {
  for(const file of files){const bytes=await readFile(join(dir,file.path));assert.equal((await call(root+file.path,'PUT',bytes)).status,201,file.path);}
  const manifest=Buffer.from(JSON.stringify(m));assert.equal((await call(root+'manifest.json','PUT',manifest,{'x-manifest-sha256':sha(manifest)})).status,201);
  assert.equal((await call(root+'index.html','PUT',Buffer.from('replacement'))).status,409);
- const first={schemaVersion:1,family,framework:'jekyll',previousSha256:null,latestStable:null,versions:[{version,channel:'prerelease',manifestSha256:sha(manifest),supported:false,topics:files.filter(x=>x.path.endsWith('.html')).map(x=>x.path)}]},catalog=Buffer.from(JSON.stringify(first));
+ const first={schemaVersion:1,family,framework:'jekyll',previousSha256:null,latestStable:null,versions:[{version,channel:version.includes('-')?'prerelease':'stable',manifestSha256:sha(manifest),supported:false,topics:files.filter(x=>x.path.endsWith('.html')).map(x=>x.path)}]},catalog=Buffer.from(JSON.stringify(first));
  assert.equal((await call('/_archive/catalog','PUT',catalog,{'x-previous-catalog-sha256':'none'})).status,201);
  assert.equal(sha(Buffer.from(await (await call('/docs/catalog.json')).arrayBuffer())),sha(catalog));
  const index=await call('/docs/versions/');assert.equal(index.status,200);assert.match(index.headers.get('content-type'),/text\/html/);
- const indexHtml=await index.text();assert.ok(indexHtml.includes(`href="${prefix}/docs/v/${version}/"`));assert.match(indexHtml,/prerelease/);assert.match(indexHtml,/unsupported/);
+ const indexHtml=await index.text();assert.ok(indexHtml.includes(`href="${prefix}/docs/v/${version}/"`));if(version.includes('-'))assert.match(indexHtml,/prerelease/);else assert.doesNotMatch(indexHtml,/prerelease/);assert.match(indexHtml,/unsupported/);
  const rewritten=Buffer.from(JSON.stringify({...first,previousSha256:sha(catalog),versions:[{...first.versions[0],manifestSha256:'f'.repeat(64)}]}));
  assert.equal((await call('/_archive/catalog','PUT',rewritten,{'x-previous-catalog-sha256':sha(catalog)})).status,409);
  const promotion=Buffer.from(JSON.stringify({schemaVersion:1,family,framework:'jekyll',previousSha256:null,catalogSha256:sha(catalog),version,operation:'promote',reason:''}));

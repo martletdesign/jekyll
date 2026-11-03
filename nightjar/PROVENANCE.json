@@ -2,7 +2,7 @@
   "family": "martlet",
   "workbench_commit": "5141857be03d103732275fb18e05e042505381df",
   "source_manifest": "examples/page-archetypes/contracts/jekyll-source-files.json",
-  "authority": "rehearsal snapshot; workbench remains authoritative",
+  "authority": "Historical workbench extraction mapping; this standalone repository owns subsequent Jekyll implementation changes.",
   "files": [
     {
       "path": ".gitignore",
@@ -1705,5 +1705,6 @@
       "snapshot_sha256": "b16cce624fa4c8df2d858cc443bd362e4a3a743211311a2d84b6d2fdb985136d",
       "transformation": "byte-identical"
     }
-  ]
+  ],
+  "source_authority": "martletdesign/jekyll"
 }

@@ -1,7 +1,7 @@
 title: Martlet Jekyll
 family: martlet
 description: A reference shell for publishing with Martlet, rendered by Jekyll.
-url: ""
+url: "https://jekyll.martletdesign.dev"
 baseurl: ""
 markdown: kramdown
 highlighter: rouge

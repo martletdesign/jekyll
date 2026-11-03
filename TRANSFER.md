@@ -1,7 +1,5 @@
-# Nightjar IV source transfer candidate
+# Standalone Jekyll source authority
 
-This draft imports the attributed Jekyll snapshot from the Nightjar III landmark correction, preserving its per-file provenance in `nightjar/PROVENANCE.json`. The dedicated repository is the proposed future owner; the current shared workbench catalog, fixtures and generator remain in place until a separate reviewed authority transition. Its existing consumers and publishing paths are not changed by this draft.
+Issue #81 authorizes integration of the attributed Jekyll snapshot and its reviewed follow-up safeguards. `martletdesign/jekyll` owns the standalone Jekyll implementation and versioned source releases. The public workbench remains the shared 50-recipe, fixture/schema and cross-framework conformance coordinator; it is not a competing Jekyll publishing authority. Historical file-level extraction provenance remains in `nightjar/PROVENANCE.json`.
 
-Run `bundle install --deployment` and `BUNDLE_FROZEN=true python3 nightjar/verify.py` to verify root and subpath builds, safe rendering, the source archive, archive reconstruction and unsafe-source rejection without a workbench checkout. See `nightjar/README.md` for details. GitHub Actions runs this nonpublishing verification on pull requests to develop.
-
-The snapshot is a genuine Jekyll source tree, not rendered HTML. Release tagging, versioned documentation infrastructure, archive hosting, cross-framework conformance and an ownership transition are not yet implemented by this import. No release, deployment or publication is enabled here.
+Run locked `bundle install` and `BUNDLE_FROZEN=true python3 nightjar/verify.py` to verify root/subpath builds, safe rendering, exact deterministic source archives, archive reconstruction without Git or workbench metadata and unsafe-source rejection. Browser CI retains Chromium, Firefox and WebKit. The ordinary static build path is enabled; advanced R2 serving remains explicitly disabled and cannot claim unverified immutability or anti-rollback protection.

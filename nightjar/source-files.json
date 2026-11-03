@@ -196,6 +196,7 @@
   "nightjar/source-files.json",
   "nightjar/verify-html.py",
   "nightjar/verify.py",
+  "release-policy.json",
   "scripts/docs-archive.py",
   "scripts/source-shell-provenance.json",
   "setup.md"

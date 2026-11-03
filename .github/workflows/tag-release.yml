@@ -1,13 +1,16 @@
-name: Proposed Jekyll tag release
+name: Verified Jekyll source release
 on:
   push:
     tags: ['v*']
 permissions:
   contents: read
+concurrency:
+  group: jekyll-source-release-${{ github.repository }}
+  cancel-in-progress: false
 jobs:
   verify:
-    if: ${{ false }} # Activation requires separate authorization.
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       GITHUB_REF_PROTECTED: ${{ github.ref_protected }}
     steps:
@@ -34,8 +37,8 @@ jobs:
           mkdir "$RUNNER_TEMP/release"
           cp "$RUNNER_TEMP/root/template.zip" "$RUNNER_TEMP/release/source.zip"
           (cd "$RUNNER_TEMP/release" && sha256sum source.zip > SHA256SUMS)
-      - name: Require verified immutable documentation
-        run: python3 scripts/verify_docs.py
+      - name: Verify the static documentation and source policy
+        run: python3 scripts/verify_docs.py --build "${{ runner.temp }}/root"
       - uses: actions/upload-artifact@v4
         with:
           name: jekyll-source
@@ -43,9 +46,9 @@ jobs:
           if-no-files-found: error
           retention-days: 7
   release:
-    if: ${{ false }} # Activation requires separate authorization.
     needs: verify
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
     env:
@@ -63,8 +66,8 @@ jobs:
           name: jekyll-source
           path: release
       - run: cd release && sha256sum --check SHA256SUMS
-      - name: Recheck immutable documentation before release
-        run: python3 scripts/verify_docs.py
+      - name: Recheck the verified source archive before release
+        run: python3 scripts/verify_docs.py --archive release/source.zip
       - name: Reject an existing release or an ambiguous API response
         run: python3 scripts/check_release_absent.py
       - name: Create GitHub Release only after checks
