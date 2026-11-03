@@ -64,4 +64,4 @@ html[data-appearance="dark"] .example-frame--reading[data-example="article"] .to
 .example-documentation-entries p { margin:.6rem 0 0 1.5rem; max-width:58ch; font-family:"Cambo",serif; font-size:1.12rem; }
 @media(max-width:64rem) { .example-frame--document .example-document { display:block; } }
 @media(max-width:40rem) { .example-documentation-entries p { margin-inline-start:0; } }
-@media(forced-colors:active) { .example-frame--reading[data-example="article"] .toc :is(h2,a) { color:CanvasText; } }
+@media(forced-colors:active) { html[data-appearance] .example-frame--reading[data-example="article"] .toc :is(h2,a) { color:CanvasText; } }
