@@ -57,6 +57,28 @@ class PrPreviewTests(unittest.TestCase):
     (d/'.cloudflare-pr-source.json').write_text(json.dumps(state))
     with patch.dict(os.environ,{'JEKYLL_DEPLOY_BRANCH':'main'}),self.assertRaises(AssertionError):pr.context()
     with patch.dict(os.environ,{'WORKERS_CI_BRANCH':'main'}),self.assertRaises(AssertionError):pr.context()
+ def test_generated_names_fit_both_parents_and_separate_long_branches(self):
+  names=[]
+  for suffix in ['A','B']:
+   branch='feature/'+('sameprefix'*10)+'-'+suffix
+   with tempfile.TemporaryDirectory() as tmp:
+    d=Path(tmp);(d/'scripts/deployment').mkdir(parents=True);(d/'nightjar').mkdir()
+    script=d/'scripts/deployment/pr-preview-source.py';script.write_bytes((ROOT/'scripts/deployment/pr-preview-source.py').read_bytes())
+    (d/'README.md').write_text('fixture');(d/'nightjar/source-files.json').write_text('["README.md"]')
+    subprocess.run(['git','init','-q',str(d)],check=True)
+    subprocess.run(['git','-C',str(d),'add','README.md'],check=True)
+    subprocess.run(['git','-C',str(d),'-c','user.name=Fixture','-c','user.email=fixture@example.test','commit','-qm','fixture'],check=True)
+    env={**os.environ,'WORKERS_CI_BRANCH':branch};env.pop('JEKYLL_DEPLOY_BRANCH',None);env.pop('WORKERS_CI_COMMIT_SHA',None)
+    subprocess.run([sys.executable,str(script)],cwd=d,env=env,check=True,capture_output=True,text=True)
+    name=(d/'.cloudflare-pr-name').read_text().strip();names.append(name)
+    sha=subprocess.check_output(['git','-C',str(d),'rev-parse','HEAD'],text=True).strip()
+    for family in ['martlet','krigsvold']:
+     c={'repository':family+'design/jekyll','targets':{'develop':{'worker':family+'design-jekyll-reference'}}}
+     with patch.object(pr,'ROOT',d),patch.object(pr.artifact,'read_config',return_value=c),patch.dict(os.environ,env,clear=True):
+      actual,_,_,context_name=pr.context();self.assertEqual(context_name,name)
+      label=actual['targets'][branch]['origin'].split('://')[1].split('.')[0]
+      self.assertLessEqual(len(label),63);self.assertLessEqual(len(name),26)
+  self.assertNotEqual(names[0],names[1],'Long branches sharing the slug must remain distinct')
  def fixture(self,mode):
   class Handler(http.server.BaseHTTPRequestHandler):
    def log_message(self,*args):pass

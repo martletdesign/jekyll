@@ -29,13 +29,14 @@ def context():
     assert not os.environ.get('WORKERS_CI_COMMIT_SHA') or os.environ['WORKERS_CI_COMMIT_SHA']==sha
     subprocess.run(['git','diff','--quiet','HEAD'],cwd=ROOT,check=True,timeout=30)
     import hashlib
-    slug=re.sub(r'[^a-z0-9-]+','-',branch.lower()).strip('-')[:24].strip('-')
+    slug=re.sub(r'[^a-z0-9-]+','-',branch.lower()).strip('-')[:12].strip('-')
     name='pr-'+slug+'-'+hashlib.sha256(branch.encode()).hexdigest()[:10]
     assert re.fullmatch(r'pr-[a-z0-9-]{1,40}',name)
     staged=json.loads((ROOT/'.cloudflare-pr-source.json').read_text())
     assert staged=={'branch':branch,'sourceCommit':sha,'previewName':name},'Staged preview identity differs'
     assert (ROOT/'.cloudflare-pr-name').read_text()==name+'\n'
     target=dict(c['targets']['develop'])
+    assert len(name+'-'+target['worker'])<=63,'Preview hostname label exceeds DNS limit'
     target.update(previewName=name,origin='https://'+name+'-'+target['worker']+'.k3jph.workers.dev')
     c['targets'][branch]=target
     return c,branch,sha,name

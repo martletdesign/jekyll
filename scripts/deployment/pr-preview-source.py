@@ -38,7 +38,7 @@ for name in entries:
     inputs.append({"path":name,"sha256":hashlib.sha256(src.read_bytes()).hexdigest()})
 (ROOT/".cloudflare-source-inputs.json").write_text(json.dumps(inputs,sort_keys=True)+"\n")
 (ROOT/".cloudflare-render.yml").write_text("source_archive: true\n")
-slug=re.sub(r"[^a-z0-9-]+","-",branch.lower()).strip("-")[:24].strip("-")
+slug=re.sub(r"[^a-z0-9-]+","-",branch.lower()).strip("-")[:12].strip("-")
 tag=hashlib.sha256(branch.encode()).hexdigest()[:10]
 name="pr-"+slug+"-"+tag
 assert re.fullmatch(r"pr-[a-z0-9-]{1,40}",name)
