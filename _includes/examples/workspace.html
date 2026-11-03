@@ -1,0 +1,8 @@
+{% capture workspace_id %}workspace:{{ include.id }}:{% endcapture %}
+<div class="example-workspace" data-workspace>
+  <div class="example-workspace__collection"><label for="{{ workspace_id }}filter">Filter records</label><input id="{{ workspace_id }}filter" type="search" data-record-filter disabled><p data-record-count role="status"></p>
+    <ul class="example-records">{% for item in include.items %}<li data-record data-record-id="{{ item.id | escape }}" data-record-owner="{{ item.owner | escape }}"><button class="{% include examples/button-classes.html %}" type="button" data-select-record aria-pressed="false" disabled>{{ item.title | escape }}</button><span class="example-tag">{{ item.status | escape }}</span><p data-record-summary>{{ item.summary | escape }}</p><p class="example-help">{{ item.id | escape }} · {{ item.owner | escape }}</p></li>{% endfor %}</ul>
+  </div>
+  <section class="example-workspace__detail" aria-label="Selected record — {{ include.title | escape }}"><h3>Selected record</h3><div data-active-record><p>Select a record to inspect it.</p></div><button class="{% include examples/button-classes.html %}" type="button" data-review-record disabled>Mark reviewed locally</button><button class="{% include examples/button-classes.html %}" type="button" data-reset-workspace disabled>Reset demonstration</button><p role="status" data-workspace-status>Local demonstration. No changes are saved.</p></section>
+</div>
+<noscript><p>The full record list is shown above. Selection and local review require JavaScript.</p></noscript>

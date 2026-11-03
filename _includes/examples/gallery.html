@@ -1,0 +1,6 @@
+<div data-gallery>
+<div class="example-gallery">
+  {% for item in include.items %}<figure><a href="{{ item.image | relative_url }}" data-enlarge data-caption="{{ item.caption | escape }}"><img src="{{ item.image | relative_url }}" alt="{{ item.alt | escape }}" width="960" height="640" loading="lazy"><span>Enlarge {{ item.title | escape }}</span></a><figcaption>{{ item.caption | escape }}</figcaption></figure>{% endfor %}
+</div>
+<dialog class="example-lightbox" aria-label="Image detail"><h3>Image detail</h3><button class="{% include examples/button-classes.html %}" type="button" data-close-dialog>Close image</button><figure><img alt="" width="960" height="640"><figcaption></figcaption></figure></dialog>
+</div>

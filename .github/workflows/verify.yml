@@ -1,0 +1,24 @@
+name: Verify standalone Jekyll
+on:
+  pull_request:
+    branches: [develop, main]
+permissions:
+  contents: read
+concurrency:
+  group: jekyll-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - run: BUNDLE_FROZEN=true python3 nightjar/verify.py
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
