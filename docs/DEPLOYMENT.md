@@ -4,9 +4,35 @@ Jekyll builds the site. Cloudflare Workers serves the generated static HTML, CSS
 
 The build command is `bash scripts/deployment/build-cloudflare.sh`. That script runs locked Bundler/Jekyll directly for root and `/preview`. Python only stages the source allowlist, verifies provenance, creates the deterministic source ZIP, retains frozen documentation, and hashes the already-built output. It does not invoke Ruby. Committed `.ruby-version` and `.node-version` files pin Ruby 3.2.11 and Node 24.19.0; no dashboard runtime or build variables are required. Bundler remains 2.4.19 and the existing Gemfile.lock pins Jekyll 4.3.2. Cloudflare may perform its normal dependency installation before the command; the script still explicitly verifies and installs the locked dependencies. `SKIP_DEPENDENCY_INSTALL=true` is an optional build-only optimization, never a runtime binding or a prerequisite. The integrity-locked local Wrangler is 4.156.2.
 
+## Dashboard command fields during development validation
+
+Replace each entire command field; do not append these commands to a generated `npm run build` or another existing value. Both repositories use the same three fields. No dashboard variables are mandatory.
+
+Build command:
+
+```sh
+bash scripts/deployment/build-cloudflare.sh
+```
+
+Nonproduction / Preview command:
+
+```sh
+bash scripts/deployment/preview-cloudflare.sh
+```
+
+Production deploy command while validation is paused:
+
+```sh
+exit 1
+```
+
+The paused production command must remain in place until an explicitly reviewed GitFlow production promotion is approved. A manual nonproduction upload is identified as manual evidence; it does not establish that the native Git-triggered build deployed successfully.
+
 ## GitFlow and one native deployment authority
 
 Feature PRs target `develop`; GitHub Actions retains all existing source, archive, browser and release verification. Successful develop merges build the exact checked source tree through Cloudflare's native Git connection. Native preflight independently checks that the merged PR head has the identical Git tree and all six existing GitHub Actions checks passed, including Chromium, Firefox and WebKit. Public GitHub REST endpoints are used; a GitHub credential or CLI is not required. An optional read-only token can handle authenticated API rate limits, but missing verification never becomes a pass.
+
+Cloudflare's documented Preview Builds switch triggers a preview build on every nonproduction branch push; it is not a develop-only filter. Feature branch native builds therefore appear as Cloudflare checks, while the source scripts reject unsupported branches before building or uploading. Only a verified `develop` merge may update the stable develop Preview. Keep the six GitHub verification checks separate from those expected native branch-guard rejections. See [Cloudflare build branches](https://developers.cloudflare.com/workers/ci-cd/builds/build-branches/).
 
 Cloudflare supplies `WORKERS_CI_BRANCH`; the build selects that Git branch automatically. `JEKYLL_DEPLOY_BRANCH` is only an explicit local override when the native branch is absent; conflicting nonempty branch signals fail before build or deploy. For the develop Preview, use the native nonproduction deploy command `bash scripts/deployment/preview-cloudflare.sh`. This invokes only `wrangler preview --name develop --ignore-base-config`, never production `wrangler deploy`. The exact parent Worker and supported native Preview URL are pinned in `infra/deployment/site.json`. The actual addresses are `develop-martletdesign-jekyll-reference.k3jph.workers.dev` and `develop-krigsvolddesign-jekyll-reference.k3jph.workers.dev`; the shorter proposed names would require different parent Workers. Preview runtime variables, secrets and bindings must be empty. Preview responses send `X-Robots-Tag: noindex, nofollow, noarchive` and a disallow-all robots.txt.
 
@@ -34,6 +60,6 @@ The main-only production helper records the prior single-version deployment, pub
 
 Visual review still compares actual desktop/tablet/mobile, light/dark, imagery, source typography, navigation and cropping against jameshoward.us and krigsvold.org. Automated checks alone do not certify visual fidelity.
 
-Live payload verification has a 300-second overall deadline, at most four in-flight requests, and a 25-second whole-request deadline. Cancellation unwinds within at most 30 additional seconds. The Preview upload command has its own 300-second limit. Failed checks and timeouts remain failures.
+Live payload verification has a 300-second overall deadline, at most four in-flight requests, and a 25-second whole-request deadline. A 404 or a 200 response containing stale bytes may retry with capped exponential backoff for at most 30 seconds per file, within the same overall deadline. Matching bytes must still pass every header assertion; transport failures and other HTTP errors remain failures without retry. Permanent mismatch diagnostics include the path, attempt count, status, byte counts and expected/actual SHA-256. Cancellation stops further retries and unwinds within at most 30 additional seconds. The Preview upload command has its own 300-second limit. Failed checks and timeouts remain failures.
 
 When Cloudflare supplies its documented native build UUID, commit and branch, `.well-known/deployment.json` records those three validated, whitelisted fields in `cloudflareBuild`. Builds outside native Cloudflare CI record `null`. These are environment-reported identifiers, not independent attestation; preserve the corresponding native build log/link to prove the trigger. No credentials or other environment values are copied.

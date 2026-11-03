@@ -177,4 +177,40 @@ class CloudflareBuildMetadataTests(unittest.TestCase):
         with self.assertRaises(AssertionError):artifact.cloudflare_build_metadata('develop','a'*40,{'WORKERS_CI_COMMIT_SHA':'b'*40})
 
 
+# Actual HTTP stale-edge behavior; no Cloudflare writes.
+import collections
+class PropagationTests(unittest.TestCase):
+ def check(self,mode):
+  calls=collections.Counter()
+  class Handler(http.server.BaseHTTPRequestHandler):
+   def log_message(self,*args):pass
+   def do_GET(self):
+    calls[self.path]+=1;n=calls[self.path];code=200;body=b'{}'
+    if self.path=='/asset.bin':
+     if mode=='stale' and n==1:body=b'old'
+     if mode=='missing' and n==1:code=404
+     if mode=='permanent':body=b'bad'
+     if mode=='503':code=503
+    self.send_response(code);self.send_header('X-Robots-Tag','noindex');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
+  server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler);server.daemon_threads=True;t=threading.Thread(target=server.serve_forever,daemon=True);t.start()
+  try:
+   with tempfile.TemporaryDirectory() as tmp:
+    d=pathlib.Path(tmp);(d/'.well-known').mkdir();(d/'.well-known/deployment.json').write_bytes(b'{}');(d/'deployment-inventory.json').write_bytes(b'{}')
+    files=[{'path':'asset.bin','bytes':2,'sha256':artifact.digest(b'{}')}];c={'targets':{'develop':{'origin':f'http://127.0.0.1:{server.server_port}'}}}
+    with patch.object(artifact,'validate_artifact',return_value=({'artifactSha256':'fixture'},{'files':files})):
+     start=time.monotonic()
+     if mode in ('permanent','503'):
+      with self.assertRaises(AssertionError) as error:artifact.verify_live(c,'develop','a'*40,d,propagation_timeout=.08,retry_delay=.01)
+      if mode=='permanent':self.assertIn('did not converge within 0.08s',str(error.exception));self.assertIn('actualSha256=',str(error.exception))
+     else:self.assertEqual(artifact.verify_live(c,'develop','a'*40,d,propagation_timeout=.08,retry_delay=.01)['filesVerified'],3)
+     elapsed=time.monotonic()-start
+     self.assertGreaterEqual(calls['/asset.bin'],3) if mode=='permanent' else self.assertEqual(calls['/asset.bin'],1 if mode=='503' else 2)
+     self.assertLess(elapsed,3 if mode!='503' else .5)
+     print(mode,round(elapsed,3),dict(calls))
+  finally:server.shutdown();server.server_close();t.join(timeout=1)
+ def test_stale_then_current(self):self.check('stale')
+ def test_missing_then_current(self):self.check('missing')
+ def test_permanent_corruption_fails(self):self.check('permanent')
+ def test_503_fails_without_retry(self):self.check('503')
+
 if __name__=='__main__':unittest.main()

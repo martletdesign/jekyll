@@ -80,9 +80,9 @@ html[data-appearance="dark"] body .page-intro--illustrated :is(h1,p,a,code),
 html[data-appearance="dark"] body .page-intro--illustrated .page-intro__content { color: var(--color-cream, #f8f4e9) !important; }
 html[data-appearance="dark"] body .page-intro--illustrated .eyebrow { color: var(--color-gold-300, #e6c77d) !important; }
 html[data-appearance="dark"] body .page-intro--illustrated .page-intro__content::after { background: var(--color-gold-300, #e6c77d); }
-/* The source dark header uses ink over its cream masthead. The illustrated
-   homepage instead needs cream at the unscrolled transparent edge; opened and
-   scrolled cream surfaces retain the canonical ink treatment unchanged. */
+/* The source dark header uses ink over its cream masthead on plain pages.
+   The illustrated homepage needs cream at its transparent edge; its dedicated
+   brown open/scrolled states are scoped below without changing other pages. */
 html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) :is(.brand,nav a,.menu-button,.appearance-toggle) { color: var(--color-cream, #f8f4e9); }
 html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) nav a:is([aria-current="page"],.is-active-section,:hover) { color: var(--color-gold-300, #e6c77d); }
 html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) nav a::after { background: var(--color-gold-300, #e6c77d); }
@@ -103,4 +103,45 @@ html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scroll
   .page-intro--illustrated .page-intro__art,.page-intro--illustrated::before { display:none; }
   html[data-appearance] body .page-intro--illustrated :is(h1,p,a,code,.eyebrow),
   html[data-appearance] body .page-intro--illustrated .page-intro__content { color:#000 !important; }
+}
+
+/* Transparent home navigation sits over the hero's protected warm field.
+   The complete panorama remains below the fixed controls at every width, so
+   neither mobile controls nor the desktop appearance button hide wing tips.
+   Scrolled/open states resolve to brown; other pages retain their source shell. */
+html[data-appearance] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) {
+  background-color:transparent;
+  border-bottom-color:transparent;
+  box-shadow:none;
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open) {
+  background-color:rgb(37 23 11 / .97);
+  border-bottom-color:rgb(230 199 125 / .18);
+  box-shadow:0 5px 24px rgb(31 20 11 / .25);
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open)
+  :is(.brand,nav a,.menu-button,.appearance-toggle) {
+  color:var(--color-cream,#f8f4e9);
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open)
+  nav a:is([aria-current="page"],.is-active-section,:hover) {
+  color:var(--color-gold-300,#e6c77d);
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open) nav a::after {
+  background:var(--color-gold-300,#e6c77d);
+}
+@media(max-width:68rem),(max-aspect-ratio:4/5) {
+  /* The existing expanded menu background must stay opaque and readable. */
+  html[data-appearance] body.has-panoramic-hero .site-header.is-menu-open nav {
+    background-color:rgb(37 23 11 / .99);
+  }
+}
+@media(forced-colors:active) {
+  html[data-appearance] body.has-panoramic-hero .site-header {
+    background:Canvas!important;
+    color:CanvasText!important;
+    border-bottom:1px solid CanvasText;
+  }
+  html[data-appearance] body.has-panoramic-hero .site-header
+    :is(.brand,nav a,.menu-button,.appearance-toggle) {color:CanvasText!important;}
 }
