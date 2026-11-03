@@ -1,1 +1,15 @@
+{% if page.record_id == 'faq' %}
+<div class="example-faq example-faq--grouped">
+  {% for item in include.items %}
+    {% if forloop.index0 == 0 or forloop.index0 == 2 %}
+    <section class="example-faq__group" aria-labelledby="{% if forloop.first %}faq-about{% else %}faq-using{% endif %}">
+      <h3 id="{% if forloop.first %}faq-about{% else %}faq-using{% endif %}">{% if forloop.first %}About these examples{% else %}Using these examples{% endif %}</h3>
+      <div class="example-faq__questions">
+    {% endif %}
+        <details><summary>{{ item.question | escape }}</summary><div class="example-faq__answer"><p>{{ item.answer | escape }}</p></div></details>
+    {% if forloop.index0 == 1 or forloop.last %}</div></section>{% endif %}
+  {% endfor %}
+</div>
+{% else %}
 <div class="example-faq">{% for item in include.items %}<details><summary>{{ item.question | escape }}</summary><p>{{ item.answer | escape }}</p></details>{% endfor %}</div>
+{% endif %}

@@ -1,0 +1,11 @@
+<ol class="example-release-history" aria-label="Release history">
+{% for block in include.record.sections %}
+  {% assign heading = block.title | split: ' · ' %}
+  <li class="example-release-history__entry">
+    <section class="example-section example-release" aria-labelledby="{{ block.id | escape }}">
+      <h2 id="{{ block.id | escape }}"><span class="example-release__version">{{ heading.first | escape }}</span><span class="example-release__date"> · <time datetime="{{ heading.last | date: '%Y-%m-%d' | escape }}">{{ heading.last | escape }}</time></span></h2>
+      <div class="example-prose">{{ block.body | markdownify | escape | nightjar_sanitize: site.baseurl }}</div>
+    </section>
+  </li>
+{% endfor %}
+</ol>
