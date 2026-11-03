@@ -49,7 +49,10 @@ body.martlet .site-header.is-ready :is(.brand,nav a,.menu-button,.appearance-tog
 .example-frame--reading[data-example="article"] .example-reading { max-width:48rem; }
 .example-frame--reading[data-example="article"] .toc { margin-block:0 2.5rem; }
 .example-frame--reading[data-example="article"] .toc h2 { font-size:1rem; line-height:1.4; margin:0 0 .5rem; }
-.example-frame--reading[data-example="article"] .toc :is(h2,a) { color:var(--color-navy-900,#0b1c33); }
+.example-frame--reading[data-example="article"] .toc h2 { color:var(--color-navy-900,#0b1c33); }
+.example-frame--reading[data-example="article"] .toc a { color:var(--color-blue-600); }
+html[data-appearance="dark"] .example-frame--reading[data-example="article"] .toc a { color:var(--color-navy-900,#0b1c33); }
+.example-frame--reading[data-example="article"] .toc a:hover { color:var(--color-gold-700); }
 .example-frame--reading[data-example="article"] article > .example-section .example-prose { font-family:"Cambo",serif; font-size:1.12rem; }
 .example-frame--reading[data-example="article"] .example-context { font-family:"Lato",sans-serif; }
 /* Documentation is a choice of reading paths: annotations sit with their
