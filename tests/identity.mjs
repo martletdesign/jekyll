@@ -44,7 +44,7 @@ try {
    const menu=page.locator('.menu-button');if(await menu.isVisible()){await menu.focus();await page.keyboard.press('Enter');assert.equal(await menu.getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await menu.evaluate(el=>document.activeElement===el),true)}
    const axe=await bounded(`Identity axe ${engineName} ${base||'/'} ${width} ${mode} ${route}`,()=>new AxeBuilder({page}).analyze(),45000);assert.deepEqual(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[],`${route} axe`);console.log(JSON.stringify({route,base,width,mode,incomplete:axe.incomplete.map(v=>v.id)}));
    if(process.env.HERO_SCREENSHOT_DIR&&[375,1440].includes(width)){mkdirSync(process.env.HERO_SCREENSHOT_DIR,{recursive:true});await page.screenshot({path:join(process.env.HERO_SCREENSHOT_DIR,`identity-${engineName}-${base?'preview':'root'}-${route.replaceAll('/','_')}-${width}-${mode}.png`)})}
-   await page.emulateMedia({forcedColors:'active'});assert.equal(await page.locator('main h1').isVisible(),true);assert.equal(await page.locator('.page-intro img').isVisible().catch(()=>false),false,'Forced colors remove decoration');await page.emulateMedia({forcedColors:'none'});
+   await page.emulateMedia({forcedColors:'active'});assert.equal(await page.locator('main h1').isVisible(),true);assert.equal(await page.locator('.page-intro img').isVisible(),false,'Forced colors remove decoration');await page.emulateMedia({forcedColors:'none'});
    assert.deepEqual(errors,[],'Identity renders without script errors');
   }
   await context.close();
