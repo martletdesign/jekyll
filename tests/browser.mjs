@@ -28,23 +28,32 @@ try {
   });
   browser = await engine.launch(engineName === 'chromium' && process.env.CHROMIUM_PATH ? {executablePath:process.env.CHROMIUM_PATH} : {});
   // Opt-in artwork must not alter canonical type, navigation, or plain mastheads.
-  for(const base of ['', '/preview']) for(const width of [320,768,1440]) for(const appearance of ['light','dark']) {
+  for(const base of ['', '/preview']) for(const width of [320,375,640,768,1024,1440,1920,3440]) for(const appearance of ['light','dark']) {
     const context=await browser.newContext({viewport:{width,height:1000},reducedMotion:'reduce'});
     context.setDefaultTimeout(10000);context.setDefaultNavigationTimeout(15000);
     await context.addInitScript(mode=>localStorage.setItem('design-appearance',mode),appearance);
-    const page=await context.newPage(),errors=[];
+    const page=await context.newPage(),errors=[],artRequests=[];
+    page.on('request',request=>{if(/martlet-hero-(?:[0-9]+\.webp|master\.png)$/.test(new URL(request.url()).pathname))artRequests.push(request.url())});
     page.on('pageerror',error=>errors.push(error.message));
     try {
       await bounded(`${engineName} hero ${base||'/'} ${width} ${appearance}`,()=>page.goto(`http://127.0.0.1:${port}${base}/`,{waitUntil:'load'}));
       const hero=page.locator('.page-intro--illustrated'),art=hero.locator('.page-intro__art');
       assert.equal(await hero.count(),1,'Homepage opts in to approved panorama');
       assert.equal(await art.getAttribute('alt'),'');assert.equal(await art.getAttribute('aria-hidden'),'true');
-      assert.equal(await art.getAttribute('width'),'1536');assert.equal(await art.getAttribute('height'),'506');
+      assert.equal(await art.getAttribute('width'),'2172');assert.equal(await art.getAttribute('height'),'724');
       assert.equal(await art.getAttribute('fetchpriority'),'high');
-      assert.ok((await art.getAttribute('srcset')).includes(`${base}/assets/images/heroes/hero-640.webp 640w`));
+      for(const variant of [640,960,1440,1920,2172])assert.ok((await art.getAttribute('srcset')).includes(`${base}/assets/images/heroes/martlet-hero-${variant}.webp ${variant}w`));
+      assert.equal(artRequests.length,1,'Native srcset loads one image, never the master or duplicate fallback');
+      assert.ok(!artRequests.some(url=>url.endsWith('.png')),'Archival master is not a runtime download');
+      const box=await art.boundingBox(),header=await page.locator('.site-header').boundingBox(),heading=await page.locator('h1').boundingBox();
+      assert.ok(Math.abs(box.width/box.height-3)<.01,'Full 3:1 panorama is never distorted');
+      assert.equal(await art.evaluate(img=>getComputedStyle(img).objectFit),'contain','Full wings and tail remain uncropped');
+      assert.ok(box.y+.5>=header.y+header.height,'Navigation does not cover the panorama');
+      if(width<=768)assert.ok(heading.y>=box.y+box.height,'Mobile text sits below the complete image');
       assert.equal(await art.evaluate(img=>img.complete&&img.naturalWidth>0),true,'Approved artwork loads');
       assert.equal(await page.locator('html').getAttribute('data-appearance'),appearance);
       assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)');
+      assert.equal(await hero.locator('p:not(.eyebrow)').first().evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Supporting text uses opaque existing cream for measured contrast');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Hero does not cause horizontal overflow');
       if(appearance==='dark') {
         assert.equal(await page.locator('.brand').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Dark transparent hero header is legible');
@@ -75,6 +84,14 @@ try {
     } finally {await context.close()}
   }
   for(const base of ['', '/preview']) {
+    const dprContext=await browser.newContext({viewport:{width:375,height:900},deviceScaleFactor:2}),dprPage=await dprContext.newPage(),dprRequests=[];
+    dprPage.on('request',request=>{if(/martlet-hero-/.test(new URL(request.url()).pathname))dprRequests.push(request.url())});
+    try {
+      await dprPage.goto(`http://127.0.0.1:${port}${base}/`,{waitUntil:'load'});
+      const chosen=await dprPage.locator('.page-intro__art').evaluate(img=>new URL(img.currentSrc).pathname);
+      assert.match(chosen,/martlet-hero-(960|1440|1920|2172)\.webp$/,'High-DPR mobile uses a suitable supplied derivative');
+      assert.equal(dprRequests.length,1,'High-DPR does not download duplicate art or the archival PNG');
+    } finally {await dprContext.close()}
     const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:900}}),page=await context.newPage();
     try {
       await page.goto(`http://127.0.0.1:${port}${base}/`,{waitUntil:'load'});
@@ -87,7 +104,7 @@ try {
       await failedPage.goto(`http://127.0.0.1:${port}${base}/`,{waitUntil:'load'});
       assert.equal(await failedPage.locator('.page-intro__art').evaluate(img=>img.naturalWidth),0,'Fault injection blocks the image');
       assert.equal(await failedPage.locator('h1').isVisible(),true,'Image failure preserves title');
-      assert.equal(await failedPage.locator('.page-intro--illustrated').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(7, 17, 31)','Image failure retains canonical navy fallback');
+      assert.equal(await failedPage.locator('.page-intro--illustrated').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(31, 20, 11)','Image failure retains contextual warm-ink fallback');
     } finally {await failedContext.close()}
   }
   const pages = JSON.parse(readFileSync('_data/examples.json')).pages;

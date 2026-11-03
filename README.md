@@ -30,4 +30,4 @@ The advanced remote R2 archive is explicitly disabled by `release-policy.json`. 
 
 ## Approved panoramic homepage
 
-The homepage opts into the locally hosted, original approved Martlet bird panorama. See [hero provenance and behavior](HERO-PROVENANCE.md) for original/derivative hashes, responsive cropping, dark/header behavior, fallback and review limits. Other mastheads retain the canonical image-free shell.
+The homepage opts into the locally hosted, approved responsive 2172 × 724 footless Martlet bird panorama. See [hero provenance and behavior](HERO-PROVENANCE.md) for original/derivative hashes, responsive cropping, dark/header behavior, fallback and review limits. Other mastheads retain the canonical image-free shell.

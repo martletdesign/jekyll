@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
-branch="${JEKYLL_DEPLOY_BRANCH:-${WORKERS_CI_BRANCH:-develop}}"
+if [[ -n "${WORKERS_CI_BRANCH:-}" && -n "${JEKYLL_DEPLOY_BRANCH:-}" && "$WORKERS_CI_BRANCH" != "$JEKYLL_DEPLOY_BRANCH" ]]; then
+  echo 'Conflicting native and local GitFlow branch signals' >&2
+  exit 1
+fi
+branch="${WORKERS_CI_BRANCH:-${JEKYLL_DEPLOY_BRANCH:-develop}}"
 case "$branch" in develop|main) ;; *) echo 'Unsupported GitFlow branch' >&2; exit 1;; esac
 export BUNDLE_FROZEN=true
 export BUNDLE_PATH="${BUNDLE_PATH:-vendor/bundle}"

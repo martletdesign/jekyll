@@ -1,6 +1,8 @@
 """Deployment boundaries and immutable artifact checks; no network or secrets."""
 import importlib.util
 import json
+import os
+import subprocess
 from pathlib import Path
 import tempfile
 import unittest
@@ -10,6 +12,15 @@ spec=importlib.util.spec_from_file_location('deployment_artifact',ROOT/'scripts/
 artifact=importlib.util.module_from_spec(spec);spec.loader.exec_module(artifact)
 
 class DeploymentTests(unittest.TestCase):
+    def test_conflicting_native_and_local_branch_signals_fail_before_build_or_deploy(self):
+        for name in ['build-cloudflare.sh','deploy-cloudflare.sh']:
+            for native,override in [('develop','main'),('main','develop')]:
+                with self.subTest(script=name,native=native,override=override):
+                    env={**os.environ,'WORKERS_CI_BRANCH':native,'JEKYLL_DEPLOY_BRANCH':override}
+                    result=subprocess.run(['bash',str(ROOT/'scripts/deployment'/name)],cwd=ROOT,env=env,capture_output=True,text=True,timeout=10)
+                    self.assertEqual(result.returncode,1)
+                    self.assertIn('Conflicting native and local GitFlow branch signals',result.stderr)
+
     def test_only_reviewed_gitflow_promotion_shape(self):
         sha='a'*40
         good={'merged_at':'2026-11-03T00:00:00Z','merge_commit_sha':sha,'base':{'ref':'main'},'head':{'ref':'release/hero','sha':sha},'user':{'login':'author'}}
