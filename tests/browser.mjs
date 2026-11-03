@@ -39,6 +39,9 @@ try {
       await bounded(`${engineName} hero ${base||'/'} ${width} ${appearance}`,()=>page.goto(`http://127.0.0.1:${port}${base}/`,{waitUntil:'load'}));
       const hero=page.locator('.page-intro--illustrated'),art=hero.locator('.page-intro__art');
       assert.equal(await hero.count(),1,'Homepage opts in to approved panorama');
+      assert.equal(await page.locator('.brand').getAttribute('href'),`${base}/`,'Brand remains the root/subpath homepage destination');
+      assert.equal(await page.locator(`#site-nav a[href="${base}/"]`).count(),0,'Homepage navigation has no redundant Overview destination');
+      assert.equal(await page.locator('#site-nav a[aria-current="page"]').count(),0,'Homepage has no falsely selected inner destination');
       assert.equal(await art.getAttribute('alt'),'');assert.equal(await art.getAttribute('aria-hidden'),'true');
       assert.equal(await art.getAttribute('width'),'2172');assert.equal(await art.getAttribute('height'),'724');
       assert.equal(await art.getAttribute('fetchpriority'),'high');
@@ -63,8 +66,9 @@ try {
         await menu.click();assert.equal(await menu.getAttribute('aria-expanded'),'true');
         assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.97)','Open home menu uses the approved burnished brown');
         assert.equal(await page.locator('#site-nav').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.99)','Expanded menu stays opaque and readable');
-        assert.equal(await page.locator('#site-nav a[aria-current="page"]').evaluate(el=>getComputedStyle(el).color),'rgb(230, 199, 125)','Current destination keeps its gold cue');
-        assert.equal(await page.locator('#site-nav a:not([aria-current])').first().evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Menu links retain legible cream');
+        const homeLinkColors=await page.locator('#site-nav a').evaluateAll(links=>links.map(link=>getComputedStyle(link).color));
+        assert.equal(homeLinkColors.length,4,'Every remaining primary destination is present');
+        assert.deepEqual(homeLinkColors,Array(4).fill('rgb(248, 244, 233)'),'All homepage menu links retain legible cream');
         await page.keyboard.press('Escape');assert.equal(await menu.getAttribute('aria-expanded'),'false');
         assert.equal(await menu.evaluate(el=>document.activeElement===el),true);
       }
@@ -85,6 +89,20 @@ try {
       assert.equal(await page.locator('.page-intro--illustrated').count(),0,'Plain pages retain source masthead');
       await page.evaluate(()=>scrollTo(0,400));await page.waitForFunction(()=>document.querySelector('.site-header').classList.contains('is-scrolled'));
       assert.equal(await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor),appearance==='dark'?'rgb(248, 244, 233)':'rgb(7, 17, 31)','Nonhero pages retain the canonical blue/cream header states');
+      const innerMenu=page.locator('.menu-button');
+      if(await innerMenu.isVisible())await innerMenu.click();
+      const currentDestination=page.locator('#site-nav a[aria-current="page"]');
+      assert.equal(await currentDestination.count(),1,'An inner page exposes exactly one current destination');
+      assert.equal(await currentDestination.getAttribute('href'),`${base}/language/`,'The Language is the actual current inner destination');
+      assert.equal(await currentDestination.isVisible(),true,'Current destination is visible in the opened navigation');
+      const currentCue=await currentDestination.evaluate(link=>{const cue=getComputedStyle(link,'::after');return {color:cue.backgroundColor,height:parseFloat(cue.height),scale:new DOMMatrixReadOnly(cue.transform).a}});
+      assert.equal(currentCue.color,appearance==='dark'?'rgb(128, 85, 15)':'rgb(230, 199, 125)','Actual inner destination retains its canonical appearance-specific gold cue');
+      assert.ok(currentCue.height>0&&Math.abs(currentCue.scale-1)<.001,'Current destination underline is rendered, not collapsed');
+      if(await innerMenu.isVisible()) {await page.keyboard.press('Escape');assert.equal(await innerMenu.getAttribute('aria-expanded'),'false');assert.equal(await innerMenu.evaluate(el=>document.activeElement===el),true)}
+      const homeUrl=`http://127.0.0.1:${port}${base}/`;
+      await Promise.all([page.waitForURL(homeUrl),page.locator('.brand').click()]);
+      assert.equal(page.url(),homeUrl,'Brand actually returns to the correct homepage');
+      assert.equal(await page.locator('.page-intro--illustrated').count(),1,'Brand navigation restores the approved panoramic home');
       assert.deepEqual(errors,[],'Hero causes no page errors');
     } finally {await context.close()}
   }
