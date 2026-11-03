@@ -10,7 +10,7 @@
 <p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>
 <p class="dash-status" role="status" data-dashboard-status>Published synthetic directory.</p>
 <section class="dash-panel" aria-labelledby="directory-title"><h2 id="directory-title">People directory</h2>
-  <div class="dash-actions"><span data-selection-count>0 people selected.</span><button class="{% include examples/button-classes.html %}" type="button" data-bulk="Active" disabled>Activate selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-bulk="Suspended" disabled>Suspend selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-new-person disabled>Add person</button></div>
+  <div class="dash-directory-commands"><div class="dash-actions" role="group" aria-label="Selected people"><span data-selection-count>0 people selected.</span><button class="{% include examples/button-classes.html %}" type="button" data-bulk="Active" disabled>Activate selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-bulk="Suspended" disabled>Suspend selected</button></div><div class="dash-actions"><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-new-person disabled>Add person</button></div></div>
   <div class="dash-state" data-directory-state hidden></div>
   <div class="example-table-scroll" role="region" aria-label="People directory table" tabindex="0" data-directory-region>
     <table id="people-table"><caption>Synthetic people — select visible records or edit an individual</caption><thead><tr>
