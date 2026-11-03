@@ -1,0 +1,15 @@
+<ol class="example-release-history" aria-label="Release history">
+{% for block in include.record.sections %}
+  {% assign heading = block.title | split: ' · ' %}
+  {% assign release_date = heading.last | date: '%Y-%m-%d' %}
+  {% assign release_date_length = release_date | size %}
+  {% assign release_epoch = heading.last | date: '%s' %}
+  {% assign release_epoch_number = release_epoch | plus: 0 | append: '' %}
+  <li class="example-release-history__entry">
+    <section class="example-section example-release" aria-labelledby="{{ block.id | escape }}">
+      <h2 id="{{ block.id | escape }}">{% if heading.size == 2 and release_date_length == 10 and release_epoch == release_epoch_number %}<span class="example-release__version">{{ heading.first | escape }}</span><span class="example-release__date"> · <time datetime="{{ release_date | escape }}">{{ heading.last | escape }}</time></span>{% else %}{{ block.title | escape }}{% endif %}</h2>
+      <div class="example-prose">{{ block.body | markdownify | escape | nightjar_sanitize: site.baseurl }}</div>
+    </section>
+  </li>
+{% endfor %}
+</ol>
