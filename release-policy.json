@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "family": "martlet",
+  "framework": "jekyll",
+  "documentationPath": "static-source",
+  "advancedArchiveEnabled": false,
+  "securityLimitations": [
+    "Advanced remote archive serving is disabled.",
+    "No administrator-immutable R2 storage or independent anti-rollback guarantee is asserted."
+  ],
+  "authority": "martletdesign/jekyll"
+}
