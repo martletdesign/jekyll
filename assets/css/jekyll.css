@@ -269,3 +269,35 @@ html[data-appearance="dark"] body.martlet .editorial-content thead th { color:va
   html[data-appearance] body.martlet .site-header.mast,html[data-appearance] body.martlet .site-header.mast nav { background:Canvas !important; }
   body[data-hero-variant="signature"] .site-header::before { display:none; }
 }
+
+/* Martlet reference dark mode: use the same opaque burnished bronze as the
+   approved warm navigation, without changing the canonical source palette or
+   the light-mode footer. This applies to all Jekyll page archetypes. */
+html[data-appearance="dark"] body.martlet .site-footer {
+  background-color: #25170b;
+  color: #f8f4e9;
+}
+html[data-appearance="dark"] body.martlet .site-footer :is(h2,.footer-identity strong) {
+  color: #f8f4e9;
+}
+html[data-appearance="dark"] body.martlet .site-footer a {
+  color: #f8f4e9;
+}
+html[data-appearance="dark"] body.martlet .site-footer a:is(:hover,:focus-visible) {
+  color: #e6c77d;
+}
+html[data-appearance="dark"] body.martlet .site-footer :is(h2,.footer-bottom) {
+  border-color: rgb(230 199 125 / 25%);
+}
+html[data-appearance="dark"] body.martlet .site-footer a:focus-visible {
+  outline-color: #e6c77d;
+}
+@media (forced-colors:active) {
+  html[data-appearance="dark"] body.martlet .site-footer {
+    background: Canvas;
+    color: CanvasText;
+  }
+  html[data-appearance="dark"] body.martlet .site-footer :is(h2,.footer-identity strong,a,a:hover,a:focus-visible) {
+    color: CanvasText;
+  }
+}
