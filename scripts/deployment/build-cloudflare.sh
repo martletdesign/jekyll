@@ -16,13 +16,8 @@ case "$branch" in
     gem install bundler --version 2.4.19 --no-document
     bundle _2.4.19_ install --jobs 4 --retry 2
     bundle _2.4.19_ exec jekyll build --source .cloudflare-source --config .cloudflare-source/_config.yml,.cloudflare-render.yml --destination .cloudflare-site --baseurl '' --strict_front_matter --trace
-    python3 - <<'PY'
-from pathlib import Path
-site=Path(".cloudflare-site")
-assert site.is_dir() and (site/"index.html").is_file()
-(site/"robots.txt").write_text("User-agent: *\\nDisallow: /\\n")
-(site/"_headers").write_text("/*\\n  X-Robots-Tag: noindex, nofollow, noarchive\\n  X-Content-Type-Options: nosniff\\n  Referrer-Policy: strict-origin-when-cross-origin\\n")
-PY
+    bundle _2.4.19_ exec jekyll build --source .cloudflare-source --config .cloudflare-source/_config.yml,.cloudflare-render.yml --destination .cloudflare-site/preview --baseurl /preview --strict_front_matter --trace
+    python3 scripts/deployment/pr-preview-verify.py finalize
     echo "PR_PREVIEW_ONLY: $branch"
     exit 0
     ;;

@@ -8,15 +8,8 @@ test -d .cloudflare-site
 test -f .cloudflare-pr-name
 name="$(cat .cloudflare-pr-name)"
 [[ "$name" =~ ^pr-[a-z0-9-]{1,40}$ ]] || { echo "Invalid preview name" >&2; exit 1; }
-python3 - "$PWD" <<'PY'
-import json,pathlib,sys
-root=pathlib.Path(sys.argv[1])
-site=json.loads((root/"infra/deployment/site.json").read_text())
-assert site["targets"]["develop"]["worker"]==site["targets"]["main"]["worker"]
-cfg={"name":site["targets"]["develop"]["worker"],"account_id":site["accountId"],"compatibility_date":"2026-11-03","workers_dev":True,"assets":{"directory":str((root/".cloudflare-site").resolve()),"html_handling":"auto-trailing-slash","not_found_handling":"404-page"},"previews":{"vars":{}}}
-(root/".cloudflare-wrangler.pr.json").write_text(json.dumps(cfg,sort_keys=True)+"\n")
-PY
 npm ci --prefix infra/deployment --ignore-scripts --no-audit --no-fund
+python3 scripts/deployment/pr-preview-verify.py before-upload
 timeout 300s node infra/deployment/node_modules/wrangler/bin/wrangler.js preview --name "$name" --config .cloudflare-wrangler.pr.json --ignore-base-config --message "$(git rev-parse HEAD)" --json > .cloudflare-pr-result.json
-cat .cloudflare-pr-result.json
+python3 scripts/deployment/pr-preview-verify.py record
 echo "PR_PREVIEW_PUBLISHED name=$name sha=$(git rev-parse HEAD)"
