@@ -7,3 +7,16 @@
 .dash-heading h1 { font-family:var(--font-serif); font-weight:400; }
 .dash-main { padding-inline-end:1rem; }
 @media(max-width:42rem){.dash-main{padding-inline-end:0;}}
+
+/* Related fields share a small gap; different filter scopes remain groups.
+   The existing wide working canvas, native controls and chart layout stay. */
+.dash-controls--relationships { grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr)); gap:var(--martlet-group-gap,1.5rem); }
+.dash-control-group { min-width:0; }
+.dash-control-group--period,.dash-control-group--monitoring { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr)); gap:var(--martlet-field-gap,.5rem); }
+.dash-control-group > div { min-width:0; }
+.dash-directory-commands { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--martlet-group-gap,1.5rem); }
+@media(max-width:64rem) { .dash-controls--relationships,.dash-app[data-dashboard="operations"] .dash-controls--relationships { grid-template-columns:1fr; } }
+@media(max-width:42rem) { .dash-control-group--period,.dash-control-group--monitoring { grid-template-columns:1fr; } }
+/* The shell's broad label rule is column-oriented; native checkbox assistance
+   belongs beside its control in the dashboard task, not beneath it. */
+.dash-app .example-checkbox { flex-direction:row; }

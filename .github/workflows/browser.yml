@@ -62,6 +62,18 @@ jobs:
           BROWSER: ${{ matrix.browser }}
           BUNDLE_FROZEN: 'true'
           BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - run: npm run test:navigation
+        timeout-minutes: 3
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - run: npm run test:workspaces
+        timeout-minutes: 3
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
       - run: node tests/docs-browser.mjs
         env:
           BROWSER: ${{ matrix.browser }}
