@@ -3,6 +3,7 @@ layout: page
 permalink: /setup/
 title: Make it your own.
 eyebrow: Template guide
+hero_variant: compact
 description: A normal Jekyll project, with a shared design shell and editable content.
 ---
 ## Run locally

@@ -9,6 +9,22 @@ toc:
   - {id: hierarchy, title: Hierarchy}
   - {id: states, title: States and continuity}
   - {id: boundaries, title: Boundaries}
+hero_variant: section
+hero_image: /assets/images/sections/martlet-library-1920.webp
+hero_image_width: 1920
+hero_image_height: 640
+hero_focal_point: center
+hero_image_variants:
+  - {url: /assets/images/sections/martlet-library-640.webp, width: 640}
+  - {url: /assets/images/sections/martlet-library-960.webp, width: 960}
+  - {url: /assets/images/sections/martlet-library-1440.webp, width: 1440}
+  - {url: /assets/images/sections/martlet-library-1920.webp, width: 1920}
+hero_credit:
+  author: "Matthew Petroff"
+  source_url: "https://commons.wikimedia.org/wiki/File:George-peabody-library.jpg"
+  license: "CC BY-SA 3.0"
+  license_url: "https://creativecommons.org/licenses/by-sa/3.0"
+  changes: "Cropped and resized."
 ---
 ## Relationships
 

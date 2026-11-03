@@ -1,0 +1,108 @@
+{
+  "page": {
+    "pageid": 24162642,
+    "ns": 6,
+    "title": "File:George-peabody-library.jpg",
+    "index": 1,
+    "imagerepository": "local",
+    "imageinfo": [
+      {
+        "size": 3972424,
+        "width": 3000,
+        "height": 2250,
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c1/George-peabody-library.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+        "descriptionurl": "https://commons.wikimedia.org/wiki/File:George-peabody-library.jpg",
+        "descriptionshorturl": "https://commons.wikimedia.org/w/index.php?curid=24162642",
+        "extmetadata": {
+          "DateTime": {
+            "value": "2021-05-29 17:01:00",
+            "source": "mediawiki-metadata",
+            "hidden": ""
+          },
+          "ObjectName": {
+            "value": "George-peabody-library",
+            "source": "mediawiki-metadata"
+          },
+          "CommonsMetadataExtension": {
+            "value": 1.2,
+            "source": "extension",
+            "hidden": ""
+          },
+          "Categories": {
+            "value": "George Peabody Library|Self-published work|2013 in Baltimore|Exposure time 1 sec|January 2013 in Maryland|Interiors of libraries in Maryland|Featured pictures of building interiors|Atriums in Maryland|Files with coordinates missing SDC location of creation|United States photographs taken on 2013-01-15|Long exposure photography in architecture|Pictures of the Year/2021 (finalist)|Featured pictures of libraries",
+            "source": "commons-categories",
+            "hidden": ""
+          },
+          "Assessments": {
+            "value": "quality|featured|poty",
+            "source": "commons-categories",
+            "hidden": ""
+          },
+          "GPSLatitude": {
+            "value": "39.296988",
+            "source": "commons-desc-page"
+          },
+          "GPSLongitude": {
+            "value": "-76.614850",
+            "source": "commons-desc-page"
+          },
+          "GPSMapDatum": {
+            "value": "WGS-84",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "ImageDescription": {
+            "value": "Interior of the George Peabody Library in Baltimore",
+            "source": "commons-desc-page"
+          },
+          "DateTimeOriginal": {
+            "value": "Taken on\u00a015 January 2013, 19:33:27",
+            "source": "commons-desc-page"
+          },
+          "Credit": {
+            "value": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+            "source": "commons-desc-page"
+          },
+          "Artist": {
+            "value": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Petroffm&amp;action=edit&amp;redlink=1\" class=\"new\" title=\"User:Petroffm (page does not exist)\">Matthew Petroff</a>",
+            "source": "commons-desc-page"
+          },
+          "LicenseShortName": {
+            "value": "CC BY-SA 3.0",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "UsageTerms": {
+            "value": "Creative Commons Attribution-Share Alike 3.0",
+            "source": "commons-desc-page"
+          },
+          "AttributionRequired": {
+            "value": "true",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "LicenseUrl": {
+            "value": "https://creativecommons.org/licenses/by-sa/3.0",
+            "source": "commons-desc-page"
+          },
+          "Copyrighted": {
+            "value": "True",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "Restrictions": {
+            "value": "",
+            "source": "commons-desc-page",
+            "hidden": ""
+          },
+          "License": {
+            "value": "cc-by-sa-3.0",
+            "source": "commons-templates",
+            "hidden": ""
+          }
+        }
+      }
+    ]
+  },
+  "retrievedAt": "2026-11-03T18:53:18.454628+00:00"
+}
