@@ -47,9 +47,11 @@ def main():
         cli=ROOT/'infra/deployment/node_modules/wrangler/bin/wrangler.js'
         command=['node',str(cli),'deploy','--config',str(config),'--message',f"{c['repository']} {a.branch} {a.sha}",'--keep-vars']
         completed=subprocess.run(command,cwd=ROOT,check=False,timeout=300)
-        published=active(c,worker);receipt['deployment']=published;receipt['wranglerExitCode']=completed.returncode;save()
+        observed=active(c,worker)
+        if observed!=before and observed.get('sourceMessage')==f"{c['repository']} {a.branch} {a.sha}":published=observed
+        receipt['deployment']=observed;receipt['wranglerExitCode']=completed.returncode;save()
         assert completed.returncode==0,'Wrangler did not complete successfully'
-        assert published!=before,'Deployment did not advance'
+        assert published is not None,'The new source version was not observed; inspect or restore our own failed replacement'
         assert cf(c,worker,'/settings')['bindings']==[],'Runtime authority changed unexpectedly'
         receipt['liveVerification']=verify_live(c,a.branch,a.sha,a.directory)
         receipt['status']='passed';receipt['deployedAt']=datetime.now(timezone.utc).isoformat();save()

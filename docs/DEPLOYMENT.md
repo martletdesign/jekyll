@@ -33,3 +33,5 @@ The native Preview receipt logs actual preview and deployment IDs, URLs, source 
 The main-only production helper records the prior single-version deployment, publishes exactly the checked artifact, reads actual version/deployment IDs, checks bindings and compares live bytes. Failed verification remains a failure. It restores the previous version only when the failed current version bears this job's exact source annotation and no newer actor replaced it; it will not overwrite another deployment. Rollback failures are reported explicitly. Preserve native build logs/receipts and the last-good revision.
 
 Visual review still compares actual desktop/tablet/mobile, light/dark, imagery, source typography, navigation and cropping against jameshoward.us and krigsvold.org. Automated checks alone do not certify visual fidelity.
+
+Live payload verification has a 300-second overall deadline, at most four in-flight requests, and a 25-second whole-request deadline. Cancellation unwinds within at most 30 additional seconds. The Preview upload command has its own 300-second limit. Failed checks and timeouts remain failures.

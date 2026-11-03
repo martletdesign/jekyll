@@ -11,6 +11,8 @@ import re
 import shutil
 import subprocess
 import tarfile
+import tempfile
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -177,11 +179,26 @@ def request(url, *, data=None, headers=None, method=None):
     except urllib.error.HTTPError as e:
         return e.code,e.read(),dict(e.headers)
 
-def verify_live(c, branch, sha, directory):
+def public_bytes(url, timeout=25):
+    """A real HTTPS fetch with a wall-clock deadline, including redirects/body."""
+    with tempfile.TemporaryDirectory(prefix='jekyll-live-fetch-') as temporary:
+        root=Path(temporary);body=root/'body';headers=root/'headers'
+        command=['curl','--silent','--show-error','--location','--proto-redir','=https','--connect-timeout',str(min(10,timeout)),'--max-time',str(timeout),'--dump-header',str(headers),'--output',str(body),'--write-out','%{http_code}','--user-agent','Mozilla/5.0 JekyllDeploymentVerification','--header','Cache-Control: no-cache',url]
+        completed=subprocess.run(command,check=False,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=timeout+5)
+        assert completed.returncode==0,f'Live request failed or exceeded {timeout}s: {url}'
+        last=headers.read_bytes().strip().split(b'\r\n\r\n')[-1].decode('iso-8859-1')
+        parsed={}
+        for line in last.splitlines()[1:]:
+            name,separator,value=line.partition(':')
+            if separator:
+                key=name.strip().lower();parsed[key]=(parsed[key]+', ' if key in parsed else '')+value.strip()
+        return int(completed.stdout),body.read_bytes(),parsed
+
+def verify_live(c, branch, sha, directory, *, overall_timeout=300, request_timeout=25):
     m,inv=validate_artifact(c,branch,sha,directory);origin=c['targets'][branch]['origin']
     def one(f):
         if f['path']=='_headers':return None
-        code,b,h=request(origin+'/'+f['path'],headers={'User-Agent':'Mozilla/5.0 JekyllDeploymentVerification','Cache-Control':'no-cache'})
+        code,b,h=public_bytes(origin+'/'+urllib.parse.quote(f['path'],safe='/'),timeout=request_timeout)
         assert code==200,(f['path'],code)
         assert len(b)==f['bytes'] and digest(b)==f['sha256'],f'Live bytes differ: {f["path"]}'
         headers={k.lower():v for k,v in h.items()}
@@ -189,8 +206,29 @@ def verify_live(c, branch, sha, directory):
         if branch=='develop':assert 'noindex' in headers.get('x-robots-tag','')
         return {'path':f['path'],'sha256':f['sha256'],'status':code}
     files=inv['files']+[{'path':'.well-known/deployment.json','bytes':len((directory/'.well-known/deployment.json').read_bytes()),'sha256':digest((directory/'.well-known/deployment.json').read_bytes())},{'path':'deployment-inventory.json','bytes':len((directory/'deployment-inventory.json').read_bytes()),'sha256':digest((directory/'deployment-inventory.json').read_bytes())}]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:results=list(pool.map(one,files))
-    return {'status':'passed','verifiedAt':datetime.now(timezone.utc).isoformat(),'sourceCommit':sha,'artifactSha256':m['artifactSha256'],'origin':origin,'filesVerified':sum(r is not None for r in results),'noindex':branch=='develop','tlsVerificationDisabled':False,'externalSiteAvailabilityClaimed':False}
+    # Submit at most four requests. executor.map would queue the entire site
+    # and wait for that queue even after a failure, defeating the rollback bound.
+    deadline=time.monotonic()+overall_timeout;results=[];remaining=iter(files)
+    pool=concurrent.futures.ThreadPoolExecutor(max_workers=4);pending=set()
+    def fill():
+        while len(pending)<4:
+            try:f=next(remaining)
+            except StopIteration:return
+            pending.add(pool.submit(one,f))
+    try:
+        fill()
+        while pending:
+            left=deadline-time.monotonic()
+            if left<=0:raise TimeoutError(f'Live verification exceeded {overall_timeout}s overall deadline')
+            done,_=concurrent.futures.wait(pending,timeout=left,return_when=concurrent.futures.FIRST_COMPLETED)
+            if not done:raise TimeoutError(f'Live verification exceeded {overall_timeout}s overall deadline')
+            # Observe all completed failures before submitting any more work.
+            batch=[future.result() for future in done]
+            pending.difference_update(done);results.extend(batch);fill()
+    finally:
+        for future in pending:future.cancel()
+        pool.shutdown(wait=True,cancel_futures=True)
+    return {'status':'passed','verifiedAt':datetime.now(timezone.utc).isoformat(),'sourceCommit':sha,'artifactSha256':m['artifactSha256'],'origin':origin,'filesVerified':sum(r is not None for r in results),'noindex':branch=='develop','tlsVerificationDisabled':False,'externalSiteAvailabilityClaimed':False,'overallDeadlineSeconds':overall_timeout,'requestWallClockDeadlineSeconds':request_timeout,'maxInFlightRequests':4}
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('operation',choices=['guard','finalize','verify-artifact','verify-live','config']);p.add_argument('--branch',required=True,choices=['develop','main']);p.add_argument('--sha',required=True);p.add_argument('--directory',type=Path);p.add_argument('--output',type=Path)

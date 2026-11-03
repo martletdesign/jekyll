@@ -54,4 +54,72 @@ class DeploymentTests(unittest.TestCase):
             d=Path(temp);(d/'outside').write_text('sensitive synthetic data');(d/'alias').symlink_to(d/'outside')
             with self.assertRaises(AssertionError):artifact.inventory(d)
 
+
+# Real HTTP faults prove bounded verification and rollback without Cloudflare writes.
+import contextlib,hashlib,http.server,pathlib,subprocess,sys,threading,time
+from unittest.mock import patch
+sys.modules['artifact']=artifact
+spec=importlib.util.spec_from_file_location('deployment_with_bounds',ROOT/'scripts/deployment/deploy.py')
+deploy=importlib.util.module_from_spec(spec);spec.loader.exec_module(deploy)
+REPORT=[]
+
+@contextlib.contextmanager
+def fixture(mode, count=500):
+ with tempfile.TemporaryDirectory() as temp:
+  directory=pathlib.Path(temp);(directory/'.well-known').mkdir();(directory/'.well-known/deployment.json').write_text('{}');(directory/'deployment-inventory.json').write_text('{}')
+  paths=['fail.bin']+[f'stall-{i}.bin' for i in range(count)] if mode=='failure' else [f'stall-{i}.bin' for i in range(count)]
+  if mode=='success':paths=['index.html','asset.bin']
+  files=[{'path':p,'bytes':2,'sha256':hashlib.sha256(b'{}').hexdigest()} for p in paths]
+  calls=[]
+  class Handler(http.server.BaseHTTPRequestHandler):
+   def log_message(self,*args):pass
+   def do_GET(self):
+    calls.append(self.path)
+    if mode=='failure' and self.path=='/fail.bin':
+     self.send_response(503);self.end_headers();self.wfile.write(b'no');return
+    if mode!='success':time.sleep(.75)
+    self.send_response(200);self.send_header('Content-Type','text/html' if self.path.endswith('.html') else 'application/octet-stream');self.send_header('Cache-Control','public, no-transform');self.send_header('X-Robots-Tag','noindex');self.send_header('Content-Length','2');self.end_headers()
+    try:self.wfile.write(b'{}')
+    except (BrokenPipeError,ConnectionResetError):pass
+  server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler);server.daemon_threads=True;thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
+  c={'targets':{'develop':{'origin':f'http://127.0.0.1:{server.server_port}'}}}
+  try:
+   with patch.object(artifact,'validate_artifact',return_value=({'artifactSha256':'fixture-only'}, {'files':files})):
+    yield directory,c,calls
+  finally:server.shutdown();server.server_close();thread.join(timeout=1)
+
+class BoundsTests(unittest.TestCase):
+ def test_first_failure_does_not_wait_for_500_queued_assets(self):
+  with fixture('failure') as (d,c,calls):
+   started=time.monotonic()
+   with self.assertRaises((AssertionError,TimeoutError)):artifact.verify_live(c,'develop','a'*40,d,overall_timeout=.2,request_timeout=.35)
+   elapsed=time.monotonic()-started;self.assertLess(elapsed,1.5);self.assertLessEqual(len(calls),4)
+   REPORT.append({'case':'first503 with500stalledpendingassets','result':'rejected','elapsedSeconds':round(elapsed,3),'requestsStarted':len(calls),'maxRequests':4})
+ def test_overall_deadline_stops_submission_and_inflight_requests_are_bounded(self):
+  with fixture('stall') as (d,c,calls):
+   started=time.monotonic()
+   with self.assertRaises(TimeoutError):artifact.verify_live(c,'develop','a'*40,d,overall_timeout=.1,request_timeout=.35)
+   elapsed=time.monotonic()-started;self.assertLess(elapsed,1.5);self.assertLessEqual(len(calls),4)
+   REPORT.append({'case':'overall100ms with500stalledassets','result':'deadlinefailed','elapsedSeconds':round(elapsed,3),'requestsStarted':len(calls),'requestWallClockSeconds':.35})
+ def test_real_bytes_headers_and_manifest_checks_still_pass(self):
+  with fixture('success') as (d,c,calls):
+   result=artifact.verify_live(c,'develop','a'*40,d,overall_timeout=3,request_timeout=1)
+   self.assertEqual(result['status'],'passed');self.assertEqual(result['filesVerified'],4);self.assertEqual(len(calls),4)
+   REPORT.append({'case':'real payload plusbothmanifestfiles/noindex/no-transform','result':'passed','filesVerified':4})
+ def test_rollback_observes_own_new_version_after_initial_read_lag(self):
+  sha='a'*40;message='martletdesign/jekyll main '+sha
+  before={'deploymentId':'old-deploy','versionId':'old-version','sourceMessage':'old'}
+  own={'deploymentId':'our-deploy','versionId':'our-version','sourceMessage':message}
+  restored={'deploymentId':'rollback-deploy','versionId':'old-version','sourceMessage':'old'}
+  c={'repository':'martletdesign/jekyll','targets':{'main':{'worker':'martletdesign-jekyll-reference','origin':'https://jekyll.martletdesign.dev'}}}
+  with tempfile.TemporaryDirectory() as temp:
+   d=pathlib.Path(temp);receipt=d/'receipt.json';cf_calls=[]
+   def cf(*args,**kwargs):
+    cf_calls.append((args,kwargs));return {'bindings':[]}
+   with patch.object(deploy,'read_config',return_value=c),patch.object(deploy,'guard'),patch.object(deploy,'validate_artifact',return_value=({'artifactSha256':'fixture'},{})),patch.object(deploy,'cf',side_effect=cf),patch.object(deploy,'active',side_effect=[before,before,own,restored]),patch.object(deploy.subprocess,'run',return_value=subprocess.CompletedProcess([],0)),patch.object(sys,'argv',['deploy.py','--branch','main','--sha',sha,'--directory',temp,'--receipt',str(receipt)]):
+    with self.assertRaises(AssertionError):deploy.main()
+   result=json.loads(receipt.read_text());self.assertEqual(result['status'],'failed');self.assertEqual(result['rollback']['status'],'restored');self.assertEqual(result['rollback']['deployment']['versionId'],'old-version');self.assertTrue(any(call[1].get('body',{}).get('versions')==[{'version_id':'old-version','percentage':100}] for call in cf_calls))
+   REPORT.append({'case':'before,before,ownnew API readlag','result':'failedverificationrestoresoldversion','rollback':'restored'})
+
+
 if __name__=='__main__':unittest.main()
