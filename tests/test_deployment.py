@@ -1,6 +1,8 @@
 """Deployment boundaries and immutable artifact checks; no network or secrets."""
 import importlib.util
 import json
+import os
+import subprocess
 from pathlib import Path
 import tempfile
 import unittest
@@ -10,6 +12,15 @@ spec=importlib.util.spec_from_file_location('deployment_artifact',ROOT/'scripts/
 artifact=importlib.util.module_from_spec(spec);spec.loader.exec_module(artifact)
 
 class DeploymentTests(unittest.TestCase):
+    def test_conflicting_native_and_local_branch_signals_fail_before_build_or_deploy(self):
+        for name in ['build-cloudflare.sh','deploy-cloudflare.sh']:
+            for native,override in [('develop','main'),('main','develop')]:
+                with self.subTest(script=name,native=native,override=override):
+                    env={**os.environ,'WORKERS_CI_BRANCH':native,'JEKYLL_DEPLOY_BRANCH':override}
+                    result=subprocess.run(['bash',str(ROOT/'scripts/deployment'/name)],cwd=ROOT,env=env,capture_output=True,text=True,timeout=10)
+                    self.assertEqual(result.returncode,1)
+                    self.assertIn('Conflicting native and local GitFlow branch signals',result.stderr)
+
     def test_only_reviewed_gitflow_promotion_shape(self):
         sha='a'*40
         good={'merged_at':'2026-11-03T00:00:00Z','merge_commit_sha':sha,'base':{'ref':'main'},'head':{'ref':'release/hero','sha':sha},'user':{'login':'author'}}
@@ -150,5 +161,20 @@ class PreviewOutputTests(unittest.TestCase):
         with self.assertRaises(AssertionError):module.parse_preview_output('x'*(module.MAX_PREVIEW_OUTPUT_BYTES+1))
         data=self.payload();data['deployment']['env']={'unexpected':{'type':'plain_text','text':'synthetic'}}
         with self.assertRaises(AssertionError):module.parse_preview_output(json.dumps(data))
+
+class CloudflareBuildMetadataTests(unittest.TestCase):
+    def test_local_manual_build_has_no_native_build_claim(self):
+        self.assertIsNone(artifact.cloudflare_build_metadata('develop','a'*40,{}))
+    def test_native_fields_are_validated_and_secrets_never_copied(self):
+        values={'WORKERS_CI_BUILD_UUID':'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','WORKERS_CI_COMMIT_SHA':'a'*40,'WORKERS_CI_BRANCH':'develop','CLOUDFLARE_API_TOKEN':'private-synthetic-value','WORKERS_CI':'not-required'}
+        result=artifact.cloudflare_build_metadata('develop','a'*40,values)
+        self.assertEqual(result['buildUuid'],values['WORKERS_CI_BUILD_UUID']);self.assertEqual(result['commitSha'],'a'*40);self.assertEqual(result['branch'],'develop');self.assertIs(result['independentAttestationClaimed'],False)
+        self.assertNotIn('private-synthetic-value',json.dumps(result));self.assertNotIn('WORKERS_CI',result)
+    def test_mismatched_or_malformed_reported_values_fail(self):
+        valid={'WORKERS_CI_BUILD_UUID':'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','WORKERS_CI_COMMIT_SHA':'a'*40,'WORKERS_CI_BRANCH':'develop'}
+        for key,value in [('WORKERS_CI_BUILD_UUID','not-a-uuid'),('WORKERS_CI_COMMIT_SHA','b'*40),('WORKERS_CI_COMMIT_SHA','not-a-hash'),('WORKERS_CI_BRANCH','main')]:
+            with self.assertRaises(AssertionError):artifact.cloudflare_build_metadata('develop','a'*40,{**valid,key:value})
+        with self.assertRaises(AssertionError):artifact.cloudflare_build_metadata('develop','a'*40,{'WORKERS_CI_COMMIT_SHA':'b'*40})
+
 
 if __name__=='__main__':unittest.main()

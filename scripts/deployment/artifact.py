@@ -17,6 +17,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import zipfile
+import uuid
 from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -123,6 +124,18 @@ def inventory(directory):
             b=p.read_bytes();files.append({'path':p.relative_to(directory).as_posix(),'bytes':len(b),'sha256':digest(b)})
     return files
 
+def cloudflare_build_metadata(branch, sha, environ=None):
+    """Whitelisted, overridable environment evidence; not an attestation."""
+    environment=os.environ if environ is None else environ
+    build_id=environment.get('WORKERS_CI_BUILD_UUID')
+    commit=environment.get('WORKERS_CI_COMMIT_SHA')
+    reported_branch=environment.get('WORKERS_CI_BRANCH')
+    if commit is not None:assert SHA.fullmatch(commit) and commit==sha,'Cloudflare reported commit does not match the actual source'
+    if reported_branch is not None:assert reported_branch==branch,'Cloudflare reported branch does not match the target'
+    if build_id is None:return None
+    assert re.fullmatch(r'[a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}',build_id),'Invalid Cloudflare build UUID'
+    return {'buildUuid':str(uuid.UUID(build_id)),'commitSha':commit,'branch':reported_branch,'evidence':'environment-reported','independentAttestationClaimed':False}
+
 def finalize(c, branch, sha, destination):
     """Consume direct Jekyll output; this function never invokes Ruby."""
     assert branch in c['targets'] and SHA.fullmatch(sha)
@@ -154,6 +167,7 @@ def finalize(c, branch, sha, destination):
     (destination/'_headers').write_text(headers)
     files=inventory(destination);artifact_sha=digest(json_bytes(files))
     metadata={'schemaVersion':1,'family':c['family'],'framework':'jekyll','repository':c['repository'],'branch':branch,'sourceCommit':sha,'sourceTree':subprocess.check_output(['git','rev-parse',sha+'^{tree}'],cwd=ROOT,text=True).strip(),'builtAt':datetime.now(timezone.utc).isoformat(),'artifactSha256':artifact_sha,'sourceZipSha256':digest((destination/'template.zip').read_bytes()),'sourceArchivePublication':'not-performed-by-deployment','frozenHistorySha256':history['sha256'],'worker':c['targets'][branch]['worker'],'url':c['targets'][branch]['origin'],'advancedArchiveEnabled':False,'runtimeBindings':[],'runtimeSecrets':False,'noindex':branch=='develop','deliveryMode':'native-cloudflare-static-assets','manualAccessibilityReviewPassed':False}
+    metadata['cloudflareBuild']=cloudflare_build_metadata(branch,sha)
     path=destination/'.well-known/deployment.json';path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(json_bytes(metadata))
     (destination/'deployment-inventory.json').write_bytes(json_bytes({'schemaVersion':1,'artifactSha256':artifact_sha,'files':files}))
     return metadata

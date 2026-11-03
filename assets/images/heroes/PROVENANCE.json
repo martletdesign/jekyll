@@ -1,40 +1,64 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "family": "martlet",
-  "approvedSource": "Maintainer-supplied approved-panoramic-heroes.zip, original panoramic compositions from preceding ChatGPT design review",
+  "approvedSource": "martlet-krigsvold-approved-responsive-heroes.zip",
+  "archiveSha256": "2b1e7baa26ef3aef804c06a8c4817a84f59e3f13f3ad974f23f32c7048108649",
+  "approvedSelection": "2026-11-03 user-supplied 2172 by 724 footless martlet panorama, superseding previous candidates",
   "reviewIssue": "https://github.com/k3jph/design-workbench/issues/88",
   "visualAuthority": "https://jameshoward.us/",
-  "artworkRole": "Host-owned decorative airborne bird at dusk; not a source-site photograph or the heraldic system mark",
-  "rightsBasis": "Supplied by the maintainer with explicit direction to commit and distribute these approved assets in this repository; no external photography or third-party attribution claimed",
+  "artworkRole": "Host-owned decorative footless martlet at sunset, not a replacement heraldic mark or a change to canonical blue foundations",
+  "rightsBasis": "Supplied by maintainer with explicit direction to commit and distribute approved artwork in this repository",
   "distributionLicense": "Repository LICENSE (MIT)",
   "originalPreserved": true,
-  "later16by9RegenerationsUsed": false,
-  "derivatives": "Supplied optimized WebP derivatives; no regenerated artwork or additional image transformation",
-  "files": [
-    {
-      "file": "hero-original.webp",
-      "width": 1536,
-      "height": 506,
-      "bytes": 41024,
-      "sha256": "6ee7d00a6b2b0c25a7ea24fa0d334cc5ea3782e1fea4a1d81b91449d32de78b4"
-    },
-    {
-      "file": "hero-960.webp",
-      "width": 960,
-      "height": 316,
-      "bytes": 16090,
-      "sha256": "c6bf5a34ea31741019dd9e25105d85efa826465ef1af3b68defd649a01261cce"
-    },
-    {
-      "file": "hero-640.webp",
-      "width": 640,
-      "height": 211,
-      "bytes": 9494,
-      "sha256": "c1d22b655d0a6425d9ca85e95925c37d10afab40dc81d2fb42c3902ed77da564"
-    }
-  ],
+  "underlyingImageColorsAltered": false,
+  "optional16by9CropUsed": false,
+  "treatment": "CSS-only layered bronze/warm ink, antique-gold center and restrained right tint; full uncropped image row above text on mobile",
   "sourceStylePreservation": {
     "assets/css/shell.css": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45",
     "assets/css/fonts.css": "80f766b73961542249d0cd82917d72ad65a9d869cfbb1566daeba5caba56560f"
-  }
+  },
+  "files": [
+    {
+      "file": "martlet-hero-1440.webp",
+      "bytes": 29386,
+      "width": 1440,
+      "height": 480,
+      "sha256": "0135fb44890f4bf5092afa2c798fa7337800cfb021f1622d876733072181c877"
+    },
+    {
+      "file": "martlet-hero-1920.webp",
+      "bytes": 42644,
+      "width": 1920,
+      "height": 640,
+      "sha256": "d726af09b175d474cffcfb1152c2b6b69e04e5b51ed85244396b39965c27e2e3"
+    },
+    {
+      "file": "martlet-hero-2172.webp",
+      "bytes": 50988,
+      "width": 2172,
+      "height": 724,
+      "sha256": "325691c8e1468c19b809242f4b6b8cd49780afecbbf00800b1b8567efd74c55d"
+    },
+    {
+      "file": "martlet-hero-640.webp",
+      "bytes": 10572,
+      "width": 640,
+      "height": 213,
+      "sha256": "98a0b5248a74203e32136301df707302d1274e5b3110a4b201ad5420edeaab7c"
+    },
+    {
+      "file": "martlet-hero-960.webp",
+      "bytes": 17284,
+      "width": 960,
+      "height": 320,
+      "sha256": "a7c0713f8fa2faa1a10dd382c9d7c4bfea5a149a30def1e2fb29f6f2c158acf8"
+    },
+    {
+      "file": "martlet-hero-master.png",
+      "bytes": 1665260,
+      "width": 2172,
+      "height": 724,
+      "sha256": "2ab6f3b4ba63d7fd3ba51a8cd3db7e5782de1bf03eb31b0ec3b1fd44f100959a"
+    }
+  ]
 }

@@ -6,16 +6,20 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 APPROVED = {
-    'hero-original.webp': ('6ee7d00a6b2b0c25a7ea24fa0d334cc5ea3782e1fea4a1d81b91449d32de78b4', 41024, 1536, 506),
-    'hero-960.webp': ('c6bf5a34ea31741019dd9e25105d85efa826465ef1af3b68defd649a01261cce', 16090, 960, 316),
-    'hero-640.webp': ('c1d22b655d0a6425d9ca85e95925c37d10afab40dc81d2fb42c3902ed77da564', 9494, 640, 211),
+    'martlet-hero-640.webp': ('98a0b5248a74203e32136301df707302d1274e5b3110a4b201ad5420edeaab7c', 10572, 640, 213),
+    'martlet-hero-960.webp': ('a7c0713f8fa2faa1a10dd382c9d7c4bfea5a149a30def1e2fb29f6f2c158acf8', 17284, 960, 320),
+    'martlet-hero-1440.webp': ('0135fb44890f4bf5092afa2c798fa7337800cfb021f1622d876733072181c877', 29386, 1440, 480),
+    'martlet-hero-1920.webp': ('d726af09b175d474cffcfb1152c2b6b69e04e5b51ed85244396b39965c27e2e3', 42644, 1920, 640),
+    'martlet-hero-2172.webp': ('325691c8e1468c19b809242f4b6b8cd49780afecbbf00800b1b8567efd74c55d', 50988, 2172, 724),
+    'martlet-hero-master.png': ('2ab6f3b4ba63d7fd3ba51a8cd3db7e5782de1bf03eb31b0ec3b1fd44f100959a', 1665260, 2172, 724),
 }
 
 class ApprovedHeroTests(unittest.TestCase):
     def test_approved_artwork_and_derivatives_are_byte_exact(self):
         provenance = json.loads((ROOT/'assets/images/heroes/PROVENANCE.json').read_text())
         self.assertEqual(provenance['family'], 'martlet')
-        self.assertFalse(provenance['later16by9RegenerationsUsed'])
+        self.assertFalse(provenance['optional16by9CropUsed'])
+        self.assertFalse(provenance['underlyingImageColorsAltered'])
         records = {r['file']: r for r in provenance['files']}
         self.assertEqual(set(records), set(APPROVED))
         for name, (digest, length, width, height) in APPROVED.items():
@@ -23,7 +27,7 @@ class ApprovedHeroTests(unittest.TestCase):
                 path = ROOT/'assets/images/heroes'/name
                 self.assertFalse(path.is_symlink())
                 data = path.read_bytes()
-                self.assertEqual(data[8:12], b'WEBP')
+                self.assertEqual(data[:8], b'\x89PNG\r\n\x1a\n') if name.endswith('.png') else self.assertEqual(data[8:12], b'WEBP')
                 self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
                 self.assertEqual(len(data), length)
                 self.assertEqual(records[name], {'file':name, 'width':width, 'height':height, 'bytes':length, 'sha256':digest})

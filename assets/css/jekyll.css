@@ -31,37 +31,51 @@ html[data-appearance=dark] .page-index a {color:var(--color-gold-300,var(--ice-4
 /* The Krigsvold source shell overlays its header on dashboard pages. */
 .krigsvold .docs-version-nav--dashboard { padding-top: 7rem; }
 
-/* Optional host artwork; source palette, type, spacing, and plain mastheads stay
-   in shell.css. The approved panorama is decorative, not the heraldic mark. */
+/* Host-owned artwork and burnished-gold composition only. The source palette,
+   type and plain mastheads remain byte-for-byte in shell.css. */
 .page-intro--illustrated {
+  --martlet-hero-ink: #1f140b;
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   overflow: hidden;
   isolation: isolate;
-  background-color: var(--color-navy-950, #07111f);
+  background-color: var(--martlet-hero-ink);
   background-image: none;
 }
+/* Reserve the fixed navigation's own dark band. The complete panorama begins
+   below it; without JavaScript the original header already remains in flow. */
+.site-header[data-navigation-ready] + main .page-intro--illustrated { padding-top: calc(4.6rem + 1px); }
 .page-intro--illustrated .page-intro__art {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  grid-area: 1 / 1;
+  align-self: start;
+  display: block;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: none;
-  object-fit: cover;
-  object-position: 65% center;
+  aspect-ratio: 3 / 1;
+  object-fit: contain;
+  object-position: center;
 }
 .page-intro--illustrated::before {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  grid-area: 1 / 1;
   z-index: 1;
+  pointer-events: none;
   content: "";
-  background: linear-gradient(105deg, rgb(7 17 31 / .94) 0%, rgb(11 28 51 / .81) 45%, rgb(11 28 51 / .24) 100%);
+  /* Separate layers: warm ink legibility + translucent antique-gold glaze.
+     The right edge remains light, retaining the approved wings and sunset. */
+  background:
+    linear-gradient(103deg, rgb(31 20 11 / .92) 0%, rgb(54 32 10 / .82) 33%, rgb(112 70 16 / .35) 59%, rgb(38 29 27 / .10) 100%),
+    linear-gradient(0deg, rgb(154 107 21 / .08), rgb(199 149 47 / .04));
 }
+.page-intro--illustrated .page-intro__shade { grid-area: 1 / 1; min-height: 0; padding-block: 3rem; background: transparent; }
 .page-intro--illustrated .page-intro__content { position: relative; z-index: 2; }
-.page-intro--illustrated .page-intro__shade { background: transparent; }
+.page-intro--illustrated h1 { max-width: min(46vw, 44rem); }
+.page-intro--illustrated p:not(.eyebrow) { max-width: min(40vw, 36rem); color: var(--color-cream, #f8f4e9); }
 .page-intro--illustrated :is(h1,p) { color: var(--color-cream, #f8f4e9); }
-/* The source's image-free dark masthead uses cream. Only this opt-in photograph
-   remains navy-backed in dark mode, with the same opaque, legible text scrim. */
-html[data-appearance="dark"] body .page-intro--illustrated { background-color: var(--color-navy-950, #07111f); }
+html[data-appearance="dark"] body .page-intro--illustrated { background-color: var(--martlet-hero-ink); }
 html[data-appearance="dark"] body .page-intro--illustrated :is(h1,p,a,code),
 html[data-appearance="dark"] body .page-intro--illustrated .page-intro__content { color: var(--color-cream, #f8f4e9) !important; }
 html[data-appearance="dark"] body .page-intro--illustrated .eyebrow { color: var(--color-gold-300, #e6c77d) !important; }
@@ -73,8 +87,10 @@ html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scroll
 html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) nav a:is([aria-current="page"],.is-active-section,:hover) { color: var(--color-gold-300, #e6c77d); }
 html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) nav a::after { background: var(--color-gold-300, #e6c77d); }
 @media(max-width:48rem) {
-  .page-intro--illustrated .page-intro__art { object-position: 80% center; }
-  .page-intro--illustrated::before { background: linear-gradient(90deg, rgb(7 17 31 / .97), rgb(11 28 51 / .8)); }
+  /* Full, uncropped image row above its text: no portrait cover crop. */
+  .page-intro--illustrated .page-intro__shade { grid-area: 2 / 1; padding-block: 2rem 3rem; }
+  .page-intro--illustrated h1,.page-intro--illustrated p:not(.eyebrow) { max-width: none; }
+  .page-intro--illustrated::before { background: linear-gradient(103deg, rgb(31 20 11 / .22), rgb(112 70 16 / .12) 59%, rgb(38 29 27 / .04)); }
 }
 @media(forced-colors:active) {
   html[data-appearance] body .page-intro--illustrated { background: Canvas; }
