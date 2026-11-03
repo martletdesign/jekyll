@@ -30,3 +30,24 @@ html[data-appearance=dark] .page-index a {color:var(--color-gold-300,var(--ice-4
 
 /* The Krigsvold source shell overlays its header on dashboard pages. */
 .krigsvold .docs-version-nav--dashboard { padding-top: 7rem; }
+
+/* Optional family-owned panoramic hero image. Canonical palette and type remain from
+   jameshoward.us; a host opts in with page.hero_image (no generic shared art). */
+.page-intro--illustrated {
+  background-color: var(--color-navy-950,#07111f);
+  background-image: linear-gradient(105deg, rgb(7 17 31 / .94) 0%, rgb(11 28 51 / .81) 45%, rgb(11 28 51 / .24) 100%), var(--martlet-hero-art);
+  background-position: center, center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  isolation: isolate;
+}
+.page-intro--illustrated .page-intro__content { position:relative; z-index:1; }
+.page-intro--illustrated .page-intro__shade { background:transparent; }
+.page-intro--illustrated :is(h1,p) { color: #f8f4e9; text-shadow: 0 1px 2px rgb(7 17 31 / .3); }
+@media(max-width:48rem) {
+  .page-intro--illustrated {
+    background-image:linear-gradient(90deg, rgb(7 17 31 / .97), rgb(11 28 51 / .8)), var(--martlet-hero-art);
+    background-position:center, 65% center;
+  }
+}
+@media(forced-colors:active) { .page-intro--illustrated { background-image:none; } }
