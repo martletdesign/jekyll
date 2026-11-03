@@ -104,3 +104,53 @@ html[data-appearance="dark"] body.has-panoramic-hero .site-header:not(.is-scroll
   html[data-appearance] body .page-intro--illustrated :is(h1,p,a,code,.eyebrow),
   html[data-appearance] body .page-intro--illustrated .page-intro__content { color:#000 !important; }
 }
+
+/* Martlet panoramic home: let the source-style fixed masthead float over the
+   image at scroll origin, resolving to burnished brown as scrolling begins.
+   Other pages retain the canonical blue navigation without any new override. */
+body.has-panoramic-hero .site-header[data-navigation-ready] + main .page-intro--illustrated {
+  padding-top:0;
+}
+body.has-panoramic-hero .page-intro--illustrated .page-intro__shade {
+  padding-top:calc(3rem + 4.6rem);
+}
+html[data-appearance] body.has-panoramic-hero .site-header:not(.is-scrolled):not(.is-menu-open) {
+  background-color:transparent;
+  border-bottom-color:transparent;
+  box-shadow:none;
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open) {
+  background-color:rgb(37 23 11 / .97);
+  border-bottom-color:rgb(230 199 125 / .18);
+  box-shadow:0 5px 24px rgb(31 20 11 / .25);
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open)
+  :is(.brand,nav a,.menu-button,.appearance-toggle) {
+  color:var(--color-cream,#f8f4e9);
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open)
+  nav a:is([aria-current="page"],.is-active-section,:hover) {
+  color:var(--color-gold-300,#e6c77d);
+}
+html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-menu-open) nav a::after {
+  background:var(--color-gold-300,#e6c77d);
+}
+@media(max-width:68rem),(max-aspect-ratio:4/5) {
+  /* The existing expanded menu background must stay opaque and readable. */
+  html[data-appearance] body.has-panoramic-hero .site-header.is-menu-open nav {
+    background-color:rgb(37 23 11 / .99);
+  }
+}
+@media(max-width:48rem) {
+  /* Keep the panorama under the transparent nav without hiding mobile content. */
+  body.has-panoramic-hero .page-intro--illustrated .page-intro__shade {padding-top:2rem;}
+}
+@media(forced-colors:active) {
+  html[data-appearance] body.has-panoramic-hero .site-header {
+    background:Canvas!important;
+    color:CanvasText!important;
+    border-bottom:1px solid CanvasText;
+  }
+  html[data-appearance] body.has-panoramic-hero .site-header
+    :is(.brand,nav a,.menu-button,.appearance-toggle) {color:CanvasText!important;}
+}
