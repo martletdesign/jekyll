@@ -1,0 +1,7 @@
+{% if page.tags.size > 0 %}
+<nav class="post-tags" aria-label="Tags">
+  <div class="container"><ul class="pill-list">
+    {% for tag in page.tags %}<li><a href="{% if page.record_id %}{{ '/examples/categories/' | relative_url }}{% else %}{{ '/journal/' | relative_url }}#{{ tag | slugify }}{% endif %}">{{ tag | escape }}</a></li>{% endfor %}
+  </ul></div>
+</nav>
+{% endif %}

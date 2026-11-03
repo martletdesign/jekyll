@@ -1,0 +1,13 @@
+{%- if include.start_markup contains '<time datetime=' and include.end_markup contains '<time datetime=' -%}
+  {%- assign start_seconds = include.start | date: '%s' | plus: 0 -%}
+  {%- assign end_seconds = include.end | date: '%s' | plus: 0 -%}
+  {%- assign start_millis = include.start | date: '%L' | plus: 0 -%}
+  {%- assign end_millis = include.end | date: '%L' | plus: 0 -%}
+  {%- assign reversed = false -%}
+  {%- if end_seconds < start_seconds -%}
+    {%- assign reversed = true -%}
+  {%- elsif end_seconds == start_seconds and end_millis < start_millis -%}
+    {%- assign reversed = true -%}
+  {%- endif -%}
+  {%- if reversed -%}<p>Event end is earlier than its start. Check the event times.</p>{%- endif -%}
+{%- endif -%}

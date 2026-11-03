@@ -1,0 +1,1 @@
+<nav class="example-local-index" aria-label="On this page"><p class="eyebrow">On this page</p><ol>{% for block in include.record.sections %}<li><a href="#{{ block.id | escape }}">{{ block.title | escape }}</a></li>{% endfor %}</ol></nav>

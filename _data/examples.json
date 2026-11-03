@@ -1,0 +1,2054 @@
+{
+  "schema_version": 1,
+  "fixture": {
+    "name": "Northlight Field Institute",
+    "fictional": true,
+    "notice": "Northlight, its people, prices, events, and records are fictional demonstration content."
+  },
+  "pages": [
+    {
+      "id": "home",
+      "title": "A place for careful discovery.",
+      "summary": "Northlight Field Institute connects people, field observations, and the public record.",
+      "category": "Presentation",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "welcome",
+          "title": "Start with a question.",
+          "body": "Good fieldwork begins with attention. We bring researchers, students, and neighbours together to observe the coast and share what they find.",
+          "actions": [
+            {
+              "label": "Explore the work",
+              "url": "/examples/projects/"
+            },
+            {
+              "label": "Meet the institute",
+              "url": "/examples/about/"
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "title": "Three ways into the work",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Read the coast",
+              "summary": "A field essay about the value of repeated observation.",
+              "url": "/examples/article/"
+            },
+            {
+              "title": "Follow the survey",
+              "summary": "From a local question to an openly documented method.",
+              "url": "/examples/case-study/"
+            },
+            {
+              "title": "Come to the field station",
+              "summary": "A shared place for workshops and quiet work.",
+              "url": "/examples/place/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "landing"
+    },
+    {
+      "id": "about",
+      "title": "An institute built around observation.",
+      "summary": "Who we are, what we do, and how the work is governed.",
+      "category": "Presentation",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "purpose",
+          "title": "Knowledge belongs in public.",
+          "body": "Northlight is a fictional institute used throughout this collection. Its examples connect real publishing needs: explaining a mission, documenting a method, and making the next step clear."
+        },
+        {
+          "id": "principles",
+          "title": "How we work",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Observe carefully",
+              "summary": "Record conditions and uncertainty alongside every finding.",
+              "url": "/examples/reference/"
+            },
+            {
+              "title": "Publish clearly",
+              "summary": "Make methods, limitations, and corrections available.",
+              "url": "/examples/report/"
+            },
+            {
+              "title": "Invite participation",
+              "summary": "Create useful routes into the work.",
+              "url": "/examples/contact/"
+            }
+          ]
+        },
+        {
+          "id": "people",
+          "title": "People behind the work",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Mara Ellis",
+              "summary": "Field researcher and editor.",
+              "url": "/examples/person/"
+            },
+            {
+              "title": "Open opportunities",
+              "summary": "Help maintain the public record.",
+              "url": "/examples/careers/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "organization"
+    },
+    {
+      "id": "article",
+      "title": "What a shoreline remembers",
+      "summary": "A field essay on repeated observation, uncertainty, and the records we leave behind.",
+      "category": "Publishing",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "return",
+          "title": "Return to the same place",
+          "body": "The first visit gives us a view. The second gives us a comparison. By the fifth visit, we have begun to notice how much the first view left out.\n\nA shoreline does not present one stable object. The tide changes, the light changes, and the observer learns to ask different questions."
+        },
+        {
+          "id": "evidence",
+          "title": "Keep the ordinary observations",
+          "body": "A notebook full of remarkable events is a poor account of an ordinary month. Record the calm days, the empty quadrats, and the instruments that did not behave as expected. These observations provide the context that a spectacular result needs."
+        },
+        {
+          "id": "limits",
+          "title": "Say what the record cannot tell us",
+          "body": "Our demonstration survey describes one fictional reach of coast. It cannot establish a regional trend. A useful account makes that limitation visible before a reader mistakes detail for generality.",
+          "actions": [
+            {
+              "label": "Read the survey method",
+              "url": "/examples/reference/"
+            },
+            {
+              "label": "About the author",
+              "url": "/examples/person/"
+            }
+          ]
+        }
+      ],
+      "date": "2026-10-28",
+      "author": "Mara Ellis",
+      "tags": [
+        "Field notes",
+        "Methods"
+      ],
+      "semantic_class": "article"
+    },
+    {
+      "id": "archive",
+      "title": "Notes from the field",
+      "summary": "Essays, project accounts, and records, in date order.",
+      "category": "Publishing",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "entries",
+          "title": "Latest writing",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "What a shoreline remembers",
+              "summary": "An essay about returning, noticing, and recording uncertainty.",
+              "url": "/examples/article/",
+              "date": "2026-10-28",
+              "tag": "Field notes"
+            },
+            {
+              "title": "A survey that others can repeat",
+              "summary": "A project account with a published method and limitations.",
+              "url": "/examples/case-study/",
+              "date": "2026-10-21",
+              "tag": "Methods"
+            },
+            {
+              "title": "The October field record",
+              "summary": "A dated account of activity and illustrative measures.",
+              "url": "/examples/report/",
+              "date": "2026-10-15",
+              "tag": "Records"
+            },
+            {
+              "title": "From the notebook",
+              "summary": "A small exhibition of field illustrations.",
+              "url": "/examples/gallery/",
+              "date": "2026-10-10",
+              "tag": "Field notes"
+            },
+            {
+              "title": "Protocol 1.2",
+              "summary": "Changes to the observation protocol.",
+              "url": "/examples/changelog/",
+              "date": "2026-10-03",
+              "tag": "Methods"
+            },
+            {
+              "title": "Preparing your first visit",
+              "summary": "A practical guide to the field station.",
+              "url": "/examples/guide/",
+              "date": "2026-09-29",
+              "tag": "Guides"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "archive"
+    },
+    {
+      "id": "category",
+      "title": "Field notes",
+      "summary": "A topic archive brings related writing together without duplicating it.",
+      "category": "Publishing",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "entries",
+          "title": "In this subject",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "What a shoreline remembers",
+              "summary": "An essay about returning, noticing, and recording uncertainty.",
+              "url": "/examples/article/",
+              "date": "2026-10-28",
+              "tag": "Field notes"
+            },
+            {
+              "title": "From the notebook",
+              "summary": "A small exhibition of field illustrations.",
+              "url": "/examples/gallery/",
+              "date": "2026-10-10",
+              "tag": "Field notes"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "taxonomy"
+    },
+    {
+      "id": "categories",
+      "title": "Explore by subject",
+      "summary": "Find a route through the archive by topic.",
+      "category": "Publishing",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "topics",
+          "title": "Subjects",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Field notes",
+              "summary": "Observations, essays, and illustrated notebooks.",
+              "url": "/examples/category/"
+            },
+            {
+              "title": "Methods",
+              "summary": "Protocols, guides, and project accounts.",
+              "url": "/examples/documentation/"
+            },
+            {
+              "title": "Public record",
+              "summary": "Reports and release histories.",
+              "url": "/examples/report/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "taxonomy-index"
+    },
+    {
+      "id": "person",
+      "title": "Mara Ellis",
+      "summary": "Field researcher · Editor · Workshop host",
+      "category": "People",
+      "composition": "detail",
+      "sections": [
+        {
+          "id": "biography",
+          "title": "Learning to notice",
+          "body": "Mara is a fictional researcher whose work connects field observation with public explanation. Her biography gives this template enough room to demonstrate an actual reading sequence."
+        },
+        {
+          "id": "details",
+          "title": "At a glance",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Role",
+              "value": "Field researcher and editor"
+            },
+            {
+              "label": "Interests",
+              "value": "Coastal observation, public methods, field notebooks"
+            },
+            {
+              "label": "Office hours",
+              "value": "By arrangement through the contact page"
+            }
+          ]
+        },
+        {
+          "id": "work",
+          "title": "Selected work",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "What a shoreline remembers",
+              "summary": "An essay about returning, noticing, and recording uncertainty.",
+              "url": "/examples/article/",
+              "date": "2026-10-28",
+              "tag": "Field notes"
+            },
+            {
+              "title": "A survey that others can repeat",
+              "summary": "A project account with a published method and limitations.",
+              "url": "/examples/case-study/",
+              "date": "2026-10-21",
+              "tag": "Methods"
+            },
+            {
+              "title": "The October field record",
+              "summary": "A dated account of activity and illustrative measures.",
+              "url": "/examples/report/",
+              "date": "2026-10-15",
+              "tag": "Records"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "person"
+    },
+    {
+      "id": "projects",
+      "title": "Questions put to work",
+      "summary": "A directory of projects, with scope and status visible before opening a record.",
+      "category": "Research",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "projects",
+          "title": "Current and completed",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "Shoreline observation study",
+              "summary": "A repeatable approach to recording a changing coast.",
+              "url": "/examples/case-study/",
+              "tag": "Published"
+            },
+            {
+              "title": "Field notebook collection",
+              "summary": "An open collection of illustrated observations.",
+              "url": "/examples/collection/",
+              "tag": "Ongoing"
+            },
+            {
+              "title": "Annual field record",
+              "summary": "A bounded account of activity and methods.",
+              "url": "/examples/report/",
+              "tag": "Annual"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "project-index"
+    },
+    {
+      "id": "case-study",
+      "title": "A survey that others can repeat",
+      "summary": "A project account connecting the original question to the method, observations, and limits.",
+      "category": "Research",
+      "composition": "dossier",
+      "sections": [
+        {
+          "id": "context",
+          "title": "The question",
+          "body": "Could a small volunteer group keep a useful account of shoreline change without treating every visible difference as a long-term trend?"
+        },
+        {
+          "id": "method",
+          "title": "The approach",
+          "body": "The demonstration protocol fixes the observation locations, records the tide and weather, and distinguishes photographs from measurements. A second observer checks each record before publication."
+        },
+        {
+          "id": "observations",
+          "title": "What we learned",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Scope",
+              "value": "One fictional coastal reach"
+            },
+            {
+              "label": "Period",
+              "value": "Illustrative October 2026 field cycle"
+            },
+            {
+              "label": "Result",
+              "value": "A documented protocol and an example observation register"
+            }
+          ]
+        },
+        {
+          "id": "limits",
+          "title": "What remains uncertain",
+          "body": "This fictional example makes no scientific claim. In a real project, distinguish results from expectations and record missing observations alongside completed work.",
+          "actions": [
+            {
+              "label": "Open the protocol",
+              "url": "/examples/reference/"
+            },
+            {
+              "label": "Read the public record",
+              "url": "/examples/report/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "case-study"
+    },
+    {
+      "id": "documentation",
+      "title": "A method you can follow",
+      "summary": "Guides, reference material, and answers organised around the task at hand.",
+      "category": "Support",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "start",
+          "title": "Start here",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Prepare for your first visit",
+              "summary": "What to bring, where to arrive, and what happens next.",
+              "url": "/examples/guide/"
+            },
+            {
+              "title": "Observation protocol",
+              "summary": "The fields, definitions, and limits of the record.",
+              "url": "/examples/reference/"
+            },
+            {
+              "title": "Frequently asked questions",
+              "summary": "Short answers to common questions.",
+              "url": "/examples/faq/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "documentation-index"
+    },
+    {
+      "id": "guide",
+      "title": "Preparing your first visit",
+      "summary": "A practical sequence with prerequisites, steps, and a clear next action.",
+      "category": "Support",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "before",
+          "title": "Before you arrive",
+          "body": "Read the event description and check the access arrangements. Bring weather-appropriate clothing and a notebook. This fictional station does not accept real bookings."
+        },
+        {
+          "id": "arrival",
+          "title": "When you arrive",
+          "body": "1. Meet the workshop host at the entrance.\n2. Review the observation route and access needs.\n3. Check your equipment with a partner.\n4. Record the date, time, and conditions before starting."
+        },
+        {
+          "id": "after",
+          "title": "After the session",
+          "body": "Review your notes while the visit is fresh. Mark anything uncertain and retain the original entry when making a correction.",
+          "actions": [
+            {
+              "label": "Find a workshop",
+              "url": "/examples/events/"
+            },
+            {
+              "label": "Ask a question",
+              "url": "/examples/contact/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "guide"
+    },
+    {
+      "id": "reference",
+      "title": "Shoreline observation protocol",
+      "summary": "A reference document with definitions, a data table, a code example, and explicit limitations.",
+      "category": "Research",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "scope",
+          "title": "Scope and interpretation",
+          "body": "Use this illustrative protocol to understand the publishing pattern. It is not a validated scientific method.\n\nA record describes one observation at one place and time. Comparisons require compatible methods and conditions."
+        },
+        {
+          "id": "fields",
+          "title": "Required fields",
+          "kind": "table",
+          "headers": [
+            "Field",
+            "Format",
+            "Purpose"
+          ],
+          "rows": [
+            [
+              "record_id",
+              "Stable text identifier",
+              "Connect revisions to the original observation"
+            ],
+            [
+              "observed_at",
+              "ISO 8601 timestamp with offset",
+              "Identify the observation time"
+            ],
+            [
+              "site",
+              "Location reference",
+              "Identify the observation point"
+            ],
+            [
+              "conditions",
+              "Plain text",
+              "Record tide, weather, and limitations"
+            ]
+          ]
+        },
+        {
+          "id": "example",
+          "title": "Example record",
+          "body": "```json\n{\n  \"record_id\": \"north-001\",\n  \"observed_at\": \"2026-10-28T09:00:00-04:00\",\n  \"site\": \"North transect\",\n  \"conditions\": \"Illustrative record; no real measurement\"\n}\n```"
+        },
+        {
+          "id": "corrections",
+          "title": "Corrections and provenance",
+          "body": "Keep the original timestamp and record the reason for a correction. A changed method requires a new protocol version, not a silent alteration to an old result."
+        }
+      ],
+      "date": "2026-10-28",
+      "author": "Northlight editorial team",
+      "semantic_class": "reference"
+    },
+    {
+      "id": "contact",
+      "title": "Start a conversation",
+      "summary": "Tell us what you are trying to do and who should hear about it.",
+      "category": "Support",
+      "composition": "detail",
+      "sections": [
+        {
+          "id": "routes",
+          "title": "Find the right route",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Research",
+              "value": "Questions about methods and the public record"
+            },
+            {
+              "label": "Visits",
+              "value": "Workshop access and station information"
+            },
+            {
+              "label": "Corrections",
+              "value": "An issue in a published example"
+            }
+          ]
+        },
+        {
+          "id": "message",
+          "title": "Your message",
+          "kind": "form",
+          "form": "contact"
+        }
+      ],
+      "semantic_class": "contact"
+    },
+    {
+      "id": "faq",
+      "title": "Questions, answered",
+      "summary": "Short answers with links into more detailed guidance.",
+      "category": "Support",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "questions",
+          "title": "Common questions",
+          "kind": "faq",
+          "items": [
+            {
+              "question": "Is Northlight a real organisation?",
+              "answer": "No. The institute, people, opportunities, prices, events, and records are fictional fixtures shared by both themes."
+            },
+            {
+              "question": "Can I use either language for this kind of site?",
+              "answer": "Yes. Both themes support the same content roles. Their compositions differ; their capabilities remain comparable."
+            },
+            {
+              "question": "Does this demo submit my information?",
+              "answer": "No. Forms validate locally. Account, payment, messaging, and booking services require a separately configured server integration."
+            },
+            {
+              "question": "What happens without JavaScript?",
+              "answer": "Published content, links, and native disclosures remain available. Search and local application interactions explain that JavaScript is required."
+            }
+          ]
+        }
+      ],
+      "semantic_class": "faq"
+    },
+    {
+      "id": "privacy",
+      "title": "Privacy notice",
+      "summary": "An example policy structure with an effective date, scope, and change history.",
+      "category": "Support",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "scope",
+          "title": "Scope",
+          "body": "This is an illustrative policy page, not a complete policy for a deployed service. Replace it with terms that describe your actual organisation and processing."
+        },
+        {
+          "id": "demo",
+          "title": "This demonstration",
+          "body": "The example application scripts do not send form values or messages to a server. The shell may store your appearance preference in this browser. Hosting and access services have their own policies."
+        },
+        {
+          "id": "changes",
+          "title": "Changes and questions",
+          "body": "Effective October 28, 2026. Keep a dated change record and give readers an appropriate contact route.",
+          "actions": [
+            {
+              "label": "Contact",
+              "url": "/examples/contact/"
+            },
+            {
+              "label": "Release history",
+              "url": "/examples/changelog/"
+            }
+          ]
+        }
+      ],
+      "date": "2026-10-28",
+      "semantic_class": "policy"
+    },
+    {
+      "id": "terms",
+      "title": "Terms of use",
+      "summary": "An example policy structure with an effective date, scope, and change history.",
+      "category": "Support",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "scope",
+          "title": "Scope",
+          "body": "This is an illustrative policy page, not a complete policy for a deployed service. Replace it with terms that describe your actual organisation and processing."
+        },
+        {
+          "id": "demo",
+          "title": "This demonstration",
+          "body": "The example application scripts do not send form values or messages to a server. The shell may store your appearance preference in this browser. Hosting and access services have their own policies."
+        },
+        {
+          "id": "changes",
+          "title": "Changes and questions",
+          "body": "Effective October 28, 2026. Keep a dated change record and give readers an appropriate contact route.",
+          "actions": [
+            {
+              "label": "Contact",
+              "url": "/examples/contact/"
+            },
+            {
+              "label": "Release history",
+              "url": "/examples/changelog/"
+            }
+          ]
+        }
+      ],
+      "date": "2026-10-28",
+      "semantic_class": "policy"
+    },
+    {
+      "id": "service",
+      "title": "Fieldwork, explained together",
+      "summary": "A service landing page connects an offer with its audience, process, and next step.",
+      "category": "Commercial",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "offer",
+          "title": "Work through the question",
+          "body": "Our fictional workshops help small groups turn an interesting observation into a clear record. Sessions combine preparation, field practice, and a review of what the evidence supports."
+        },
+        {
+          "id": "process",
+          "title": "From question to record",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Prepare",
+              "summary": "Agree on the question, access needs, and scope.",
+              "url": "/examples/guide/"
+            },
+            {
+              "title": "Observe",
+              "summary": "Practice recording conditions and uncertainty.",
+              "url": "/examples/reference/"
+            },
+            {
+              "title": "Review",
+              "summary": "Turn the notebook into a shareable account.",
+              "url": "/examples/report/"
+            }
+          ]
+        },
+        {
+          "id": "next",
+          "title": "Find a session",
+          "body": "Compare the example packages or inspect a workshop detail.",
+          "actions": [
+            {
+              "label": "Compare packages",
+              "url": "/examples/pricing/"
+            },
+            {
+              "label": "Workshop details",
+              "url": "/examples/event/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "service"
+    },
+    {
+      "id": "place",
+      "title": "The Northlight field station",
+      "summary": "A place detail with facilities, access information, and a next step.",
+      "category": "Commercial",
+      "composition": "detail",
+      "sections": [
+        {
+          "id": "setting",
+          "title": "Room to look closely",
+          "kind": "figure",
+          "image": "/assets/examples/station.svg",
+          "alt": "Stylised illustration of a field station beside water.",
+          "caption": "Original vector illustration. Fictional station; not a map."
+        },
+        {
+          "id": "facilities",
+          "title": "Plan a visit",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Spaces",
+              "value": "Workshop room, reference shelves, covered observation deck"
+            },
+            {
+              "label": "Access",
+              "value": "Step-free entrance and accessible facilities in this fictional example"
+            },
+            {
+              "label": "Location",
+              "value": "Fictional Northlight coast; no real travel directions"
+            }
+          ]
+        },
+        {
+          "id": "booking",
+          "title": "Arrange a visit",
+          "body": "Review the session details before enquiring. Bookings are not accepted by this demonstration.",
+          "actions": [
+            {
+              "label": "View workshops",
+              "url": "/examples/events/"
+            },
+            {
+              "label": "Make an enquiry",
+              "url": "/examples/contact/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "place"
+    },
+    {
+      "id": "pricing",
+      "title": "Choose the right amount of support",
+      "summary": "A comparison with clear units, inclusions, and a route to ask questions. All prices are illustrative.",
+      "category": "Commercial",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "plans",
+          "title": "Workshop packages",
+          "kind": "plans",
+          "items": [
+            {
+              "title": "Introduction",
+              "price": "$40 / person",
+              "summary": "One half-day group workshop.",
+              "features": [
+                "Preparation guide",
+                "Shared field session",
+                "Notebook review"
+              ],
+              "action": {
+                "label": "View the session",
+                "url": "/examples/event/"
+              }
+            },
+            {
+              "title": "Small group",
+              "price": "$240 / group",
+              "summary": "A half-day session for up to eight participants.",
+              "features": [
+                "Planning conversation",
+                "Shared field session",
+                "Follow-up review"
+              ],
+              "action": {
+                "label": "Ask about a group",
+                "url": "/examples/contact/"
+              }
+            },
+            {
+              "title": "Project support",
+              "price": "By agreement",
+              "summary": "A scoped engagement for a specific research question.",
+              "features": [
+                "Written scope",
+                "Method review",
+                "Public-record planning"
+              ],
+              "action": {
+                "label": "Discuss the scope",
+                "url": "/examples/contact/"
+              }
+            }
+          ]
+        },
+        {
+          "id": "questions",
+          "title": "Before you choose",
+          "kind": "faq",
+          "items": [
+            {
+              "question": "Can I buy a package here?",
+              "answer": "No. This is a comparison example. No payment or booking service is connected."
+            }
+          ]
+        }
+      ],
+      "semantic_class": "comparison"
+    },
+    {
+      "id": "careers",
+      "title": "Help make the work useful",
+      "summary": "An opportunity directory with roles, arrangements, and deadlines.",
+      "category": "People",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "roles",
+          "title": "Open example opportunities",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "Field record editor",
+              "summary": "Part-time · Remote · Example deadline November 20, 2026.",
+              "url": "/examples/opportunity/",
+              "tag": "Editorial"
+            },
+            {
+              "title": "Workshop collaboration",
+              "summary": "Discuss a scoped workshop with the team.",
+              "url": "/examples/contact/",
+              "tag": "Collaboration"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "opportunity-index"
+    },
+    {
+      "id": "opportunity",
+      "title": "Field record editor",
+      "summary": "An example role with responsibilities, requirements, arrangements, and an application route.",
+      "category": "People",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "role",
+          "title": "The work",
+          "body": "Review field accounts for clarity, check that methods and limitations are visible, and maintain links between revisions. This is a fictional opportunity, not a real vacancy."
+        },
+        {
+          "id": "requirements",
+          "title": "What you would bring",
+          "body": "- Experience explaining technical work to general readers.\n- Care with citations, dates, and correction histories.\n- A willingness to ask what a record does not establish."
+        },
+        {
+          "id": "arrangements",
+          "title": "Arrangements",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Time",
+              "value": "Illustrative part-time arrangement"
+            },
+            {
+              "label": "Location",
+              "value": "Remote"
+            },
+            {
+              "label": "Deadline",
+              "value": "November 20, 2026 — example only"
+            }
+          ]
+        },
+        {
+          "id": "apply",
+          "title": "Application route",
+          "body": "In a live site, explain the requested materials, process, accommodation route, and response schedule.",
+          "actions": [
+            {
+              "label": "Example enquiry form",
+              "url": "/examples/contact/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "opportunity"
+    },
+    {
+      "id": "software",
+      "title": "Your field record, connected",
+      "summary": "A software landing page with capabilities, a working preview, and release information.",
+      "category": "Commercial",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "overview",
+          "title": "From notebook to public record",
+          "body": "Northlight Notebook is a fictional desktop and mobile tool. This example keeps the product story independent of device imagery."
+        },
+        {
+          "id": "capabilities",
+          "title": "Made for the observation cycle",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Review a collection",
+              "summary": "Find an observation and inspect its context.",
+              "url": "/examples/workspace/"
+            },
+            {
+              "title": "Compare conditions",
+              "summary": "Explore clearly labelled simulated sensors.",
+              "url": "/examples/sensors/"
+            },
+            {
+              "title": "Follow changes",
+              "summary": "Read versioned release notes.",
+              "url": "/examples/changelog/"
+            }
+          ]
+        },
+        {
+          "id": "try",
+          "title": "Explore before you integrate",
+          "body": "The application examples run locally in your browser. They do not connect to real equipment or accounts.",
+          "actions": [
+            {
+              "label": "Open the workspace",
+              "url": "/examples/workspace/"
+            },
+            {
+              "label": "Read integration guidance",
+              "url": "/examples/integrations/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "software"
+    },
+    {
+      "id": "product",
+      "title": "The field notebook",
+      "summary": "A product detail with an illustration, specifications, and a clear purchasing boundary.",
+      "category": "Commercial",
+      "composition": "detail",
+      "sections": [
+        {
+          "id": "image",
+          "title": "Designed for the field",
+          "kind": "figure",
+          "image": "/assets/examples/notebook.svg",
+          "alt": "Illustration of an open field notebook with observation lines.",
+          "caption": "Original vector illustration of a fictional product."
+        },
+        {
+          "id": "specifications",
+          "title": "Specifications",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Format",
+              "value": "A5, 96 pages"
+            },
+            {
+              "label": "Binding",
+              "value": "Lay-flat stitched binding"
+            },
+            {
+              "label": "Price",
+              "value": "Illustrative $18; no checkout connected"
+            }
+          ]
+        },
+        {
+          "id": "purchase",
+          "title": "Ask before you order",
+          "body": "A real product page should explain availability, delivery, returns, and the transaction provider.",
+          "actions": [
+            {
+              "label": "Product enquiry",
+              "url": "/examples/contact/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "product"
+    },
+    {
+      "id": "collection",
+      "title": "The field notebook collection",
+      "summary": "A reusable directory for books, software, exhibits, publications, and research records.",
+      "category": "Collections",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "records",
+          "title": "Browse the collection",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "Notebook 01: North transect",
+              "summary": "Illustrated notes, October 2026.",
+              "url": "/examples/collection-item/",
+              "tag": "Notebook"
+            },
+            {
+              "title": "Observation protocol",
+              "summary": "Definitions and example data fields.",
+              "url": "/examples/reference/",
+              "tag": "Reference"
+            },
+            {
+              "title": "A shoreline in three views",
+              "summary": "An illustrated exhibition.",
+              "url": "/examples/gallery/",
+              "tag": "Exhibition"
+            },
+            {
+              "title": "Annual field record",
+              "summary": "Activity, measures, and limitations.",
+              "url": "/examples/report/",
+              "tag": "Report"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "collection"
+    },
+    {
+      "id": "collection-item",
+      "title": "Notebook 01: North transect",
+      "summary": "A collection record connects the object, its context, and its provenance.",
+      "category": "Collections",
+      "composition": "detail",
+      "sections": [
+        {
+          "id": "object",
+          "title": "A record of returning",
+          "kind": "figure",
+          "image": "/assets/examples/notebook.svg",
+          "alt": "Open notebook illustration.",
+          "caption": "Original illustration representing the fictional collection object."
+        },
+        {
+          "id": "record",
+          "title": "Catalogue record",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Identifier",
+              "value": "NL-NB-001"
+            },
+            {
+              "label": "Creator",
+              "value": "Mara Ellis — fictional author"
+            },
+            {
+              "label": "Date",
+              "value": "October 2026"
+            },
+            {
+              "label": "Rights",
+              "value": "Example text and illustrations are MIT licensed"
+            }
+          ]
+        },
+        {
+          "id": "context",
+          "title": "What the notebook records",
+          "body": "A short catalogue account should explain what the object contains and why it belongs in the collection. Keep interpretation distinct from the catalogue facts.",
+          "actions": [
+            {
+              "label": "Back to the collection",
+              "url": "/examples/collection/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "collection-item"
+    },
+    {
+      "id": "events",
+      "title": "Come and look closely",
+      "summary": "Upcoming and past events with explicit dates and locations.",
+      "category": "Events",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "upcoming",
+          "title": "Upcoming examples",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "Reading the shoreline",
+              "summary": "November 14, 2026 · 09:00–12:00 America/New_York · Fictional field station.",
+              "url": "/examples/event/",
+              "tag": "Workshop"
+            }
+          ]
+        },
+        {
+          "id": "past",
+          "title": "From the programme",
+          "kind": "listing",
+          "items": [
+            {
+              "title": "October open notebook",
+              "summary": "Past example session · Read the field record.",
+              "url": "/examples/report/",
+              "date": "2026-10-15",
+              "tag": "Past event"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "event-index"
+    },
+    {
+      "id": "event",
+      "title": "Reading the shoreline",
+      "summary": "A workshop detail with a schedule, access information, and a clear registration state.",
+      "category": "Events",
+      "composition": "detail",
+      "sections": [
+        {
+          "id": "details",
+          "title": "Plan the morning",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "When",
+              "value": "November 14, 2026, 09:00–12:00 America/New_York (UTC−05:00)"
+            },
+            {
+              "label": "Where",
+              "value": "Northlight field station — fictional location"
+            },
+            {
+              "label": "Access",
+              "value": "Example step-free route; discuss accommodations before booking"
+            },
+            {
+              "label": "Registration",
+              "value": "Demonstration only; no real event or bookings"
+            }
+          ]
+        },
+        {
+          "id": "schedule",
+          "title": "Programme",
+          "kind": "table",
+          "headers": [
+            "Local time",
+            "Activity"
+          ],
+          "rows": [
+            [
+              "09:00",
+              "Welcome and access review"
+            ],
+            [
+              "09:30",
+              "Guided observation"
+            ],
+            [
+              "11:00",
+              "Notebook review"
+            ],
+            [
+              "12:00",
+              "Close"
+            ]
+          ]
+        },
+        {
+          "id": "next",
+          "title": "Before registering",
+          "body": "A live event page needs capacity, cancellation terms, and a confirmed registration service.",
+          "actions": [
+            {
+              "label": "Ask about the session",
+              "url": "/examples/contact/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "event",
+      "event": {
+        "start": "2026-11-14T09:00:00-05:00",
+        "end": "2026-11-14T12:00:00-05:00",
+        "display_start": "November 14, 2026, 09:00",
+        "display_end": "12:00",
+        "timezone": "America/New_York",
+        "location": "Northlight field station (fictional)",
+        "registration": "Demonstration; registration unavailable"
+      }
+    },
+    {
+      "id": "report",
+      "title": "The October field record",
+      "summary": "A report combines narrative, dated measures, methodology, and a portable data download.",
+      "category": "Research",
+      "composition": "dossier",
+      "sections": [
+        {
+          "id": "summary",
+          "title": "The reporting period",
+          "body": "This fictional record covers October 1–28, 2026. It demonstrates how to publish a bounded account without suggesting that illustrative numbers are real findings."
+        },
+        {
+          "id": "measures",
+          "title": "Activity in the example period",
+          "kind": "stats",
+          "items": [
+            {
+              "value": "12",
+              "label": "Illustrative visits"
+            },
+            {
+              "value": "4",
+              "label": "Example observation points"
+            },
+            {
+              "value": "2",
+              "label": "Example review sessions"
+            }
+          ]
+        },
+        {
+          "id": "register",
+          "title": "Observation register",
+          "kind": "table",
+          "headers": [
+            "Point",
+            "Visits",
+            "Record state"
+          ],
+          "rows": [
+            [
+              "North transect",
+              "4",
+              "Reviewed"
+            ],
+            [
+              "Station inlet",
+              "3",
+              "Reviewed"
+            ],
+            [
+              "South path",
+              "3",
+              "One note pending"
+            ],
+            [
+              "Outer beach",
+              "2",
+              "Reviewed"
+            ]
+          ]
+        },
+        {
+          "id": "method",
+          "title": "Method and limitations",
+          "body": "All values on this page are sample data, created to exercise the layout. A real report should attach units, periods, sources, revisions, and uncertainty to its measures.",
+          "actions": [
+            {
+              "label": "Download example data (CSV)",
+              "url": "/assets/examples/observations.csv",
+              "download": "observations.csv"
+            },
+            {
+              "label": "Observation protocol",
+              "url": "/examples/reference/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "report"
+    },
+    {
+      "id": "gallery",
+      "title": "A shoreline in three views",
+      "summary": "An exhibition with captions, credits, and accessible image enlargement.",
+      "category": "Collections",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "views",
+          "title": "From the illustrated notebook",
+          "kind": "gallery",
+          "items": [
+            {
+              "title": "The station",
+              "image": "/assets/examples/station.svg",
+              "alt": "Stylised field station beside calm water.",
+              "caption": "A place to begin. Original MIT-licensed vector illustration."
+            },
+            {
+              "title": "The coastline",
+              "image": "/assets/examples/coast.svg",
+              "alt": "Layered coastal contours with observation markers.",
+              "caption": "Looking along the shore. Illustrative geography, not a map."
+            },
+            {
+              "title": "The notebook",
+              "image": "/assets/examples/notebook.svg",
+              "alt": "An open notebook with observation lines.",
+              "caption": "The working record. Original MIT-licensed vector illustration."
+            }
+          ]
+        },
+        {
+          "id": "curation",
+          "title": "About this exhibition",
+          "body": "These illustrations are shared across both themes. Image content, aspect ratios, captions, and credits are part of the content contract; framing and arrangement belong to each language."
+        }
+      ],
+      "semantic_class": "exhibition"
+    },
+    {
+      "id": "changelog",
+      "title": "A record of changes",
+      "summary": "Versioned updates with dates, stable anchors, and migration notes.",
+      "category": "Publishing",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "v1-2",
+          "title": "1.2 · October 28, 2026",
+          "body": "### Added\n\nAn explicit conditions field and a review state in the example protocol.\n\n### Migration\n\nExisting records retain their identifiers. Add conditions when known and mark missing values as unrecorded."
+        },
+        {
+          "id": "v1-1",
+          "title": "1.1 · October 10, 2026",
+          "body": "Clarified the distinction between an observation and an interpretation. No example data fields changed."
+        },
+        {
+          "id": "v1-0",
+          "title": "1.0 · September 29, 2026",
+          "body": "Initial fictional protocol, published with a scope statement and correction policy."
+        }
+      ],
+      "semantic_class": "changelog"
+    },
+    {
+      "id": "search",
+      "title": "Find your way through the record",
+      "summary": "Search the example collection by title, summary, and subject.",
+      "category": "Support",
+      "composition": "collection",
+      "sections": [
+        {
+          "id": "search",
+          "title": "Search examples",
+          "kind": "search"
+        }
+      ],
+      "semantic_class": "search"
+    },
+    {
+      "id": "sign-in",
+      "title": "Sign in to the notebook",
+      "summary": "Account interface specimen. Use invented values only; no account service is connected.",
+      "category": "Accounts",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "form",
+          "title": "Try the form",
+          "kind": "form",
+          "form": "sign-in"
+        },
+        {
+          "id": "routes",
+          "title": "Account routes",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Sign in",
+              "summary": "Return to an existing account.",
+              "url": "/examples/sign-in/"
+            },
+            {
+              "title": "Create an account",
+              "summary": "Review the registration pattern.",
+              "url": "/examples/sign-up/"
+            },
+            {
+              "title": "Reset a password",
+              "summary": "Request a recovery link.",
+              "url": "/examples/password-reset/"
+            },
+            {
+              "title": "Two-factor verification",
+              "summary": "Enter a six-digit example code.",
+              "url": "/examples/two-factor/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "account"
+    },
+    {
+      "id": "sign-up",
+      "title": "Create a notebook account",
+      "summary": "Account interface specimen. Use invented values only; no account service is connected.",
+      "category": "Accounts",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "form",
+          "title": "Try the form",
+          "kind": "form",
+          "form": "sign-up"
+        },
+        {
+          "id": "routes",
+          "title": "Account routes",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Sign in",
+              "summary": "Return to an existing account.",
+              "url": "/examples/sign-in/"
+            },
+            {
+              "title": "Create an account",
+              "summary": "Review the registration pattern.",
+              "url": "/examples/sign-up/"
+            },
+            {
+              "title": "Reset a password",
+              "summary": "Request a recovery link.",
+              "url": "/examples/password-reset/"
+            },
+            {
+              "title": "Two-factor verification",
+              "summary": "Enter a six-digit example code.",
+              "url": "/examples/two-factor/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "account"
+    },
+    {
+      "id": "password-reset",
+      "title": "Reset your password",
+      "summary": "Account interface specimen. Use invented values only; no account service is connected.",
+      "category": "Accounts",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "form",
+          "title": "Try the form",
+          "kind": "form",
+          "form": "password-reset"
+        },
+        {
+          "id": "routes",
+          "title": "Account routes",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Sign in",
+              "summary": "Return to an existing account.",
+              "url": "/examples/sign-in/"
+            },
+            {
+              "title": "Create an account",
+              "summary": "Review the registration pattern.",
+              "url": "/examples/sign-up/"
+            },
+            {
+              "title": "Reset a password",
+              "summary": "Request a recovery link.",
+              "url": "/examples/password-reset/"
+            },
+            {
+              "title": "Two-factor verification",
+              "summary": "Enter a six-digit example code.",
+              "url": "/examples/two-factor/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "account"
+    },
+    {
+      "id": "two-factor",
+      "title": "Verify your sign-in",
+      "summary": "Account interface specimen. Use invented values only; no account service is connected.",
+      "category": "Accounts",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "form",
+          "title": "Try the form",
+          "kind": "form",
+          "form": "two-factor"
+        },
+        {
+          "id": "routes",
+          "title": "Account routes",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "Sign in",
+              "summary": "Return to an existing account.",
+              "url": "/examples/sign-in/"
+            },
+            {
+              "title": "Create an account",
+              "summary": "Review the registration pattern.",
+              "url": "/examples/sign-up/"
+            },
+            {
+              "title": "Reset a password",
+              "summary": "Request a recovery link.",
+              "url": "/examples/password-reset/"
+            },
+            {
+              "title": "Two-factor verification",
+              "summary": "Enter a six-digit example code.",
+              "url": "/examples/two-factor/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "account"
+    },
+    {
+      "id": "coming-soon",
+      "title": "The next field season",
+      "summary": "A compact announcement with a clear purpose and a local newsletter form specimen.",
+      "category": "Presentation",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "announcement",
+          "title": "Something worth returning for",
+          "body": "The next fictional programme explores how small groups can maintain useful public records. No launch date has been announced."
+        },
+        {
+          "id": "updates",
+          "title": "Programme updates",
+          "kind": "form",
+          "form": "newsletter"
+        }
+      ],
+      "semantic_class": "announcement"
+    },
+    {
+      "id": "not-found",
+      "title": "That page is outside the record.",
+      "summary": "A missing-page recovery example with useful routes back into the site.",
+      "category": "Recovery",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "recover",
+          "title": "Find another route",
+          "body": "The address may have changed, or the page may never have existed.",
+          "actions": [
+            {
+              "label": "Browse all examples",
+              "url": "/examples/"
+            },
+            {
+              "label": "Search the record",
+              "url": "/examples/search/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "error"
+    },
+    {
+      "id": "server-error",
+      "title": "The record is temporarily unavailable.",
+      "summary": "An illustrative server-error page. This static response does not generate an HTTP 500.",
+      "category": "Recovery",
+      "composition": "reading",
+      "sections": [
+        {
+          "id": "recover",
+          "title": "Try again in a moment",
+          "body": "If you were submitting a form, retain your original text until the service confirms receipt. A live application should distinguish a failed request from an uncertain result.",
+          "actions": [
+            {
+              "label": "Visit the help centre",
+              "url": "/examples/documentation/"
+            },
+            {
+              "label": "Contact the team",
+              "url": "/examples/contact/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "error"
+    },
+    {
+      "id": "workspace",
+      "title": "The observation desk",
+      "summary": "Filter a collection and inspect an active record. Local demonstration; changes are not saved.",
+      "category": "Applications",
+      "composition": "workspace",
+      "sections": [
+        {
+          "id": "desk",
+          "title": "Observation register",
+          "kind": "workspace",
+          "items": [
+            {
+              "id": "NL-001",
+              "title": "North transect",
+              "summary": "Calm conditions. Photo pair reviewed.",
+              "status": "Reviewed",
+              "owner": "Mara Ellis"
+            },
+            {
+              "id": "NL-002",
+              "title": "Station inlet",
+              "summary": "Tide context needs a second check.",
+              "status": "Needs review",
+              "owner": "Rowan Park"
+            },
+            {
+              "id": "NL-003",
+              "title": "South path",
+              "summary": "Access note recorded; no measurement taken.",
+              "status": "Reviewed",
+              "owner": "Mara Ellis"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "record-workspace"
+    },
+    {
+      "id": "chat",
+      "title": "A conversation about the record",
+      "summary": "A messaging interface with local composition, empty-input validation, and clear delivery status.",
+      "category": "Applications",
+      "composition": "workspace",
+      "sections": [
+        {
+          "id": "messages",
+          "title": "Workshop conversation",
+          "kind": "chat"
+        }
+      ],
+      "semantic_class": "messaging"
+    },
+    {
+      "id": "sensors",
+      "title": "Conditions at the station",
+      "summary": "A smart-building interface with simulated readings and explicit local controls.",
+      "category": "Applications",
+      "composition": "workspace",
+      "sections": [
+        {
+          "id": "controls",
+          "title": "Simulated station controls",
+          "kind": "sensors"
+        }
+      ],
+      "semantic_class": "device-controls"
+    },
+    {
+      "id": "fleet",
+      "title": "Ready for the field",
+      "summary": "An automotive/fleet interface with status, selection, and a bounded action.",
+      "category": "Applications",
+      "composition": "workspace",
+      "sections": [
+        {
+          "id": "fleet",
+          "title": "Example vehicle register",
+          "kind": "workspace",
+          "items": [
+            {
+              "id": "EV-01",
+              "title": "Field van",
+              "summary": "72% charge · Station bay · Ready for local work.",
+              "status": "Ready",
+              "owner": "Workshop team"
+            },
+            {
+              "id": "EV-02",
+              "title": "Survey vehicle",
+              "summary": "45% charge · Scheduled service · Not available.",
+              "status": "Service due",
+              "owner": "Field team"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "record-workspace"
+    },
+    {
+      "id": "scene",
+      "title": "An illustrated field view",
+      "summary": "A scene-viewer composition for immersive content, with a static fallback. No VR hardware integration.",
+      "category": "Applications",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "scene",
+          "title": "Choose a viewpoint",
+          "kind": "scene"
+        },
+        {
+          "id": "scope",
+          "title": "About this viewer",
+          "body": "This is an accessible image-viewer specimen. A production virtual-reality experience needs a separate rendering and device adapter; the page preserves context, caption, and navigation outside that adapter."
+        }
+      ],
+      "semantic_class": "scene-viewer"
+    },
+    {
+      "id": "integrations",
+      "title": "From specimen to service",
+      "summary": "The boundary between static publishing, local interaction, and server-backed capabilities.",
+      "category": "Support",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "static",
+          "title": "Available from Jekyll",
+          "body": "Every example renders its content at build time. Search, gallery enlargement, collection filtering, pagination, and application state use progressive browser JavaScript. No external libraries or remote APIs are required."
+        },
+        {
+          "id": "services",
+          "title": "Connect these deliberately",
+          "kind": "table",
+          "headers": [
+            "Capability",
+            "Required integration",
+            "Demo behaviour"
+          ],
+          "rows": [
+            [
+              "Contact / newsletter",
+              "Submission endpoint, consent, delivery, abuse controls",
+              "Local validation only; nothing sent"
+            ],
+            [
+              "Accounts / 2FA",
+              "Identity provider, sessions, server verification",
+              "No credentials accepted by a server"
+            ],
+            [
+              "Payments / bookings",
+              "Payment or registration provider and confirmed status",
+              "Links to an example enquiry"
+            ],
+            [
+              "Messaging",
+              "Authorised messaging service and delivery acknowledgements",
+              "Messages exist only in page memory"
+            ],
+            [
+              "Sensors / fleet / VR",
+              "Authorised device/data adapter or renderer",
+              "Simulated data or static scene"
+            ],
+            [
+              "HTTP errors",
+              "Hosting-specific error routing and status configuration",
+              "404 file supplied; 500 specimen is a normal static page"
+            ]
+          ]
+        },
+        {
+          "id": "ports",
+          "title": "Port the roles, preserve the behaviour",
+          "body": "The shared JSON catalog has no Liquid, JSX, or theme classes. Astro and React adapters should implement its section roles, URL handling, accessible states, and capability boundaries. See the downloadable source documentation for the schema and acceptance checklist."
+        }
+      ],
+      "semantic_class": "integration-guide"
+    },
+    {
+      "id": "stress-test",
+      "title": "A deliberately long title about the ordinary details that tend to break a beautifully composed page",
+      "summary": "Long content, absent optional media, tables, code, mathematical notation, and nested structures.",
+      "category": "Verification",
+      "composition": "document",
+      "sections": [
+        {
+          "id": "prose",
+          "title": "Prose, punctuation, and wrapping",
+          "body": "A short paragraph.\n\nA much longer paragraph follows, with an identifier that must wrap safely: NorthlightObservationRegisterWithAnUnusuallyLongUnbrokenIdentifierForTestingResponsiveReadingLayouts2026.\n\n> Keep the observation. Label the interpretation. Preserve the correction.\n\n1. Prepare the record.\n   - Check the timestamp.\n   - Record the conditions.\n2. Ask a second observer to review it.\n\nA footnote tests the return path.[^note]\n\n[^note]: A fictional note with no scientific claim."
+        },
+        {
+          "id": "hierarchy",
+          "title": "Headings within a document",
+          "body": "### A subordinate heading\n\nContent belongs under the heading that introduces it.\n\n#### A more specific heading\n\nThe reading measure should remain comfortable.\n\n##### A fifth-level heading\n\nEven a deep hierarchy needs visible spacing.\n\n###### A sixth-level heading\n\nUse deep hierarchies sparingly."
+        },
+        {
+          "id": "wide",
+          "title": "A wide table",
+          "kind": "table",
+          "headers": [
+            "Observation identifier",
+            "Date and local time",
+            "Conditions and limitations",
+            "Review state",
+            "Method version"
+          ],
+          "rows": [
+            [
+              "Northlight-Long-Observation-Identifier-000001",
+              "2026-10-28T09:00:00-04:00",
+              "Long explanatory text that should wrap inside its cell.",
+              "Needs review",
+              "1.2"
+            ],
+            [
+              "NL-002",
+              "Not recorded",
+              "Missing data stays visible.",
+              "Unreviewed",
+              "1.1"
+            ]
+          ]
+        },
+        {
+          "id": "code",
+          "title": "Code and mathematical notation",
+          "body": "```python\nrecord = {\"id\": \"NL-001\", \"conditions\": \"illustrative\"}\nprint(record[\"conditions\"])\n```\n\nA semantic formula, without a rendering dependency: <var>SE</var> = <var>s</var> / √<var>n</var>.\n\nMathML is also supported by the content renderer:\n\n<math xmlns=\"http://www.w3.org/1998/Math/MathML\" display=\"block\"><mrow><mi>E</mi><mo>=</mo><mi>m</mi><msup><mi>c</mi><mn>2</mn></msup></mrow></math>"
+        },
+        {
+          "id": "missing",
+          "title": "Optional media omitted",
+          "kind": "cards",
+          "items": [
+            {
+              "title": "A short entry",
+              "summary": "Brief.",
+              "url": "/examples/article/"
+            },
+            {
+              "title": "An entry with a considerably longer heading and more supporting detail",
+              "summary": "This item deliberately has no image. Absence of optional media must not leave an empty placeholder or hide useful content.",
+              "url": "/examples/case-study/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "content-test"
+    },
+    {
+      "id": "patterns",
+      "title": "The reusable parts",
+      "summary": "A compact section library: facts, figures, statistics, listings, comparison plans, disclosures, and actions.",
+      "category": "Verification",
+      "composition": "landing",
+      "sections": [
+        {
+          "id": "facts",
+          "title": "Facts",
+          "kind": "facts",
+          "facts": [
+            {
+              "label": "Content",
+              "value": "Shared across both families"
+            },
+            {
+              "label": "Composition",
+              "value": "Owned by each design language"
+            }
+          ]
+        },
+        {
+          "id": "stats",
+          "title": "Dated measures",
+          "kind": "stats",
+          "items": [
+            {
+              "value": "2",
+              "label": "Design languages"
+            },
+            {
+              "value": "50",
+              "label": "Shared page recipes"
+            }
+          ]
+        },
+        {
+          "id": "disclosures",
+          "title": "Disclosures",
+          "kind": "faq",
+          "items": [
+            {
+              "question": "Is Northlight a real organisation?",
+              "answer": "No. The institute, people, opportunities, prices, events, and records are fictional fixtures shared by both themes."
+            },
+            {
+              "question": "Can I use either language for this kind of site?",
+              "answer": "Yes. Both themes support the same content roles. Their compositions differ; their capabilities remain comparable."
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "title": "A useful next step",
+          "body": "An action should explain its destination.",
+          "actions": [
+            {
+              "label": "Browse the collection",
+              "url": "/examples/collection/"
+            }
+          ]
+        }
+      ],
+      "semantic_class": "section-library"
+    },
+    {
+      "id": "dashboard-analytics",
+      "title": "Analytics",
+      "summary": "Explore audience activity, downloads, and completed tasks across the Northlight programme.",
+      "category": "Dashboards",
+      "composition": "dashboard",
+      "semantic_class": "analytics-dashboard",
+      "sections": [
+        {
+          "id": "workspace",
+          "title": "Analytics workspace",
+          "body": "Shared synthetic analytics and controls."
+        }
+      ],
+      "dashboard": "analytics"
+    },
+    {
+      "id": "dashboard-components",
+      "title": "Working with application data",
+      "summary": "Reusable layouts, metrics, charts, collections, and interaction contracts within each design language.",
+      "category": "Dashboards",
+      "composition": "document",
+      "semantic_class": "reference",
+      "sections": [
+        {
+          "id": "composition",
+          "title": "One language, demanding applications",
+          "body": "The dashboard frame composes the existing source shell, native buttons, table and form styles, disclosures, status regions, and independent family tokens. The sidebar and bounded working area are an application composition, not a separate design system."
+        },
+        {
+          "id": "metrics",
+          "title": "Metrics and chart frames",
+          "body": "Metric values name their unit and comparison basis. Chart frames pair labelled SVGs with exact data tables. These capabilities have no chart-library dependency and load only on dashboard pages."
+        },
+        {
+          "id": "behaviour",
+          "title": "Portable behaviour",
+          "body": "Date filtering, aggregation, collection sorting and pagination, validation, bulk updates, thresholds, and acknowledgement rules live in framework-neutral modules. Both families use the same modules and synthetic fixture. Browser-local changes reset on reload."
+        },
+        {
+          "id": "authority",
+          "title": "Design authorities",
+          "body": "Jameshoward.us remains authoritative for Martlet; krigsvold.org remains authoritative for Krigsvold. The application layout extends the language to a working context while preserving source controls, typography, palette roles, and navigation identity."
+        }
+      ]
+    },
+    {
+      "id": "dashboard-administration",
+      "title": "Administration",
+      "summary": "Manage the Northlight people directory with scoped selection, validation, and explicit local changes.",
+      "category": "Dashboards",
+      "composition": "dashboard",
+      "semantic_class": "administration-dashboard",
+      "dashboard": "administration",
+      "sections": [
+        {
+          "id": "workspace",
+          "title": "Administration workspace",
+          "body": "Shared synthetic data and equivalent application behaviour."
+        }
+      ]
+    },
+    {
+      "id": "dashboard-operations",
+      "title": "Operations",
+      "summary": "Inspect service health, latency trends, alerts, and the activity record in a synthetic monitoring snapshot.",
+      "category": "Dashboards",
+      "composition": "dashboard",
+      "semantic_class": "operations-dashboard",
+      "dashboard": "operations",
+      "sections": [
+        {
+          "id": "workspace",
+          "title": "Operations workspace",
+          "body": "Shared synthetic data and equivalent application behaviour."
+        }
+      ]
+    }
+  ]
+}

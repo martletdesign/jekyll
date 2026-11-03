@@ -1,0 +1,9 @@
+/* Martlet's editorial hierarchy, spacious groups, and documentary side navigation. */
+.dash-app { --dash-ui-font:var(--martlet-font-sans); --dash-number-font:var(--martlet-font-sans); --dash-chart-primary:var(--martlet-chart-1); --dash-chart-secondary:var(--martlet-chart-2); --dash-warning:var(--martlet-warning); --dash-danger:var(--martlet-danger); --dash-success:var(--martlet-green); --dash-overlay:var(--martlet-overlay-scrim); }
+.dash-sidebar { border-top:3px solid var(--color-gold-500); }
+.dash-panel { border:0; border-top:1px solid var(--ex-line); padding:1.75rem 0; }
+.dash-grid > .dash-panel--sessions { grid-column:1 / -1; }
+.dash-metric { background:transparent; padding-inline:0; border-color:var(--color-gold-500); }
+.dash-heading h1 { font-family:var(--font-serif); font-weight:400; }
+.dash-main { padding-inline-end:1rem; }
+@media(max-width:42rem){.dash-main{padding-inline-end:0;}}

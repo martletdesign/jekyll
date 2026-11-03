@@ -1,0 +1,41 @@
+name: Jekyll release guard tests
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s tests -p 'test_release_guard.py'
+      - run: python3 -m unittest discover -s tests -p 'test_docs_gate.py'
+      - run: node --test scripts/docs-versions/*.test.mjs
+
+  archive-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - run: python3 -m unittest discover -s tests -p 'test_docs_archive.py'
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+          BUNDLE_FROZEN: 'true'
+      - run: node --test tests/docs-r2.test.mjs
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+          BUNDLE_FROZEN: 'true'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --prefix infra/docs-archive --ignore-scripts --no-audit --no-fund
+      - run: node infra/docs-archive/smoke.mjs
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+          BUNDLE_FROZEN: 'true'

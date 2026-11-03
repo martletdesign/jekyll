@@ -1,0 +1,11 @@
+<div data-example-search data-browse-url="{{ '/examples/' | relative_url | escape }}">
+<form class="example-search" action="{{ '/examples/search/' | relative_url }}" role="search" aria-label="{{ include.title | escape }}">
+  <label for="search:{{ include.id }}:query">Search the example record</label><div class="example-search__controls"><input type="search" id="search:{{ include.id }}:query" name="q" maxlength="200" placeholder="Try shoreline, workshop, or protocol" disabled><button class="{% include examples/button-classes.html %}" type="submit" disabled>Search</button></div>
+</form>
+<p role="status" data-search-status>Search is unavailable.</p>
+<ul class="example-list" data-search-results></ul>
+<p data-search-fallback><a href="{{ '/examples/' | relative_url }}">Browse the complete example index</a>.</p>
+<noscript><p>Search requires JavaScript.</p></noscript>
+{% capture search_index %}[{% for entry in site.data.examples.pages %}{"title":{{ entry.title | jsonify }},"summary":{{ entry.summary | jsonify }},"category":{{ entry.category | jsonify }},"url":{{ '/examples/' | append: entry.id | append: '/' | relative_url | jsonify }}}{% unless forloop.last %},{% endunless %}{% endfor %}]{% endcapture %}
+<script type="application/json" data-search-index>{{ search_index | replace: '<', '\u003c' }}</script>
+</div>

@@ -1,0 +1,37 @@
+<form class="example-form dash-toolbar" id="people-filters">
+  <fieldset disabled data-dashboard-controls><legend>Directory filters and state preview</legend><div class="dash-controls">
+    <div><label for="people-query">Search people</label><input type="search" name="query" id="people-query" placeholder="Name, email, role, or ID" maxlength="120"></div>
+    <div><label for="people-status">Status</label><select name="status" id="people-status"><option>All</option><option>Active</option><option>Invited</option><option>Suspended</option></select></div>
+    <div><label for="people-size">Rows per page</label><select name="size" id="people-size"><option>5</option><option>10</option><option>20</option></select></div>
+    <div><label for="people-density">Table density</label><select name="density" id="people-density"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
+    <div><label for="people-state">State preview</label><select name="state" id="people-state"><option value="ready">Ready</option><option value="loading">Loading</option><option value="error">Error</option><option value="empty">Empty</option></select></div>
+  </div><button class="{% include examples/button-classes.html %}" type="submit">Apply directory filters</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-clear-people>Clear filters</button></fieldset>
+</form>
+<p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>
+<p class="dash-status" role="status" data-dashboard-status>Published synthetic directory.</p>
+<section class="dash-panel" aria-labelledby="directory-title"><h2 id="directory-title">People directory</h2>
+  <div class="dash-actions"><span data-selection-count>0 people selected.</span><button class="{% include examples/button-classes.html %}" type="button" data-bulk="Active" disabled>Activate selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-bulk="Suspended" disabled>Suspend selected</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-new-person disabled>Add person</button></div>
+  <div class="dash-state" data-directory-state hidden></div>
+  <div class="example-table-scroll" role="region" aria-label="People directory table" tabindex="0" data-directory-region>
+    <table id="people-table"><caption>Synthetic people — select visible records or edit an individual</caption><thead><tr>
+      <th scope="col"><input class="dash-row-check" type="checkbox" data-select-page aria-label="Select visible people" disabled></th>
+      <th scope="col" aria-sort="ascending"><button class="dash-sort" type="button" data-sort="name" disabled>Name</button></th>
+      <th scope="col" aria-sort="none"><button class="dash-sort" type="button" data-sort="email" disabled>Email</button></th>
+      <th scope="col" aria-sort="none"><button class="dash-sort" type="button" data-sort="role" disabled>Role</button></th>
+      <th scope="col" aria-sort="none"><button class="dash-sort" type="button" data-sort="status" disabled>Status</button></th><th scope="col">Action</th>
+    </tr></thead><tbody>{% assign people = site.data.dashboards.people | sort: 'name' %}{% for person in people %}<tr><td>—</td><th scope="row">{{ person.name | escape }}</th><td>{{ person.email | escape }}</td><td>{{ person.role | escape }}</td><td>{{ person.status | escape }}</td><td>{{ person.id | escape }}</td></tr>{% endfor %}</tbody></table>
+  </div>
+  <nav class="example-pagination" aria-label="People pages"><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-people-previous disabled>Previous page</button><span data-people-page>All people</span><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-people-next disabled>Next page</button></nav>
+</section>
+<section class="dash-panel dash-editor" aria-labelledby="editor-title"><h2 id="editor-title" tabindex="-1">Person editor</h2><p>Use invented information only. Save updates the local directory; reload restores the fixture.</p>
+  <form class="example-form" id="person-editor" novalidate>
+    <div class="dash-error" role="alert" id="person-errors" hidden></div>
+    <fieldset disabled data-dashboard-controls><legend data-editor-legend>Add a person</legend><div class="dash-editor-grid">
+      <div><label for="person-name">Full name</label><input id="person-name" name="name" required minlength="2" maxlength="120"><p class="dash-error" id="person-name-error" hidden></p></div>
+      <div><label for="person-email">Email address</label><input id="person-email" name="email" type="email" required maxlength="254"><p class="dash-error" id="person-email-error" hidden></p></div>
+      <div><label for="person-role">Role</label><select id="person-role" name="role"><option>Researcher</option><option>Editor</option><option>Coordinator</option></select><p class="dash-error" id="person-role-error" hidden></p></div>
+      <div><label for="person-status">Person status</label><select id="person-status" name="status"><option>Invited</option><option>Active</option><option>Suspended</option></select><p class="dash-error" id="person-status-error" hidden></p></div>
+    </div><button class="{% include examples/button-classes.html %}" type="submit">Save person locally</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-discard-person>Discard draft</button></fieldset>
+  </form>
+</section>
+<dialog class="dash-dialog" aria-labelledby="bulk-title" data-bulk-dialog><h2 id="bulk-title">Confirm directory change</h2><p data-bulk-description></p><p>This changes only the selected synthetic records in this page’s memory.</p><div class="dash-actions"><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-bulk-cancel>Cancel</button><button class="{% include examples/button-classes.html %}" type="button" data-bulk-confirm>Confirm change</button></div></dialog>

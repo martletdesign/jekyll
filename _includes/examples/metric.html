@@ -1,0 +1,1 @@
+<div class="dash-metric"><dt>{{ include.label | escape }}</dt><dd><output aria-live="off" data-metric="{{ include.id }}">—</output><p data-comparison="{{ include.id }}" class="example-help">{% if include.unavailable %}Unavailable until a safe range is selected.{% else %}Calculated from the table below.{% endif %}</p></dd></div>
