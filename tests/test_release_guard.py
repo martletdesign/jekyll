@@ -41,6 +41,10 @@ class ReleaseGuardTests(unittest.TestCase):
         run('git','commit','-m','advance main',cwd=self.repo)
         newer=run('git','rev-parse','HEAD',cwd=self.repo)
         run('git','push',str(self.root/'remote.git'),f'{newer}:refs/heads/main',cwd=self.repo)
+        # Recent Git can update origin/main even when pushing by its URL.
+        # Pin the intended stale observation explicitly rather than assuming it.
+        run('git','update-ref','refs/remotes/origin/main',self.sha,cwd=self.repo)
+        self.assertNotEqual(run('git','rev-parse','refs/remotes/origin/main',cwd=self.repo),newer)
         run('git','checkout','--detach',self.sha,cwd=self.repo)
         result=self.guard()
         self.assertNotEqual(result.returncode,0)
