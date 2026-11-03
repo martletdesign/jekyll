@@ -94,3 +94,6 @@ html[data-appearance="dark"] .example-frame--reading[data-example="article"] .to
   .example-faq--grouped details::details-content { content-visibility:visible; block-size:auto; }
   .example-faq--grouped details { break-inside:avoid; }
 }
+
+/* Optional documentation media retains the existing card image contract. */
+.example-documentation-entries img { display:block; max-width:100%; height:auto; margin-block:0 1rem; }
