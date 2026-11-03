@@ -7,13 +7,18 @@ const fixture=JSON.parse(readFileSync('_data/dashboards.json')),temp=mkdtempSync
 const deadline=Date.now()+180000;let browser,server;const watchdog=setTimeout(()=>{console.error('Workspaces overall deadline exceeded');process.exit(1)},180000);
 async function bounded(label,operation,ms=15000){console.log(`START ${label}`);let timer;try{return await Promise.race([operation(),new Promise((_,reject)=>timer=setTimeout(()=>reject(Error(`Timed out ${label}`)),Math.min(ms,Math.max(1,deadline-Date.now()))))])}finally{clearTimeout(timer)}}
 const textNumber=async locator=>Number((await locator.textContent()).replaceAll(',',''));
+function parseCSV(csv){
+ const rows=[];let row=[],field='',quoted=false;
+ for(let i=0;i<csv.length;i++){const c=csv[i];if(c==='"'){if(quoted&&csv[i+1]==='"'){field+='"';i++;}else quoted=!quoted;}else if(!quoted&&c===','){row.push(field);field='';}else if(!quoted&&(c==='\n'||c==='\r')){if(c==='\r'&&csv[i+1]==='\n')i++;row.push(field);rows.push(row);row=[];field='';}else field+=c;}
+ assert.equal(quoted,false,'CSV quoting is complete');if(field||row.length){row.push(field);rows.push(row);}return rows;
+}
 async function analytics(page){
  const rows=fixture.analytics.filter(r=>r.date>='2026-10-22'&&r.date<='2026-10-28'&&r.category==='Research').sort((a,b)=>a.date.localeCompare(b.date));
  await page.locator('#analytics-category').selectOption('Research');await page.getByRole('button',{name:'Apply filters',exact:true}).click();
  assert.equal(await page.locator('#analytics-source tbody tr').count(),rows.length);assert.equal(await textNumber(page.locator('[data-metric="sessions"]')),rows.reduce((n,r)=>n+r.sessions,0));
  const downloadPromise=page.waitForEvent('download',{timeout:15000});await page.locator('[data-export-analytics]').click();const download=await downloadPromise;
- assert.equal(download.suggestedFilename(),'northlight-analytics.csv');const csv=readFileSync(await bounded('CSV download path',()=>download.path()),'utf8').split(/\r?\n/);
- const quote=v=>'"'+String(v).replaceAll('"','""')+'"';assert.deepEqual(csv,[['Date','Category','Sessions','Downloads','Completed tasks'],...rows.map(r=>[r.date,r.category,r.sessions,r.downloads,r.completions])].map(r=>r.map(quote).join(',')));
+ assert.equal(download.suggestedFilename(),'northlight-analytics.csv');const csv=parseCSV(readFileSync(await bounded('CSV download path',()=>download.path()),'utf8'));
+ assert.deepEqual(csv,[['Date','Category','Sessions','Downloads','Completed tasks'],...rows.map(r=>[r.date,r.category,r.sessions,r.downloads,r.completions])].map(r=>r.map(String)));
  const previous=await page.locator('#analytics-source tbody').textContent();await page.locator('#analytics-start').fill('2026-10-28');await page.locator('#analytics-end').fill('2026-10-22');await page.getByRole('button',{name:'Apply filters',exact:true}).click();
  assert.equal(await page.locator('#analytics-error').isVisible(),true);assert.equal(await page.locator('#analytics-error').evaluate(e=>e===document.activeElement),true);assert.equal(await page.locator('#analytics-source tbody').textContent(),previous);
  await page.locator('#analytics-start').fill('2026-10-22');await page.locator('#analytics-end').fill('2026-10-28');await page.getByRole('button',{name:'Apply filters',exact:true}).click();assert.equal(await page.locator('#analytics-error').isVisible(),false);
