@@ -2,6 +2,11 @@
 layout: page
 title: Martlet, in plain sight.
 eyebrow: The Jekyll reference
+hero_image: /assets/images/heroes/hero-original.webp
+hero_image_small: /assets/images/heroes/hero-640.webp
+hero_image_medium: /assets/images/heroes/hero-960.webp
+hero_image_width: 1536
+hero_image_height: 506
 description: The same shell. Markdown, Liquid, and a little JavaScript. Nothing hiding the design.
 ---
 ## A smaller engine. The same language.

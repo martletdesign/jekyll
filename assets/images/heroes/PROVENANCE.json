@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "family": "martlet",
+  "approvedSource": "Maintainer-supplied approved-panoramic-heroes.zip, original panoramic compositions from preceding ChatGPT design review",
+  "reviewIssue": "https://github.com/k3jph/design-workbench/issues/88",
+  "visualAuthority": "https://jameshoward.us/",
+  "artworkRole": "Host-owned decorative airborne bird at dusk; not a source-site photograph or the heraldic system mark",
+  "rightsBasis": "Supplied by the maintainer with explicit direction to commit and distribute these approved assets in this repository; no external photography or third-party attribution claimed",
+  "distributionLicense": "Repository LICENSE (MIT)",
+  "originalPreserved": true,
+  "later16by9RegenerationsUsed": false,
+  "derivatives": "Supplied optimized WebP derivatives; no regenerated artwork or additional image transformation",
+  "files": [
+    {
+      "file": "hero-original.webp",
+      "width": 1536,
+      "height": 506,
+      "bytes": 41024,
+      "sha256": "6ee7d00a6b2b0c25a7ea24fa0d334cc5ea3782e1fea4a1d81b91449d32de78b4"
+    },
+    {
+      "file": "hero-960.webp",
+      "width": 960,
+      "height": 316,
+      "bytes": 16090,
+      "sha256": "c6bf5a34ea31741019dd9e25105d85efa826465ef1af3b68defd649a01261cce"
+    },
+    {
+      "file": "hero-640.webp",
+      "width": 640,
+      "height": 211,
+      "bytes": 9494,
+      "sha256": "c1d22b655d0a6425d9ca85e95925c37d10afab40dc81d2fb42c3902ed77da564"
+    }
+  ],
+  "sourceStylePreservation": {
+    "assets/css/shell.css": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45",
+    "assets/css/fonts.css": "80f766b73961542249d0cd82917d72ad65a9d869cfbb1566daeba5caba56560f"
+  }
+}
