@@ -145,3 +145,44 @@ html[data-appearance] body.has-panoramic-hero .site-header:is(.is-scrolled,.is-m
   html[data-appearance] body.has-panoramic-hero .site-header
     :is(.brand,nav a,.menu-button,.appearance-toggle) {color:CanvasText!important;}
 }
+
+/* Home-only hero refinement: the transparent fixed navbar must actually
+   overlay image pixels rather than a header-height strip of fallback ink. */
+body.has-panoramic-hero .site-header[data-navigation-ready] + main .page-intro--illustrated {
+  padding-top: 0;
+}
+/* Make the first viewport's artwork and heading remain distinct. Fixed nav
+   overlays the image; content spacing protects it without shifting the art. */
+body.has-panoramic-hero .page-intro--illustrated .page-intro__shade {
+  padding-top: clamp(7rem, 11vw, 11rem);
+}
+/* Darken with warm bronze, not navy or a flat black wash. Keep sunlight,
+   the bird silhouette, and the right-side feather details readable. */
+body.has-panoramic-hero .page-intro--illustrated::before {
+  background:
+    linear-gradient(103deg,
+      rgb(27 17 10 / .97) 0%,
+      rgb(43 24 11 / .91) 32%,
+      rgb(91 49 15 / .59) 60%,
+      rgb(37 26 17 / .26) 100%),
+    linear-gradient(0deg,
+      rgb(115 65 14 / .16),
+      rgb(168 108 27 / .08));
+}
+/* Warm but unobtrusive header states, and deliberate behavior for the
+   original image-above-copy mobile treatment. */
+@media (max-width: 48rem) {
+  body.has-panoramic-hero .page-intro--illustrated .page-intro__shade {
+    padding-top: 2rem;
+  }
+  body.has-panoramic-hero .page-intro--illustrated::before {
+    background: linear-gradient(103deg,
+      rgb(27 17 10 / .36),
+      rgb(91 49 15 / .22) 60%,
+      rgb(37 26 17 / .12));
+  }
+}
+/* No decorative layer in forced-colors or print. */
+@media (forced-colors: active) {
+  body.has-panoramic-hero .page-intro--illustrated::before { display:none; }
+}
