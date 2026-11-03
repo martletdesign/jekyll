@@ -335,3 +335,11 @@ html[data-appearance] body.martlet:not(.has-panoramic-hero) .site-header:not(.is
   border-bottom-color:transparent;
   box-shadow:none;
 }
+
+/* The short desktop hero must still meet the documented 250px reading frame
+   after removing the artificial navigation-height spacer. */
+@media (min-width:1024px) and (min-aspect-ratio:4/5) {
+  body.martlet.has-panoramic-hero .page-intro--section {
+    min-height:250px;
+  }
+}
