@@ -1,6 +1,6 @@
 # Martlet grammar reconciliation: reading and documentation
 
-Tracks [work order #91](https://github.com/k3jph/design-workbench/issues/91). Work began independently from accepted `develop` `ac0a64c6cd5167ccbdf96bb20e46e5d547a49a5d`, rather than stacking on the then-unaccepted first exemplar candidate. The accepted first wave must be merged normally before final verification and submission. This wave preserves the same 50 fixtures, route IDs, headings, content, anchors and capability contracts; it does not redesign account forms or operational dashboards.
+Tracks [work order #91](https://github.com/k3jph/design-workbench/issues/91). Work began independently from accepted `develop` `ac0a64c6cd5167ccbdf96bb20e46e5d547a49a5d`, rather than stacking on the then-unaccepted first exemplar candidate. The accepted first wave was integrated by a normal merge of `develop` `0701a83e948964fd5bf2e05ee31e7385af7752d6` before final verification. This wave preserves the same 50 fixtures, route IDs, headings, content, anchors and capability contracts; it does not redesign account forms or operational dashboards.
 
 ## Actual origin evidence
 
