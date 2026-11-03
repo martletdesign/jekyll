@@ -74,7 +74,7 @@ class PrPreviewTests(unittest.TestCase):
     sha=subprocess.check_output(['git','-C',str(d),'rev-parse','HEAD'],text=True).strip()
     for family in ['martlet','krigsvold']:
      c={'repository':family+'design/jekyll','targets':{'develop':{'worker':family+'design-jekyll-reference'}}}
-     with patch.object(pr,'ROOT',d),patch.object(pr.artifact,'read_config',return_value=c),patch.dict(os.environ,env,clear=True):
+     with patch.object(pr,'ROOT',d),patch.object(pr.artifact,'read_config',return_value=c),patch.dict(os.environ,{**env,'GITHUB_REPOSITORY':c['repository']},clear=True):
       actual,_,_,context_name=pr.context();self.assertEqual(context_name,name)
       label=actual['targets'][branch]['origin'].split('://')[1].split('.')[0]
       self.assertLessEqual(len(label),63);self.assertLessEqual(len(name),26)
