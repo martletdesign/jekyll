@@ -33,11 +33,19 @@ try {
     const context = await browser.newContext({javaScriptEnabled:js, viewport:{width:320,height:900}, reducedMotion:'reduce'});
     context.setDefaultTimeout(10000);context.setDefaultNavigationTimeout(15000);
     const page = await context.newPage();
+    const pageErrors=[];page.on('pageerror',error=>pageErrors.push(error.message));
     for (const item of pages) {
       const response = await bounded(`${engineName} ${base||'/'} js=${js} route=${item.id} navigation`,()=>page.goto(`http://127.0.0.1:${port}${base}/examples/${item.id}/`, {waitUntil:'domcontentloaded'}));
       assert.equal(response.status(), 200, item.id);
       assert.equal(await page.locator('main').count(), 1, `${item.id} main`);
       assert.ok(await page.locator('h1').count(), `${item.id} h1`);
+      if(js&&item.id.startsWith('dashboard-')){
+        for(const width of [1440,320]){
+          await bounded(`${engineName} ${base||'/'} route=${item.id} resize=${width}`,()=>page.setViewportSize({width,height:900}));
+          await bounded(`${engineName} ${base||'/'} route=${item.id} resize settle`,()=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))));
+        }
+      }
+      assert.deepEqual(pageErrors,[],`${item.id} uncaught page errors`);
       if (js && item.id === 'home') {
         const result = await bounded(`${engineName} ${base||'/'} route=${item.id} accessibility`,()=>new AxeBuilder({page}).analyze());
         assert.deepEqual(result.violations.map(v => v.id), [], `axe ${base}/${item.id}`);

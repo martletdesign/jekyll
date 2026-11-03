@@ -24,7 +24,10 @@ try {
  // runtime. The server must reject each endpoint before accepting an object.
  for(const [path,chunkSize,count] of [[`/_archive/v/${version}/oversized.bin`,1024*1024,20],['/_archive/catalog',256*1024,6],['/_archive/promotion',32*1024,4]]){
   let produced=0,cancelled=false;
-  const stream=new ReadableStream({pull(controller){produced++;controller.enqueue(new Uint8Array(chunkSize));if(produced===count)controller.close();},cancel(){cancelled=true;}});
+  // Pace the producer so the local Undici bridge can deliver the early 413
+  // before its next write races the Workerd body-cancellation socket close.
+  // The same total size, chunk sizes, 413 and no-object assertions remain.
+  const stream=new ReadableStream({async pull(controller){await new Promise(resolve=>setTimeout(resolve,5));if(cancelled)return;produced++;controller.enqueue(new Uint8Array(chunkSize));if(produced===count)controller.close();},cancel(){cancelled=true;}});
   const response=await mf.dispatchFetch(`https://example.invalid${prefix}${path}`,{method:'PUT',body:stream,duplex:'half',redirect:'manual',headers:{authorization:`Bearer ${token}`}});
   assert.equal(response.status,413,path);
   console.log(`${path}: oversized chunked request rejected (source chunks ${produced}/${count}, cancelled=${cancelled})`);

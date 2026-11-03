@@ -41,12 +41,18 @@ export function chart(root,id,rows,{label='Count',bars=false,previous=false,thre
   const options={label,bars,previous,threshold};
   let state=chartStates.get(mount);
   if(!state){
-    state={id,rows,options,width:0};
+    state={id,rows,options,width:0,frame:null};
     chartStates.set(mount,state);
     if(typeof ResizeObserver!=='undefined'){
       new ResizeObserver(entries=>{
-        const width=entries[0].contentRect.width;
-        if(width>0&&Math.abs(width-state.width)>=1){state.width=width;drawChart(mount,state.id,state.rows,state.options);}
+        const width=mount.clientWidth;
+        if(width>0&&Math.abs(width-state.width)>=1){
+          state.width=width;
+          if(state.frame===null)state.frame=requestAnimationFrame(()=>{
+            state.frame=null;
+            if(mount.isConnected)drawChart(mount,state.id,state.rows,state.options);
+          });
+        }
       }).observe(mount);
     }
   }
