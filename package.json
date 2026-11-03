@@ -8,7 +8,8 @@
     "test:reading": "node tests/reading.mjs",
     "test:grammar": "node tests/grammar.mjs",
     "test:navigation": "node tests/navigation.mjs",
-    "test:workspaces": "node tests/workspaces.mjs"
+    "test:workspaces": "node tests/workspaces.mjs",
+    "test:collections": "node tests/collections.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.1",
