@@ -301,3 +301,11 @@ html[data-appearance="dark"] body.martlet .site-footer a:focus-visible {
     color: CanvasText;
   }
 }
+
+/* Host text resizing: reserve the existing Menu control's intrinsic width and
+   let the adjacent brand wrap inside its own allocation, never paint over it. */
+.site-header .header-inner { flex-wrap:wrap; row-gap:.25rem; }
+.site-header .brand { min-inline-size:0; flex:1 1 max-content; }
+.site-header .brand img { flex:0 0 auto; }
+.site-header .brand span { min-inline-size:0; overflow-wrap:anywhere; }
+.site-header .menu-button { flex:0 0 auto; }
