@@ -55,6 +55,16 @@ try {
       if(width<=768)assert.ok(heading.y>=box.y+box.height,'Mobile text sits below the complete image');
       assert.equal(await art.evaluate(img=>img.complete&&img.naturalWidth>0),true,'Approved artwork loads');
       assert.equal(await page.locator('html').getAttribute('data-appearance'),appearance);
+      const footer=page.locator('.site-footer');
+      assert.equal(await footer.evaluate(el=>getComputedStyle(el).backgroundColor),
+        appearance==='dark'?'rgb(37, 23, 11)':'rgb(7, 17, 31)',
+        'The footer uses bronze only in dark mode, retaining source navy in light mode');
+      if(appearance==='dark'){
+        assert.equal(await footer.locator('h2').first().evaluate(el=>getComputedStyle(el).color),
+          'rgb(248, 244, 233)','Footer headings remain cream on bronze');
+        assert.equal(await footer.locator('a').first().evaluate(el=>getComputedStyle(el).color),
+          'rgb(248, 244, 233)','Footer links remain cream on bronze');
+      }
       assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)');
       assert.equal(await hero.locator('p:not(.eyebrow)').first().evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Supporting text uses opaque existing cream for measured contrast');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Hero does not cause horizontal overflow');
