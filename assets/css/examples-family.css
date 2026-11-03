@@ -65,3 +65,32 @@ html[data-appearance="dark"] .example-frame--reading[data-example="article"] .to
 @media(max-width:64rem) { .example-frame--document .example-document { display:block; } }
 @media(max-width:40rem) { .example-documentation-entries p { margin-inline-start:0; } }
 @media(forced-colors:active) { html[data-appearance] .example-frame--reading[data-example="article"] .toc :is(h2,a) { color:CanvasText; } }
+/* Reference exemplars: browse related subjects, then read a bounded entry.
+   This translates the origin's index/reading relationships, not its imagery. */
+.example-reference-exemplar .example-reading { max-width:74rem; }
+.example-reference-exemplar .example-document { grid-template-columns:minmax(11rem,15rem) minmax(0,46rem); }
+.example-reference-exemplar .example-local-index { max-width:26ch; }
+.example-reference-exemplar .example-local-index a { display:inline-block; padding-block:.25rem; }
+.example-faq--grouped .example-faq__group + .example-faq__group { margin-top:3rem; }
+.example-faq--grouped .example-faq__group > h3 { font-family:var(--font-heading,"Cambo",serif); font-size:1.4rem; margin-bottom:.8rem; }
+.example-faq--grouped details { border:0; padding-block:.6rem; }
+.example-faq--grouped summary { max-width:42ch; font-size:1.15rem; line-height:1.45; }
+.example-faq__answer { margin-inline-start:1.25rem; max-width:59ch; }
+.example-faq__answer p { font-family:"Cambo",serif; font-size:1.12rem; }
+.example-release-history { list-style:none; margin:0; padding:0; }
+.example-release { display:grid; grid-template-columns:minmax(8rem,10rem) minmax(0,1fr); gap:2rem; }
+.example-release h2 { font-size:1.8rem; }
+.example-release__version { display:block; }
+.example-release__date { display:block; font:400 .95rem/1.65 "Lato",sans-serif; margin-top:.4rem; }
+.example-release__date time { display:inline; }
+.example-release .example-prose { font-family:"Cambo",serif; font-size:1.12rem; }
+.example-component-catalog__entry { max-width:64ch; margin-bottom:3rem; }
+.example-component-catalog__entry h2 { max-width:25ch; margin-bottom:.85rem; }
+.example-component-catalog__entry .example-prose { padding-inline-start:1.4rem; font-family:"Cambo",serif; font-size:1.12rem; }
+@media(max-width:64rem) { .example-reference-exemplar .example-document { display:block; } .example-reference-exemplar .example-local-index { max-width:none; } }
+@media(max-width:40rem) { .example-release { display:block; } .example-release h2 { margin-bottom:1rem; } .example-release__version,.example-release__date,.example-release__date time { display:inline; } .example-faq__answer,.example-component-catalog__entry .example-prose { margin-inline-start:0; padding-inline-start:0; } }
+@media print { .example-release-history,.example-release,.example-component-catalog { display:block; } .example-faq--grouped details:not([open]) .example-faq__answer { display:block; } }
+@media print {
+  .example-faq--grouped details::details-content { content-visibility:visible; block-size:auto; }
+  .example-faq--grouped details { break-inside:avoid; }
+}

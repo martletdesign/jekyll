@@ -2,7 +2,7 @@
 layout: default
 ---
 {% assign record = site.data.examples.pages | where: 'id', page.record_id | first %}
-<div class="example-root example-frame--document" data-example="{{ page.record_id | escape }}" data-semantic-class="{{ record.semantic_class | escape }}">
+<div class="example-root example-frame--document{% if page.record_id == 'faq' or page.record_id == 'changelog' or page.record_id == 'dashboard-components' %} example-reference-exemplar{% endif %}" data-example="{{ page.record_id | escape }}" data-semantic-class="{{ record.semantic_class | escape }}">
   <div class="example-wrap example-reading">
     <nav class="example-breadcrumb" aria-label="Breadcrumb"><a href="{{ '/' | relative_url }}">Overview</a><span aria-hidden="true">/</span><a href="{{ '/examples/' | relative_url }}">Examples</a><span aria-hidden="true">/</span><span aria-current="page">{{ record.semantic_class | replace: '-', ' ' | capitalize }}</span></nav>
     <div class="example-document">{% include examples/local-index.html record=record %}<div><article aria-labelledby="page-title">{% include examples/recipe.html %}{{ content }}</article></div></div>
