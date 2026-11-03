@@ -5,7 +5,28 @@ if [[ -n "${WORKERS_CI_BRANCH:-}" && -n "${JEKYLL_DEPLOY_BRANCH:-}" && "$WORKERS
   exit 1
 fi
 branch="${WORKERS_CI_BRANCH:-${JEKYLL_DEPLOY_BRANCH:-develop}}"
-case "$branch" in develop|main) ;; *) echo 'Unsupported GitFlow branch' >&2; exit 1;; esac
+case "$branch" in
+  develop|main) ;;
+  *)
+    # PR/feature branches are allowed to create isolated previews only.
+    # The protected develop/main verifier remains unchanged below.
+    export BUNDLE_FROZEN=true
+    export BUNDLE_PATH="${BUNDLE_PATH:-vendor/bundle}"
+    python3 scripts/deployment/pr-preview-source.py
+    gem install bundler --version 2.4.19 --no-document
+    bundle _2.4.19_ install --jobs 4 --retry 2
+    bundle _2.4.19_ exec jekyll build --source .cloudflare-source --config .cloudflare-source/_config.yml,.cloudflare-render.yml --destination .cloudflare-site --baseurl '' --strict_front_matter --trace
+    python3 - <<'PY'
+from pathlib import Path
+site=Path(".cloudflare-site")
+assert site.is_dir() and (site/"index.html").is_file()
+(site/"robots.txt").write_text("User-agent: *\\nDisallow: /\\n")
+(site/"_headers").write_text("/*\\n  X-Robots-Tag: noindex, nofollow, noarchive\\n  X-Content-Type-Options: nosniff\\n  Referrer-Policy: strict-origin-when-cross-origin\\n")
+PY
+    echo "PR_PREVIEW_ONLY: $branch"
+    exit 0
+    ;;
+esac
 export BUNDLE_FROZEN=true
 export BUNDLE_PATH="${BUNDLE_PATH:-vendor/bundle}"
 gem install bundler --version 2.4.19 --no-document
