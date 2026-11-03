@@ -8,6 +8,11 @@ import AxeBuilder from '@axe-core/playwright';
 const engineName=process.env.BROWSER||'chromium',engine={chromium,firefox,webkit}[engineName];assert.ok(engine);
 const tmp=mkdtempSync(join(tmpdir(),'martlet-identity-'));let browser,server;
 const timer=setTimeout(()=>{console.error('Identity browser deadline exceeded');process.exit(1)},360000);
+async function bounded(label,operation,ms){
+ let timeout;console.log(`START ${label}`);
+ try{return await Promise.race([operation(),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error(`Timed out: ${label} after ${ms}ms`)),ms)})])}
+ finally{clearTimeout(timeout);console.log(`END ${label}`)}
+}
 const routes=[['language/','section'],['examples/','section'],['journal/','section'],['setup/','compact'],['journal/what-a-shell-should-own/','compact'],['404.html','plain'],['examples/dashboard-analytics/','dashboard']];
 try {
  for(const base of ['', '/preview'])assert.equal(spawnSync('python3',['nightjar/build.py','--destination',join(tmp,base||'.'),'--baseurl',base],{encoding:'utf8',timeout:120000}).status,0,'Identity build');
@@ -37,7 +42,7 @@ try {
    }
    assert.equal(await page.locator('.page-intro--signature').count(),0,'Cinematic signature appears only at homepage');
    const menu=page.locator('.menu-button');if(await menu.isVisible()){await menu.focus();await page.keyboard.press('Enter');assert.equal(await menu.getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await menu.evaluate(el=>document.activeElement===el),true)}
-   const axe=await new AxeBuilder({page}).analyze();assert.deepEqual(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[],`${route} axe`);console.log(JSON.stringify({route,base,width,mode,incomplete:axe.incomplete.map(v=>v.id)}));
+   const axe=await bounded(`Identity axe ${engineName} ${base||'/'} ${width} ${mode} ${route}`,()=>new AxeBuilder({page}).analyze(),45000);assert.deepEqual(axe.violations.map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)})),[],`${route} axe`);console.log(JSON.stringify({route,base,width,mode,incomplete:axe.incomplete.map(v=>v.id)}));
    if(process.env.HERO_SCREENSHOT_DIR&&[375,1440].includes(width)){mkdirSync(process.env.HERO_SCREENSHOT_DIR,{recursive:true});await page.screenshot({path:join(process.env.HERO_SCREENSHOT_DIR,`identity-${engineName}-${base?'preview':'root'}-${route.replaceAll('/','_')}-${width}-${mode}.png`)})}
    await page.emulateMedia({forcedColors:'active'});assert.equal(await page.locator('main h1').isVisible(),true);assert.equal(await page.locator('.page-intro img').isVisible().catch(()=>false),false,'Forced colors remove decoration');await page.emulateMedia({forcedColors:'none'});
    assert.deepEqual(errors,[],'Identity renders without script errors');
@@ -50,4 +55,7 @@ try {
   await context.close();
  }
  console.log(`${engineName} identity: 196 viewport/appearance/routes plus14 no-JavaScript pages passed`);
-}finally{clearTimeout(timer);if(browser)await browser.close();if(server)server.kill();rmSync(tmp,{recursive:true,force:true})}
+}finally{
+ try{if(browser)await bounded(`Identity ${engineName} browser cleanup`,()=>browser.close(),10000)}
+ finally{clearTimeout(timer);if(server)server.kill();rmSync(tmp,{recursive:true,force:true})}
+}
