@@ -55,20 +55,23 @@ try {
       assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)');
       assert.equal(await hero.locator('p:not(.eyebrow)').first().evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Supporting text uses opaque existing cream for measured contrast');
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Hero does not cause horizontal overflow');
-      if(appearance==='dark') {
-        assert.equal(await page.locator('.brand').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Dark transparent hero header is legible');
-        const menu=page.locator('.menu-button');
-        if(await menu.isVisible()) {
-          await menu.click();assert.equal(await menu.getAttribute('aria-expanded'),'true');
-          assert.equal(await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(248, 244, 233)','Open menu retains canonical cream panel');
-          assert.equal(await page.locator('#site-nav a').first().evaluate(el=>getComputedStyle(el).color),'rgb(11, 28, 51)','Open menu retains canonical ink links');
-          await page.keyboard.press('Escape');assert.equal(await menu.getAttribute('aria-expanded'),'false');
-          assert.equal(await menu.evaluate(el=>document.activeElement===el),true);
-        }
-        await page.evaluate(()=>scrollTo(0,400));await page.waitForFunction(()=>document.querySelector('.site-header').classList.contains('is-scrolled'));
-        assert.equal(await page.locator('.brand').evaluate(el=>getComputedStyle(el).color),'rgb(11, 28, 51)','Scrolled dark header retains canonical ink');
-        await page.evaluate(()=>scrollTo(0,0));await page.waitForFunction(()=>!document.querySelector('.site-header').classList.contains('is-scrolled'));
+      const siteHeader=page.locator('.site-header');
+      assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)','Home navigation is transparent over the protected hero field');
+      if(appearance==='dark')assert.equal(await page.locator('.brand').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Dark transparent hero header is legible');
+      const menu=page.locator('.menu-button');
+      if(await menu.isVisible()) {
+        await menu.click();assert.equal(await menu.getAttribute('aria-expanded'),'true');
+        assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.97)','Open home menu uses the approved burnished brown');
+        assert.equal(await page.locator('#site-nav').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.99)','Expanded menu stays opaque and readable');
+        assert.equal(await page.locator('#site-nav a[aria-current="page"]').evaluate(el=>getComputedStyle(el).color),'rgb(230, 199, 125)','Current destination keeps its gold cue');
+        assert.equal(await page.locator('#site-nav a:not([aria-current])').first().evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Menu links retain legible cream');
+        await page.keyboard.press('Escape');assert.equal(await menu.getAttribute('aria-expanded'),'false');
+        assert.equal(await menu.evaluate(el=>document.activeElement===el),true);
       }
+      await page.evaluate(()=>scrollTo(0,400));await page.waitForFunction(()=>document.querySelector('.site-header').classList.contains('is-scrolled'));
+      assert.equal(await siteHeader.evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(37, 23, 11, 0.97)','Scrolled home header uses the approved burnished brown');
+      assert.equal(await page.locator('.brand').evaluate(el=>getComputedStyle(el).color),'rgb(248, 244, 233)','Scrolled home header keeps readable cream');
+      await page.evaluate(()=>scrollTo(0,0));await page.waitForFunction(()=>!document.querySelector('.site-header').classList.contains('is-scrolled'));
       const result=await bounded(`${engineName} hero axe ${width} ${appearance}`,()=>new AxeBuilder({page}).analyze());
       assert.deepEqual(result.violations.map(v=>v.id),[],`hero axe ${base} ${width} ${appearance}`);
       console.log(JSON.stringify({hero:true,base,width,appearance,axeIncomplete:result.incomplete.map(v=>v.id),image:await art.evaluate(img=>new URL(img.currentSrc).pathname)}));
@@ -80,6 +83,8 @@ try {
       await page.emulateMedia({media:'print'});assert.equal(await art.isVisible(),false);assert.equal(await page.locator('h1').evaluate(el=>getComputedStyle(el).color),'rgb(0, 0, 0)','Printing keeps legible title');await page.emulateMedia({media:'screen'});
       await page.goto(`http://127.0.0.1:${port}${base}/language/`,{waitUntil:'load'});
       assert.equal(await page.locator('.page-intro--illustrated').count(),0,'Plain pages retain source masthead');
+      await page.evaluate(()=>scrollTo(0,400));await page.waitForFunction(()=>document.querySelector('.site-header').classList.contains('is-scrolled'));
+      assert.equal(await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor),appearance==='dark'?'rgb(248, 244, 233)':'rgb(7, 17, 31)','Nonhero pages retain the canonical blue/cream header states');
       assert.deepEqual(errors,[],'Hero causes no page errors');
     } finally {await context.close()}
   }
