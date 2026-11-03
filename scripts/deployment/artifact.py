@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""Build and verify a Git-qualified static deployment; never publishes a package."""
+import argparse
+import concurrent.futures
+import hashlib
+import io
+import json
+import os
+from pathlib import Path, PurePosixPath
+import re
+import shutil
+import subprocess
+import tarfile
+import urllib.error
+import urllib.parse
+import urllib.request
+import zipfile
+from datetime import datetime, timezone
+
+ROOT = Path(__file__).resolve().parents[2]
+SHA = re.compile(r'^[0-9a-f]{40}$')
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+def json_bytes(value):
+    return (json.dumps(value, sort_keys=True, separators=(',', ':'))+'\n').encode()
+
+def read_config(root=ROOT):
+    c=json.loads((root/'infra/deployment/site.json').read_text())
+    assert c['schemaVersion']==1 and c['family'] in ('martlet','krigsvold')
+    assert c['repository']==c['family']+'design/jekyll'
+    assert re.fullmatch(r'[a-f0-9]{32}',c['accountId'])
+    assert set(c['targets'])=={'develop','main'}
+    for branch,t in c['targets'].items():
+        assert re.fullmatch(r'[a-z0-9-]+',t['worker'])
+        u=urllib.parse.urlsplit(t['origin'])
+        assert u.scheme=='https' and not u.username and not u.password and not u.port and not u.query and not u.fragment and u.path in ('','/')
+        assert t['environment']==('jekyll-development' if branch=='develop' else 'jekyll-production')
+    assert c['targets']['main']['worker']==c['family']+'design-jekyll-reference'
+    assert c['targets']['main']['origin']=='https://jekyll.'+c['family']+'design.dev'
+    assert c['targets']['develop']['worker']==c['targets']['main']['worker']
+    assert c['targets']['develop']['previewName']=='develop'
+    assert c['targets']['develop']['origin']=='https://develop-'+c['family']+'design-jekyll-reference.k3jph.workers.dev'
+    return c
+
+def promotion_ok(pr, sha, reviews):
+    shape=pr.get('merged_at') is not None and pr.get('merge_commit_sha')==sha and pr.get('base',{}).get('ref')=='main' and (pr.get('head',{}).get('ref')=='develop' or pr.get('head',{}).get('ref','').startswith(('release/','hotfix/')))
+    if not shape:return False
+    latest={}
+    for review in sorted(reviews,key=lambda r:r.get('id',0)):
+        if review.get('state') in ('APPROVED','CHANGES_REQUESTED','DISMISSED'):
+            latest[review.get('user',{}).get('login')]=review
+    if any(r.get('state')=='CHANGES_REQUESTED' for r in latest.values()):return False
+    return any(r.get('state')=='APPROVED' and r.get('commit_id')==pr.get('head',{}).get('sha') and login and login!=pr.get('user',{}).get('login') for login,r in latest.items())
+
+def github(path):
+    headers={'Accept':'application/vnd.github+json','User-Agent':'JekyllNativeBuildVerification','X-GitHub-Api-Version':'2022-11-28'}
+    token=os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
+    if token:headers['Authorization']='Bearer '+token
+    code,b,_=request('https://api.github.com/'+path,headers=headers)
+    assert code==200,f'Public GitHub verification denied or failed ({code}); never deploy without evidence'
+    return json.loads(b)
+
+def github_list(path):
+    result=[];page=1
+    while True:
+        values=github(path+('&' if '?' in path else '?')+f'per_page=100&page={page}')
+        assert isinstance(values,list)
+        result.extend(values)
+        if len(values)<100:return result
+        page+=1;assert page<=20,'Unexpected GitHub pagination'
+
+def guard(c, branch, sha):
+    assert branch in c['targets'] and SHA.fullmatch(sha),'Only exact main/develop commits can deploy'
+    assert os.environ.get('GITHUB_REPOSITORY',c['repository'])==c['repository']
+    assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()==sha
+    live=github(f"repos/{c['repository']}/git/ref/heads/{branch}")
+    assert live['object']['sha']==sha,'Superseded commit must not deploy'
+    if branch=='main':
+        prs=github_list(f"repos/{c['repository']}/commits/{sha}/pulls")
+        approved=False
+        for pr in prs:
+            reviews=github_list(f"repos/{c['repository']}/pulls/{pr['number']}/reviews")
+            if promotion_ok(pr,sha,reviews):approved=True
+        assert approved,'Production requires a merged GitFlow promotion PR with an actual approval of its exact head'
+
+def verify_history(directory, lock):
+    files={x['path']:x for x in lock['files']}
+    assert len(files)==len(lock['files'])
+    actual={p.relative_to(directory).as_posix() for p in directory.rglob('*') if p.is_file()}
+    assert actual==set(files),'Frozen history inventory differs'
+    for name,f in files.items():
+        p=directory/name;assert not p.is_symlink();b=p.read_bytes()
+        assert len(b)==f['bytes'] and digest(b)==f['sha256'],f'Frozen bytes differ: {name}'
+
+def extract_history(root, destination):
+    lock=json.loads((root/'infra/deployment/history.json').read_text())
+    archive=root/'infra/deployment'/lock['archive'];data=archive.read_bytes()
+    assert digest(data)==lock['sha256'],'Frozen history archive digest differs'
+    with tarfile.open(fileobj=io.BytesIO(data),mode='r:gz') as t:
+        names=set()
+        for m in t:
+            p=PurePosixPath(m.name)
+            assert m.isfile() and not p.is_absolute() and '..' not in p.parts and str(p)==m.name
+            assert m.name.startswith(('docs/','preview/docs/')) and m.name not in names
+            names.add(m.name);target=destination/m.name
+            assert not target.exists(),'Never overwrite a generated path with frozen history'
+            target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(t.extractfile(m).read())
+        assert names=={f['path'] for f in lock['files']}
+    for f in lock['files']:
+        b=(destination/f['path']).read_bytes()
+        assert len(b)==f['bytes'] and digest(b)==f['sha256']
+    return lock
+
+def inventory(directory):
+    files=[]
+    for p in sorted(directory.rglob('*')):
+        assert not p.is_symlink(),'Symlinks are forbidden in deployment payloads'
+        if p.is_file():
+            b=p.read_bytes();files.append({'path':p.relative_to(directory).as_posix(),'bytes':len(b),'sha256':digest(b)})
+    return files
+
+def finalize(c, branch, sha, destination):
+    """Consume direct Jekyll output; this function never invokes Ruby."""
+    assert branch in c['targets'] and SHA.fullmatch(sha)
+    destination=destination.resolve();assert destination.is_dir() and not destination.is_symlink()
+    assert destination==ROOT/'.cloudflare-site','Only the prebuilt deployment output is accepted'
+    entries=json.loads((ROOT/'nightjar/source-files.json').read_text())
+    inputs=json.loads((ROOT/'.cloudflare-source-inputs.json').read_text())
+    assert {x['path'] for x in inputs}==set(entries)
+    for f in inputs:
+        assert digest((ROOT/f['path']).read_bytes())==f['sha256']
+        assert digest((ROOT/'.cloudflare-source'/f['path']).read_bytes())==f['sha256']
+    subprocess.run(['git','diff','--quiet'],cwd=ROOT,check=True,timeout=30)
+    with zipfile.ZipFile(destination/'template.zip','w',zipfile.ZIP_DEFLATED) as archive:
+        for entry in entries:
+            source=ROOT/entry;assert source.is_file() and not source.is_symlink()
+            info=zipfile.ZipInfo(entry,date_time=(1980,1,1,0,0,0));info.create_system=3
+            info.external_attr=(0o100755 if source.stat().st_mode&0o111 else 0o100644)<<16
+            archive.writestr(info,source.read_bytes(),compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
+    shutil.copyfile(destination/'template.zip',destination/'preview/template.zip')
+    for base in ('','/preview'):
+        d=destination/base.lstrip('/')
+        subprocess.run(['python3','nightjar/verify-html.py',str(d),'--baseurl',base],cwd=ROOT,check=True,timeout=120)
+    subprocess.run(['python3','scripts/verify_docs.py','--build',str(destination)],cwd=ROOT,check=True,timeout=120)
+    history=extract_history(ROOT,destination)
+    headers='/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  Cache-Control: public, no-transform\n'
+    if branch=='develop':
+        headers+='  X-Robots-Tag: noindex, nofollow, noarchive\n'
+        (destination/'robots.txt').write_text('User-agent: *\nDisallow: /\n')
+    (destination/'_headers').write_text(headers)
+    files=inventory(destination);artifact_sha=digest(json_bytes(files))
+    metadata={'schemaVersion':1,'family':c['family'],'framework':'jekyll','repository':c['repository'],'branch':branch,'sourceCommit':sha,'sourceTree':subprocess.check_output(['git','rev-parse',sha+'^{tree}'],cwd=ROOT,text=True).strip(),'builtAt':datetime.now(timezone.utc).isoformat(),'artifactSha256':artifact_sha,'sourceZipSha256':digest((destination/'template.zip').read_bytes()),'sourceArchivePublication':'not-performed-by-deployment','frozenHistorySha256':history['sha256'],'worker':c['targets'][branch]['worker'],'url':c['targets'][branch]['origin'],'advancedArchiveEnabled':False,'runtimeBindings':[],'runtimeSecrets':False,'noindex':branch=='develop','deliveryMode':'native-cloudflare-static-assets','manualAccessibilityReviewPassed':False}
+    path=destination/'.well-known/deployment.json';path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(json_bytes(metadata))
+    (destination/'deployment-inventory.json').write_bytes(json_bytes({'schemaVersion':1,'artifactSha256':artifact_sha,'files':files}))
+    return metadata
+
+def validate_artifact(c, branch, sha, directory):
+    m=json.loads((directory/'.well-known/deployment.json').read_text())
+    assert m['repository']==c['repository'] and m['branch']==branch and m['sourceCommit']==sha
+    assert m['worker']==c['targets'][branch]['worker'] and m['url']==c['targets'][branch]['origin']
+    assert m['advancedArchiveEnabled'] is False and m['runtimeBindings']==[] and m['runtimeSecrets'] is False
+    assert m['noindex']==(branch=='develop')
+    inv=json.loads((directory/'deployment-inventory.json').read_text())
+    assert inv['artifactSha256']==m['artifactSha256']==digest(json_bytes(inv['files']))
+    expected={f['path']:f for f in inv['files']}
+    assert len(expected)==len(inv['files'])
+    actual={f['path']:f for f in inventory(directory) if f['path'] not in ('.well-known/deployment.json','deployment-inventory.json')}
+    assert expected==actual,'Artifact bytes or paths changed after verified build'
+    return m,inv
+
+def request(url, *, data=None, headers=None, method=None):
+    req=urllib.request.Request(url,data=data,headers=headers or {},method=method)
+    try:
+        with urllib.request.urlopen(req,timeout=25) as r:return r.status,r.read(),dict(r.headers)
+    except urllib.error.HTTPError as e:
+        return e.code,e.read(),dict(e.headers)
+
+def verify_live(c, branch, sha, directory):
+    m,inv=validate_artifact(c,branch,sha,directory);origin=c['targets'][branch]['origin']
+    def one(f):
+        if f['path']=='_headers':return None
+        code,b,h=request(origin+'/'+f['path'],headers={'User-Agent':'Mozilla/5.0 JekyllDeploymentVerification','Cache-Control':'no-cache'})
+        assert code==200,(f['path'],code)
+        assert len(b)==f['bytes'] and digest(b)==f['sha256'],f'Live bytes differ: {f["path"]}'
+        headers={k.lower():v for k,v in h.items()}
+        if f['path'].endswith('.html'):assert 'no-transform' in headers.get('cache-control','')
+        if branch=='develop':assert 'noindex' in headers.get('x-robots-tag','')
+        return {'path':f['path'],'sha256':f['sha256'],'status':code}
+    files=inv['files']+[{'path':'.well-known/deployment.json','bytes':len((directory/'.well-known/deployment.json').read_bytes()),'sha256':digest((directory/'.well-known/deployment.json').read_bytes())},{'path':'deployment-inventory.json','bytes':len((directory/'deployment-inventory.json').read_bytes()),'sha256':digest((directory/'deployment-inventory.json').read_bytes())}]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:results=list(pool.map(one,files))
+    return {'status':'passed','verifiedAt':datetime.now(timezone.utc).isoformat(),'sourceCommit':sha,'artifactSha256':m['artifactSha256'],'origin':origin,'filesVerified':sum(r is not None for r in results),'noindex':branch=='develop','tlsVerificationDisabled':False,'externalSiteAvailabilityClaimed':False}
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('operation',choices=['guard','finalize','verify-artifact','verify-live','config']);p.add_argument('--branch',required=True,choices=['develop','main']);p.add_argument('--sha',required=True);p.add_argument('--directory',type=Path);p.add_argument('--output',type=Path)
+    a=p.parse_args();c=read_config();assert SHA.fullmatch(a.sha)
+    if a.operation=='guard':guard(c,a.branch,a.sha);out={'status':'passed','branch':a.branch,'sourceCommit':a.sha}
+    elif a.operation=='finalize':out=finalize(c,a.branch,a.sha,a.directory)
+    elif a.operation=='verify-artifact':out=validate_artifact(c,a.branch,a.sha,a.directory)[0]
+    elif a.operation=='verify-live':out=verify_live(c,a.branch,a.sha,a.directory)
+    else:
+        out={'name':c['targets'][a.branch]['worker'],'account_id':c['accountId'],'compatibility_date':'2026-11-03','workers_dev':True,'assets':{'directory':str(a.directory.resolve()),'html_handling':'auto-trailing-slash','not_found_handling':'404-page'}}
+        if a.branch=='develop':out['previews']={'vars':{}}
+    if a.output:a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_bytes(json_bytes(out))
+    print(json.dumps(out,sort_keys=True))
+
+if __name__=='__main__':main()

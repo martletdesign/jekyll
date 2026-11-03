@@ -1,0 +1,1321 @@
+{
+  "schemaVersion": 1,
+  "family": "martlet",
+  "archive": "history/frozen-docs-1.0.0.tar.gz",
+  "sha256": "a2e5f0d2a868cd6bb4e28ea538a9bd7ffca2db193265468fbed2144b5f9dfc27",
+  "sourceRelease": "https://github.com/martletdesign/jekyll/releases/tag/v1.0.0",
+  "sourceZipSha256": "de97e71a49f1a270c9b548b8fae10db2d8741ae77fecc9f01263e92097c33710",
+  "capture": "Existing deployed static documentation retained byte-for-byte; not rebuilt from current development source.",
+  "files": [
+    {
+      "path": "docs/v/1.0.0/404.html",
+      "bytes": 5805,
+      "sha256": "d761a918c2cf72eddbaad33af8e211f87d59c11f63065c1aa577b452e1500f62"
+    },
+    {
+      "path": "docs/v/1.0.0/LICENSE",
+      "bytes": 1076,
+      "sha256": "1067907e4c1a431923d3e1b37c42e3fbb8dbeb79aab20ccc0e8c8e7c1323eed6"
+    },
+    {
+      "path": "docs/v/1.0.0/NOTICE.md",
+      "bytes": 736,
+      "sha256": "8e5b59cf0cc4e427296763f718407ba4760821f95c1208ee51620050bcbbf398"
+    },
+    {
+      "path": "docs/v/1.0.0/VERSION",
+      "bytes": 6,
+      "sha256": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/dashboard-family.css",
+      "bytes": 903,
+      "sha256": "0e9e979525831029745a80858bdc8e17ec5b40e6171bf1fd8f593153c2e18396"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/dashboard.css",
+      "bytes": 8047,
+      "sha256": "edb906bb6801d654fbeb9767e8672f1873c7738505951e099665e2de150a937d"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/examples-family.css",
+      "bytes": 2774,
+      "sha256": "00a00e79a0cfa9253b3a0ceb3f0d2438b692f53c70332e08a08aef077878843a"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/examples.css",
+      "bytes": 11086,
+      "sha256": "06ce4da75d5cfad84360b14b0c121007f1af95673483f434a2d036b202dd7d95"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/fonts.css",
+      "bytes": 13542,
+      "sha256": "80f766b73961542249d0cd82917d72ad65a9d869cfbb1566daeba5caba56560f"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/jekyll.css",
+      "bytes": 2308,
+      "sha256": "ac30e6fa6819d169e01fb8e1a270f9087084648a21f17b8b588dbfb92551eb2a"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/scientific.css",
+      "bytes": 2074,
+      "sha256": "08614aa3c62d2217aaf709c6f94e9704dec8145f3b63427c76f1e36554c6c5ab"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/css/shell.css",
+      "bytes": 89103,
+      "sha256": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/examples/coast.svg",
+      "bytes": 616,
+      "sha256": "8854d27cabdcb1c8a471b7fdb56ae640a957f3c5977cdd9ffa71ca44dd7f8b4b"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/examples/notebook.svg",
+      "bytes": 506,
+      "sha256": "7ea9240d26c7cb2d60912dbad34c4eff87aaa8f48f65735987e1843292b18353"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/examples/observations.csv",
+      "bytes": 136,
+      "sha256": "8818a5383144e4e4ff8525631ddd3186f04836763564cba37abae9ed9dd3c955"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/examples/station.svg",
+      "bytes": 541,
+      "sha256": "a8c6618b46b679c509d4ff3ca6fb289d9f39b9feebba51e69f383d2d0571cb85"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cambo-LICENSE.txt",
+      "bytes": 4473,
+      "sha256": "faa8e62c49fffe3e86168db72430c490279d1341b724da47c535f04ebf2c02f2"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cambo-latin-400-normal.8g9ZlP0h.woff2",
+      "bytes": 9628,
+      "sha256": "eead0ca3048c44e7ecd8302e903c282bc4041155198703ab7c0078cca94b76ab"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cambo-latin-400-normal.PIAh7sIB.woff",
+      "bytes": 13068,
+      "sha256": "aceecf8fd5f9fe7abf56f1d4644d6897cca8be8f5ec5d368fefc39010756447a"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-LICENSE.txt",
+      "bytes": 4382,
+      "sha256": "f5a242cf68ad6ebd0603b3359a74c593ca080318a681035be5296ba2c6b04ae6"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-400-normal.C8jUSQqm.woff",
+      "bytes": 16616,
+      "sha256": "99c6477f06f0c717d31f2bb41013582c347be65366179d5726d107ad908ff3b0"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-400-normal.DnUIPmzd.woff2",
+      "bytes": 14128,
+      "sha256": "b873cdd90d6bd9ca4793c805b4175abfae00b3611ee8afccf63067133dcf1217"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-600-normal.CH_LB4su.woff",
+      "bytes": 17504,
+      "sha256": "7cffb40d1c02861fd0f2fedf9446f36b9d38ce312c723927667ebcffc8690894"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-600-normal.Dd5YO2UX.woff2",
+      "bytes": 15204,
+      "sha256": "61efc27ceb7d08bb841652fa8979c0b6833b92548b7f9544c07968a6c02f28e4"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-700-normal.C-gK7hA8.woff",
+      "bytes": 17524,
+      "sha256": "83ea41e439a253b4d436cc895d07a0d47f714c4816a23e86df35c442eddffafb"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-700-normal.Dkw14w9r.woff2",
+      "bytes": 15184,
+      "sha256": "8efa224fe70fef188a39c095e218b81fd31061809f2752537e33a9ec7b9c2263"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-800-normal.69OYDlL6.woff",
+      "bytes": 17536,
+      "sha256": "f4e0646d7daff85da7c61990ca928b80b857d110ca5495e274dccb2105de407c"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/cinzel-latin-800-normal.CwkMVn6z.woff2",
+      "bytes": 15260,
+      "sha256": "47fd3e35a90ae2198df04cdc9f036011f1b58f6e97878de7aa9258c35f6ac665"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-LICENSE.txt",
+      "bytes": 5299,
+      "sha256": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-italic.66oory27.woff",
+      "bytes": 14992,
+      "sha256": "45f28e1017f6b45430614ec8a892d5b3e046870f3ecb3a26b1c99c1e5a183877"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2",
+      "bytes": 16448,
+      "sha256": "0840095faae86403735a8c04014b72cb29e7923646b222b360b7e8252932e4e3"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-normal.CvHOgSBP.woff",
+      "bytes": 13144,
+      "sha256": "328d50b6ece9ca25c46eea3e885ba497f6237f2fb84ef7b92f88e14a1a25e381"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2",
+      "bytes": 14708,
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-italic.As4cCeDr.woff2",
+      "bytes": 16484,
+      "sha256": "528cc360f6e6f5210526a33b6ed8f2c37084bd0c73b918f25a55f48b40c4ac52"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-italic.C4MYrNFW.woff",
+      "bytes": 15072,
+      "sha256": "a0de2addd5dcd80502962b65ecfedadd7d35e7df72d4e5b30a34325188f0d0a2"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-normal.CB9ihrfo.woff",
+      "bytes": 13156,
+      "sha256": "09f018c58556e5801ecc49d5b5275dcff4c73311c2af6b88e31c51d76d076a9d"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-normal.DSY6xOcd.woff2",
+      "bytes": 14888,
+      "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-italic.DYu2LnOQ.woff",
+      "bytes": 15060,
+      "sha256": "9ab7e2e790ae597f220deebd56d09c6ed891e0447d37582913abd13bbbcea1c4"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-italic.DrfJ59vG.woff2",
+      "bytes": 17356,
+      "sha256": "42a8ca72a19c5ee1612ac3e35f52d08f34a09856c9466dc87a21101ad230ed6b"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-normal.BgSNZQsw.woff2",
+      "bytes": 15620,
+      "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-normal.DWFSQ4vo.woff",
+      "bytes": 13208,
+      "sha256": "cb96282f22c6f19112856fd6e0b34e2baefaf4ca6551e851d58c5ab0aabcd2be"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-italic.DHuxH1Z4.woff",
+      "bytes": 14964,
+      "sha256": "fc59060a8ece992f30b46130e08cbdd3f6ee25f6d30f7f9213a07a1188a53887"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-italic.J6kahdQd.woff2",
+      "bytes": 16540,
+      "sha256": "2bb0d4c82652472446ed1a5a89a0553f2db1e4ea17cbda66a45e690899d83e91"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-normal.7sUh57Bg.woff2",
+      "bytes": 14908,
+      "sha256": "4f84d86cfd060f4ded334358ff8a4c81d4db2ed5addd568359d693f44a87765a"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-normal.CNHXzs6v.woff",
+      "bytes": 13212,
+      "sha256": "595e0cbaa671f5276f5fdcac6113c30b2386f247f61cb42fc81f5096631a51e4"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-LICENSE.txt",
+      "bytes": 6074,
+      "sha256": "9648253641ec1d1f8ba2fbe8997909f7bfc48cc38537946f6272321788465b84"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-400-italic.DL5fBv-7.woff",
+      "bytes": 18588,
+      "sha256": "387834b6bd2d74b8598383709521ddd04f4ef1ec8c6f80ac2cba8ddae82f996b"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-400-italic.Dc0B1559.woff2",
+      "bytes": 24408,
+      "sha256": "bca1d88ada544d9c80872d4da27133fab6d347361fa26e932b47ec9559088fd0"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-400-normal.B11PyLys.woff",
+      "bytes": 17452,
+      "sha256": "f55abc76e10cc86d799a7189e64e3c6e4cc6ced19b2474b1852a808be46232a8"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-400-normal.BEhtfm5r.woff2",
+      "bytes": 23580,
+      "sha256": "918b7dc3e2e2d015c16ce08b57bcb64d2253bafc1707658f361e72865498e537"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-700-italic.Db_2buKa.woff",
+      "bytes": 18564,
+      "sha256": "81e17cb70bfa6bf1d3021167fd0a5040f6cfde267bd4ec4a46f32228c66c5fbe"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-700-italic.Jzc1y7Yy.woff2",
+      "bytes": 24448,
+      "sha256": "6c84348296ebe2e2a0830c3962eb02156419d9bc76371c2eadaf7329d827d550"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-700-normal.BUGMgin4.woff2",
+      "bytes": 23040,
+      "sha256": "c447dd7677b419db7b21dbdfc6277c7816a913ffda76fd2e52702df538de0e49"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/fonts/lato-latin-700-normal.DAdL7O4w.woff",
+      "bytes": 17624,
+      "sha256": "98149dd994189af57b3867d308874c7acb05edd3351663ccca860b87044479db"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/js/dashboard-model.mjs",
+      "bytes": 14441,
+      "sha256": "882e7dce010d7120727fccc3599b2b3e90473db93066de70d93a61d05a8179c5"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/js/dashboard-ui.mjs",
+      "bytes": 6035,
+      "sha256": "3f551d6ab16d74cefdec7d8246bfce448b85f8412694b106826ea312c31dfb4f"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/js/dashboards.mjs",
+      "bytes": 27070,
+      "sha256": "94ebca4a88c7e820dfb801e28d9251c7f781d016d43f1ee9f34c2876f9de7b01"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/js/examples.js",
+      "bytes": 16730,
+      "sha256": "e2dd5bd36a17050db6aff9512c1bbad22feba8f686de548a9e7849dee1b64735"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/js/scientific.mjs",
+      "bytes": 3263,
+      "sha256": "ccff3cf6fda8b5952b1b03b3a5aaa0eb0bf09339b979c0b87c211a2f93bc51fe"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/js/shell.js",
+      "bytes": 1497,
+      "sha256": "5a07d5f98f27bea8abdcaa358700ffba159e62b02cdeb6b3d142d9ecd5199de9"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/js/thermal-model.mjs",
+      "bytes": 1696,
+      "sha256": "f33396b42f6711fe54435caa9e7577144eea779786b4838e68ee43ce3e2a13f9"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/mark.svg",
+      "bytes": 20746,
+      "sha256": "eaec6dce2e743b145f99dc4331c3c7fa9431280b53b84e688d89e24117354927"
+    },
+    {
+      "path": "docs/v/1.0.0/assets/owner.svg",
+      "bytes": 36757,
+      "sha256": "05c66bb02e8ec8a2277a452a5f3728362c7ea7f087ee19126230d9d1d114423a"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/about/index.html",
+      "bytes": 7073,
+      "sha256": "bde2ecf68305ec113e3206385363f92338fdd36c5c1b6649d4adca8256be9350"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/archive/index.html",
+      "bytes": 7620,
+      "sha256": "05ae45cf0033e94a58cc9d45fff05810183d698c9b890e24ec85f91bfe95f667"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/article/index.html",
+      "bytes": 7848,
+      "sha256": "2576c757becaab70db5ad577da905ca82382e63fcca2de75720d48a1db17158a"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/careers/index.html",
+      "bytes": 6304,
+      "sha256": "5d6ca4328153f23475846c14db740519e2f13fdca2a39cd491ae92bf109cc2ea"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/case-study/index.html",
+      "bytes": 7300,
+      "sha256": "0381b13cf28a8d3b50fa3a0945216aa98366f50582d297210cb2537502fc6293"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/categories/index.html",
+      "bytes": 5857,
+      "sha256": "cf685a93c59c57130cb24d4b451afd6307b6ea5db7b82cfef741909d2db41c8b"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/category/index.html",
+      "bytes": 6359,
+      "sha256": "5e09e643207b32c6651975e00bcc8bef99e96b9602e85b8768d1343debfff7a7"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/changelog/index.html",
+      "bytes": 6745,
+      "sha256": "6270e04fb6006bd7cd248fa7a2493e46bd892939e4f068b108b98b22c8b91f79"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/chat/index.html",
+      "bytes": 6341,
+      "sha256": "91a47c8beb944a3226b669ab06b1542a0668aeb73dd31407057d05e044174e11"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/collection-item/index.html",
+      "bytes": 6822,
+      "sha256": "f93f4510b6f142568cb36af16b528b7cd84f675c677f7075cf18fee85f7bff51"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/collection/index.html",
+      "bytes": 6837,
+      "sha256": "d194b80e61888c0ca7024210aee70655f89c4f8e55cad4c008282fef321ddf7b"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/coming-soon/index.html",
+      "bytes": 7149,
+      "sha256": "00a2ac8a4fe37f4917b72d2e286dad26436c44d47abe80230984517311bf33e9"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/contact/index.html",
+      "bytes": 7237,
+      "sha256": "e7824d1fe129115e673b77587d43fee3891156f648f469df2542cb05095a10d9"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/dashboard-administration/index.html",
+      "bytes": 48838,
+      "sha256": "166164b08db607ebce3b1cdf1a8b18f7aca1b3a313d937024cc3994c03623997"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/dashboard-analytics/index.html",
+      "bytes": 48588,
+      "sha256": "4abf73df83a3527b95079583e018ad8bb6fad55a81fad7d186ab4e734bf98291"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/dashboard-components/index.html",
+      "bytes": 7767,
+      "sha256": "78d3493b926da929637c42119bbc5c4683009bc86f7ab3d4820d3d65337ad685"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/dashboard-operations/index.html",
+      "bytes": 47382,
+      "sha256": "b0123bc15d1f0d60e866ebb9c19ea3cdcd7e038eea8bb97fb95e91a2c465b759"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/documentation/index.html",
+      "bytes": 5999,
+      "sha256": "7ff6a6ebc4db5d37bd35a2d10b845a05380ef56f74ed4c04805b4f60a05359f5"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/event/index.html",
+      "bytes": 7384,
+      "sha256": "35ccbb2719bbb999e6879c37a32c931bb1818402655d39a525a4db58884a994a"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/events/index.html",
+      "bytes": 6953,
+      "sha256": "a07e8b3eb2b3d14da7c6b9194f000eef3f42abceaa0ff75fe504b346bb58b343"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/faq/index.html",
+      "bytes": 6412,
+      "sha256": "6614e7cbd0aea1bb6fa6f4ce6d8503a4565c421e65788dd4d2e9da459b48d82e"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/fleet/index.html",
+      "bytes": 7046,
+      "sha256": "74216961184cee2a060a56388355f2f616959dadd57c99af192939fdc26aa930"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/gallery/index.html",
+      "bytes": 7434,
+      "sha256": "8d6745e80506f037e03a754fb6fc887335d755cf6603137b67b75e5d69f53055"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/guide/index.html",
+      "bytes": 7038,
+      "sha256": "4cc9cf9ccd22fc8dcb8669b60a58d263d8d503fba0685e87c70243f4e806d75a"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/home/index.html",
+      "bytes": 6672,
+      "sha256": "ace517bfaa2e5cdc11039f37bfd8acb445530a36ea93c5647b311e204c85e674"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/index.html",
+      "bytes": 21023,
+      "sha256": "732cbf27ab63b4d530675714135a76e76c11aa641536efd1cfa69f19148c3f3b"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/integrations/index.html",
+      "bytes": 8156,
+      "sha256": "c655007020e32d2f18a122bb8f8c67dffca332aa488eddba7463e43f21ee3f10"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/not-found/index.html",
+      "bytes": 5903,
+      "sha256": "71fc04bd9c1f60fa13bfcecff43bf04503deea7f1a0ec48f588e0c67de5d59dd"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/opportunity/index.html",
+      "bytes": 7479,
+      "sha256": "adc84f036c66789a0ed90e2ad7fe9fb047dcc80aaa8118383dfbc42d4c2f18a2"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/password-reset/index.html",
+      "bytes": 7510,
+      "sha256": "e1d65d073fc4fad69b23fd1567d3b22e17713515eeacb66dede28d23f61a1c2b"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/patterns/index.html",
+      "bytes": 7102,
+      "sha256": "1684db654845e512ca4cb082b8329a68ae4756bcc331e384db116dde8125ac42"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/person/index.html",
+      "bytes": 7658,
+      "sha256": "8f133e89ef75d0af5c3ff30a592202fae43a647b0bb4024c233606a1a4f904a7"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/place/index.html",
+      "bytes": 6852,
+      "sha256": "a1ee6db4bd7726f3f470e0ccffa7c02787bb6820ae4e3e7df5c603300a24e2d3"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/pricing/index.html",
+      "bytes": 6906,
+      "sha256": "c3d7387206e46d4fc47f58bfe2b2d1b3a1dc7f1544a917d550a695c8d3ffb826"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/privacy/index.html",
+      "bytes": 7019,
+      "sha256": "3c8edf24c4c02021636d50f8aae24f1cb354f60e53b95ba6390095bb6ab70038"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/product/index.html",
+      "bytes": 6697,
+      "sha256": "2febe5b091d7c66167905013af7d92c7b382500d44dfd21a2d8e3895c17bf88e"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/projects/index.html",
+      "bytes": 6590,
+      "sha256": "3d49200bb55377fdaf85f740b43269a5eb1b77c335aaed8403f8c76a6999c615"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/reference/index.html",
+      "bytes": 8845,
+      "sha256": "f2002760b469fa2b8bd8cb27b9f0e9cda04423648d1e08f2a3e2e63e79c115e1"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/report/index.html",
+      "bytes": 7684,
+      "sha256": "ada99889477980d04d3d4c09e883da3d7a07b203a6fba1d1efbf1f4d70f06693"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/scene/index.html",
+      "bytes": 6570,
+      "sha256": "19449713aeb3601f1e8ec0bdf1f95c4770fd12f579fd767fa6c234499741133a"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/scientific-workspace/index.html",
+      "bytes": 8670,
+      "sha256": "1a020224f4823b87b9f6f4c0ca896cb7fd5d04c7ba55af223082ec1e895630e3"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/search/index.html",
+      "bytes": 15965,
+      "sha256": "6a7596b8ca18e5bd0186a0a139e4fc08c9064dda58d461e7a14f5955d77fe501"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/sensors/index.html",
+      "bytes": 6229,
+      "sha256": "e450958edac41422364636e382ce225d52f22c9bd6fb11557c31076d0c87c98b"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/server-error/index.html",
+      "bytes": 6080,
+      "sha256": "66df0bbc39b067ffdc5f5a97204aa92b34a3df013f25da86891e42393c2bc5c6"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/service/index.html",
+      "bytes": 6989,
+      "sha256": "472659cccc580df74badb6e2c9e695d0d90bec100d3b061a2fc71c2fd242ec0b"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/sign-in/index.html",
+      "bytes": 7828,
+      "sha256": "c3bd764499127878cc46cac63d1ed539f55c10a2849a40e2f2a9340e263d1c29"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/sign-up/index.html",
+      "bytes": 8086,
+      "sha256": "412c0f7296dbde955d822ff956af677902dfa604f35be21c7409ac2625fc4cc8"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/software/index.html",
+      "bytes": 7062,
+      "sha256": "defc643bd75272abf03f11d9ab0885f6372fecb6720251742dfb9af360bd0c94"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/stress-test/index.html",
+      "bytes": 10833,
+      "sha256": "19d0c10e262b484bb69675958654fec666e4113d2fb29620719391dc42277baf"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/terms/index.html",
+      "bytes": 7013,
+      "sha256": "fd0869223c57a902a0953539c705195c3c6366b29aee2e804f65ff3fba72038c"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/two-factor/index.html",
+      "bytes": 7685,
+      "sha256": "18e3e4207510f57078bfbc92b30068553fe8d5b9429709a4f742602576bcc3ab"
+    },
+    {
+      "path": "docs/v/1.0.0/examples/workspace/index.html",
+      "bytes": 7409,
+      "sha256": "e4bc8c7ad92e309638cc7ac3fe39c6cade095bebae9d8584df2b9e1aa308e80b"
+    },
+    {
+      "path": "docs/v/1.0.0/index.html",
+      "bytes": 6333,
+      "sha256": "1a86fe29dc7d89d5043902d5d4285dc912d91a650e69c68db5d44b0e3fbe9178"
+    },
+    {
+      "path": "docs/v/1.0.0/journal/index.html",
+      "bytes": 5159,
+      "sha256": "d55787c00b602b288c73118299cd15b8b48ca15e57f489d097bf87c0ecb3f1fa"
+    },
+    {
+      "path": "docs/v/1.0.0/journal/what-a-shell-should-own/index.html",
+      "bytes": 7158,
+      "sha256": "1ac23674d4f10f7589f978c45147a2c3daf288137e0cb0eeec8d456edabfa723"
+    },
+    {
+      "path": "docs/v/1.0.0/language/index.html",
+      "bytes": 6634,
+      "sha256": "24c89395c230f0c55dcad94d9d229d86d96a45a3d8a63b3136d761d6cce08241"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar-local-evidence.json",
+      "bytes": 22834,
+      "sha256": "63c6634122a50b46a929b39ff04de6cab932bffaf0db6e7f28d704f7f86a7dc0"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar/PROVENANCE.json",
+      "bytes": 102395,
+      "sha256": "5bf971673e69fbf64e9d961ad5184d917d41617a7bd14b38cf877cf097d1e01f"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar/README.md",
+      "bytes": 1051,
+      "sha256": "89ba678d43f3438cefb2d115ac745045a8785339151fd48d9426e83912a38b53"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar/build.py",
+      "bytes": 2795,
+      "sha256": "2ea2fdd30b8566168dc25bcf567e6e3bf07d0d8a53a6ca46586c29c54db2c0ee"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar/ci-proposal.yml",
+      "bytes": 421,
+      "sha256": "1dd457b2f1935e83914e2c92a977dd7d4422231eb126f2e87822df3e23adb562"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar/source-files.json",
+      "bytes": 7202,
+      "sha256": "c897d02fa4ac94d931b6e2a9a8ae9b1ccfc9812f284a007d1561c2dab53b503a"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar/verify-html.py",
+      "bytes": 2306,
+      "sha256": "7ffbaa1bdb86b2965d6666d1960e6013f1808c60081b8bcd5af763720c953184"
+    },
+    {
+      "path": "docs/v/1.0.0/nightjar/verify.py",
+      "bytes": 4446,
+      "sha256": "9099ad8fbdfd36e68cd9ba1c3e9df79916af896e2ab1363bdb696b81550dab35"
+    },
+    {
+      "path": "docs/v/1.0.0/release-policy.json",
+      "bytes": 367,
+      "sha256": "5f9469307cbf414512d4aef74976554bc7dfb279bf3b4e92f72168156c46aec8"
+    },
+    {
+      "path": "docs/v/1.0.0/setup/index.html",
+      "bytes": 7402,
+      "sha256": "a082e09066db9c03e688f5ddad9731a09b8d192038156cbbbf603fb0e5aeb446"
+    },
+    {
+      "path": "docs/v/1.0.0/template.zip",
+      "bytes": 775234,
+      "sha256": "de97e71a49f1a270c9b548b8fae10db2d8741ae77fecc9f01263e92097c33710"
+    },
+    {
+      "path": "docs/versions/index.html",
+      "bytes": 458,
+      "sha256": "5c86be3b3dc18c2ac844272bb3d89d1c1022a8c635b09d9e27f5b76ba023caba"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/404.html",
+      "bytes": 5997,
+      "sha256": "bd36e4eb0110686edece4d4beae97d9a7e6e7fa31ac400c110a9aef396e8544a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/LICENSE",
+      "bytes": 1076,
+      "sha256": "1067907e4c1a431923d3e1b37c42e3fbb8dbeb79aab20ccc0e8c8e7c1323eed6"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/NOTICE.md",
+      "bytes": 736,
+      "sha256": "8e5b59cf0cc4e427296763f718407ba4760821f95c1208ee51620050bcbbf398"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/VERSION",
+      "bytes": 6,
+      "sha256": "59854984853104df5c353e2f681a15fc7924742f9a2e468c29af248dce45ce03"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/dashboard-family.css",
+      "bytes": 903,
+      "sha256": "0e9e979525831029745a80858bdc8e17ec5b40e6171bf1fd8f593153c2e18396"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/dashboard.css",
+      "bytes": 8047,
+      "sha256": "edb906bb6801d654fbeb9767e8672f1873c7738505951e099665e2de150a937d"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/examples-family.css",
+      "bytes": 2774,
+      "sha256": "00a00e79a0cfa9253b3a0ceb3f0d2438b692f53c70332e08a08aef077878843a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/examples.css",
+      "bytes": 11086,
+      "sha256": "06ce4da75d5cfad84360b14b0c121007f1af95673483f434a2d036b202dd7d95"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/fonts.css",
+      "bytes": 13542,
+      "sha256": "80f766b73961542249d0cd82917d72ad65a9d869cfbb1566daeba5caba56560f"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/jekyll.css",
+      "bytes": 2308,
+      "sha256": "ac30e6fa6819d169e01fb8e1a270f9087084648a21f17b8b588dbfb92551eb2a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/scientific.css",
+      "bytes": 2074,
+      "sha256": "08614aa3c62d2217aaf709c6f94e9704dec8145f3b63427c76f1e36554c6c5ab"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/css/shell.css",
+      "bytes": 89103,
+      "sha256": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/examples/coast.svg",
+      "bytes": 616,
+      "sha256": "8854d27cabdcb1c8a471b7fdb56ae640a957f3c5977cdd9ffa71ca44dd7f8b4b"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/examples/notebook.svg",
+      "bytes": 506,
+      "sha256": "7ea9240d26c7cb2d60912dbad34c4eff87aaa8f48f65735987e1843292b18353"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/examples/observations.csv",
+      "bytes": 136,
+      "sha256": "8818a5383144e4e4ff8525631ddd3186f04836763564cba37abae9ed9dd3c955"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/examples/station.svg",
+      "bytes": 541,
+      "sha256": "a8c6618b46b679c509d4ff3ca6fb289d9f39b9feebba51e69f383d2d0571cb85"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cambo-LICENSE.txt",
+      "bytes": 4473,
+      "sha256": "faa8e62c49fffe3e86168db72430c490279d1341b724da47c535f04ebf2c02f2"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cambo-latin-400-normal.8g9ZlP0h.woff2",
+      "bytes": 9628,
+      "sha256": "eead0ca3048c44e7ecd8302e903c282bc4041155198703ab7c0078cca94b76ab"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cambo-latin-400-normal.PIAh7sIB.woff",
+      "bytes": 13068,
+      "sha256": "aceecf8fd5f9fe7abf56f1d4644d6897cca8be8f5ec5d368fefc39010756447a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-LICENSE.txt",
+      "bytes": 4382,
+      "sha256": "f5a242cf68ad6ebd0603b3359a74c593ca080318a681035be5296ba2c6b04ae6"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-400-normal.C8jUSQqm.woff",
+      "bytes": 16616,
+      "sha256": "99c6477f06f0c717d31f2bb41013582c347be65366179d5726d107ad908ff3b0"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-400-normal.DnUIPmzd.woff2",
+      "bytes": 14128,
+      "sha256": "b873cdd90d6bd9ca4793c805b4175abfae00b3611ee8afccf63067133dcf1217"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-600-normal.CH_LB4su.woff",
+      "bytes": 17504,
+      "sha256": "7cffb40d1c02861fd0f2fedf9446f36b9d38ce312c723927667ebcffc8690894"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-600-normal.Dd5YO2UX.woff2",
+      "bytes": 15204,
+      "sha256": "61efc27ceb7d08bb841652fa8979c0b6833b92548b7f9544c07968a6c02f28e4"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-700-normal.C-gK7hA8.woff",
+      "bytes": 17524,
+      "sha256": "83ea41e439a253b4d436cc895d07a0d47f714c4816a23e86df35c442eddffafb"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-700-normal.Dkw14w9r.woff2",
+      "bytes": 15184,
+      "sha256": "8efa224fe70fef188a39c095e218b81fd31061809f2752537e33a9ec7b9c2263"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-800-normal.69OYDlL6.woff",
+      "bytes": 17536,
+      "sha256": "f4e0646d7daff85da7c61990ca928b80b857d110ca5495e274dccb2105de407c"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/cinzel-latin-800-normal.CwkMVn6z.woff2",
+      "bytes": 15260,
+      "sha256": "47fd3e35a90ae2198df04cdc9f036011f1b58f6e97878de7aa9258c35f6ac665"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-LICENSE.txt",
+      "bytes": 5299,
+      "sha256": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-italic.66oory27.woff",
+      "bytes": 14992,
+      "sha256": "45f28e1017f6b45430614ec8a892d5b3e046870f3ecb3a26b1c99c1e5a183877"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-italic.BqAiT5Ww.woff2",
+      "bytes": 16448,
+      "sha256": "0840095faae86403735a8c04014b72cb29e7923646b222b360b7e8252932e4e3"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-normal.CvHOgSBP.woff",
+      "bytes": 13144,
+      "sha256": "328d50b6ece9ca25c46eea3e885ba497f6237f2fb84ef7b92f88e14a1a25e381"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-400-normal.DMJ8VG8y.woff2",
+      "bytes": 14708,
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-italic.As4cCeDr.woff2",
+      "bytes": 16484,
+      "sha256": "528cc360f6e6f5210526a33b6ed8f2c37084bd0c73b918f25a55f48b40c4ac52"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-italic.C4MYrNFW.woff",
+      "bytes": 15072,
+      "sha256": "a0de2addd5dcd80502962b65ecfedadd7d35e7df72d4e5b30a34325188f0d0a2"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-normal.CB9ihrfo.woff",
+      "bytes": 13156,
+      "sha256": "09f018c58556e5801ecc49d5b5275dcff4c73311c2af6b88e31c51d76d076a9d"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-500-normal.DSY6xOcd.woff2",
+      "bytes": 14888,
+      "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-italic.DYu2LnOQ.woff",
+      "bytes": 15060,
+      "sha256": "9ab7e2e790ae597f220deebd56d09c6ed891e0447d37582913abd13bbbcea1c4"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-italic.DrfJ59vG.woff2",
+      "bytes": 17356,
+      "sha256": "42a8ca72a19c5ee1612ac3e35f52d08f34a09856c9466dc87a21101ad230ed6b"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-normal.BgSNZQsw.woff2",
+      "bytes": 15620,
+      "sha256": "0d1f0b8d0722224e32e9f28261bdc86c79115be73444ae5eceb73976a1bcdf83"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-600-normal.DWFSQ4vo.woff",
+      "bytes": 13208,
+      "sha256": "cb96282f22c6f19112856fd6e0b34e2baefaf4ca6551e851d58c5ab0aabcd2be"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-italic.DHuxH1Z4.woff",
+      "bytes": 14964,
+      "sha256": "fc59060a8ece992f30b46130e08cbdd3f6ee25f6d30f7f9213a07a1188a53887"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-italic.J6kahdQd.woff2",
+      "bytes": 16540,
+      "sha256": "2bb0d4c82652472446ed1a5a89a0553f2db1e4ea17cbda66a45e690899d83e91"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-normal.7sUh57Bg.woff2",
+      "bytes": 14908,
+      "sha256": "4f84d86cfd060f4ded334358ff8a4c81d4db2ed5addd568359d693f44a87765a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/ibm-plex-mono-latin-700-normal.CNHXzs6v.woff",
+      "bytes": 13212,
+      "sha256": "595e0cbaa671f5276f5fdcac6113c30b2386f247f61cb42fc81f5096631a51e4"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-LICENSE.txt",
+      "bytes": 6074,
+      "sha256": "9648253641ec1d1f8ba2fbe8997909f7bfc48cc38537946f6272321788465b84"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-400-italic.DL5fBv-7.woff",
+      "bytes": 18588,
+      "sha256": "387834b6bd2d74b8598383709521ddd04f4ef1ec8c6f80ac2cba8ddae82f996b"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-400-italic.Dc0B1559.woff2",
+      "bytes": 24408,
+      "sha256": "bca1d88ada544d9c80872d4da27133fab6d347361fa26e932b47ec9559088fd0"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-400-normal.B11PyLys.woff",
+      "bytes": 17452,
+      "sha256": "f55abc76e10cc86d799a7189e64e3c6e4cc6ced19b2474b1852a808be46232a8"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-400-normal.BEhtfm5r.woff2",
+      "bytes": 23580,
+      "sha256": "918b7dc3e2e2d015c16ce08b57bcb64d2253bafc1707658f361e72865498e537"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-700-italic.Db_2buKa.woff",
+      "bytes": 18564,
+      "sha256": "81e17cb70bfa6bf1d3021167fd0a5040f6cfde267bd4ec4a46f32228c66c5fbe"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-700-italic.Jzc1y7Yy.woff2",
+      "bytes": 24448,
+      "sha256": "6c84348296ebe2e2a0830c3962eb02156419d9bc76371c2eadaf7329d827d550"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-700-normal.BUGMgin4.woff2",
+      "bytes": 23040,
+      "sha256": "c447dd7677b419db7b21dbdfc6277c7816a913ffda76fd2e52702df538de0e49"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/fonts/lato-latin-700-normal.DAdL7O4w.woff",
+      "bytes": 17624,
+      "sha256": "98149dd994189af57b3867d308874c7acb05edd3351663ccca860b87044479db"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/js/dashboard-model.mjs",
+      "bytes": 14441,
+      "sha256": "882e7dce010d7120727fccc3599b2b3e90473db93066de70d93a61d05a8179c5"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/js/dashboard-ui.mjs",
+      "bytes": 6035,
+      "sha256": "3f551d6ab16d74cefdec7d8246bfce448b85f8412694b106826ea312c31dfb4f"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/js/dashboards.mjs",
+      "bytes": 27070,
+      "sha256": "94ebca4a88c7e820dfb801e28d9251c7f781d016d43f1ee9f34c2876f9de7b01"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/js/examples.js",
+      "bytes": 16730,
+      "sha256": "e2dd5bd36a17050db6aff9512c1bbad22feba8f686de548a9e7849dee1b64735"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/js/scientific.mjs",
+      "bytes": 3263,
+      "sha256": "ccff3cf6fda8b5952b1b03b3a5aaa0eb0bf09339b979c0b87c211a2f93bc51fe"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/js/shell.js",
+      "bytes": 1497,
+      "sha256": "5a07d5f98f27bea8abdcaa358700ffba159e62b02cdeb6b3d142d9ecd5199de9"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/js/thermal-model.mjs",
+      "bytes": 1696,
+      "sha256": "f33396b42f6711fe54435caa9e7577144eea779786b4838e68ee43ce3e2a13f9"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/mark.svg",
+      "bytes": 20746,
+      "sha256": "eaec6dce2e743b145f99dc4331c3c7fa9431280b53b84e688d89e24117354927"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/assets/owner.svg",
+      "bytes": 36757,
+      "sha256": "05c66bb02e8ec8a2277a452a5f3728362c7ea7f087ee19126230d9d1d114423a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/about/index.html",
+      "bytes": 7289,
+      "sha256": "2274a96bbc8c18b5c46747515b3a8abe94d794f6d3e8b7fdf72aee7ade33ae6d"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/archive/index.html",
+      "bytes": 7844,
+      "sha256": "cb5c4464bf685a9a0ba95f5c9edac6f94c01aa4fb897e1a0f0f6260acc5c60a2"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/article/index.html",
+      "bytes": 8072,
+      "sha256": "c44cb90f55bb063f42ef2869966ece18ac517ff26a00349df04b3ae91de23cb6"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/careers/index.html",
+      "bytes": 6496,
+      "sha256": "01f0fe0c5b63ea8153430294bd6b8807a6864295517c2a51d2529295dbc247bb"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/case-study/index.html",
+      "bytes": 7492,
+      "sha256": "dc8ca23bb755bfdc605cb2c25e251cdb38b2ec2276316fbdf3e552281c01331b"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/categories/index.html",
+      "bytes": 6057,
+      "sha256": "39a262ead0ded3502014feb88aa8dd263c3842f3c3b7735b3cc14892c8c0df4c"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/category/index.html",
+      "bytes": 6551,
+      "sha256": "f6bbd5baeb8c9f1ef7c2dad65317a337f632c8e3270d2c5e2d00d76893e5c252"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/changelog/index.html",
+      "bytes": 6921,
+      "sha256": "007cb09a6f013c8860717916f766c7d1bc5ff54d2d81102257c0dc0380586702"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/chat/index.html",
+      "bytes": 6517,
+      "sha256": "93af94e95d2e518e180ba34a20395b5067cb3f588773b61cf6fb78bc865a5c3e"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/collection-item/index.html",
+      "bytes": 7014,
+      "sha256": "53054b358ebdab2876b6429573840e65cf54e11c13fbf69bdb1c8df7c7c2d936"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/collection/index.html",
+      "bytes": 7045,
+      "sha256": "de802e839d0c59555ffa2325d93dae7a9f7c51524fe976a34792b0b956e7365b"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/coming-soon/index.html",
+      "bytes": 7325,
+      "sha256": "667d60bfb2a56a055e9e7a2f172f6c2e1e4a2db578afe0a8e6fda589734b708a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/contact/index.html",
+      "bytes": 7413,
+      "sha256": "2c9265aba8bafe1e6e974c80e8f2894b8d73161ace2a8aee75a0f9e0f08d2d9b"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/dashboard-administration/index.html",
+      "bytes": 49046,
+      "sha256": "40bbc3e8907f861ff7cde0a47ab81fb29c5e8a0225d775f0ef9c3eec606632bc"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/dashboard-analytics/index.html",
+      "bytes": 48796,
+      "sha256": "0202f05af1a47448ee25edd95750d64a189d7e4999b57662e1026bc1adf39643"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/dashboard-components/index.html",
+      "bytes": 7943,
+      "sha256": "e33107cf3d017bb93f37c1077f6e8570e00bcd437a96b5b946d6f4f1c0096bee"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/dashboard-operations/index.html",
+      "bytes": 47590,
+      "sha256": "b9f6b52de0e846099c1296a9ccdbfe8c0a25c50cb19b34e945277f1be5974d0d"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/documentation/index.html",
+      "bytes": 6199,
+      "sha256": "58a1745494f9198b8f520dd012b9c100c5e9f1bc42c408312232e39ed778040c"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/event/index.html",
+      "bytes": 7568,
+      "sha256": "62aef1b437a36a7550adea8ee0995a6274ed866660af48cc42cb1136547724fb"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/events/index.html",
+      "bytes": 7145,
+      "sha256": "b4f7e9036f0de7dda6a28181ae0af334da4330ba97dfaccd9c859a5d82b7bba0"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/faq/index.html",
+      "bytes": 6588,
+      "sha256": "3086a74a13ea66ebd4329e342374a9810855afd5beb6b0df61d3bf39e78622b2"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/fleet/index.html",
+      "bytes": 7222,
+      "sha256": "4b9cb2ec5318104e791f36e996bf6c0e95c438b17c8691cc0d2338539e39cdfe"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/gallery/index.html",
+      "bytes": 7658,
+      "sha256": "b3f4f5daf050560a871d35c6f0bd38a4443e3f7af8cc2b0e74b9ab8b46671edd"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/guide/index.html",
+      "bytes": 7230,
+      "sha256": "51717a13ed7613c50c3e65539ebd1b22ad00eeaa92e3434b35c6926ecf22b973"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/home/index.html",
+      "bytes": 6888,
+      "sha256": "190c4c8e707ffc587486676e0986c291f8d28e0fe1d692d6b7b46e9eb8172f7f"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/index.html",
+      "bytes": 21575,
+      "sha256": "b1344a2223b74f5b60b4d3c20c3ecdebf9d2f107200d86da6a0cb3f134ddac6d"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/integrations/index.html",
+      "bytes": 8332,
+      "sha256": "e71f4b5b14f71babc08d1b8d7575d91f8ff9e68e814c016b80d3fffc745903b6"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/not-found/index.html",
+      "bytes": 6095,
+      "sha256": "6adef0b12564deadd6459435ea2e1629857a3663c5e096a04ff2a9f6f5a5944b"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/opportunity/index.html",
+      "bytes": 7663,
+      "sha256": "1d1bcbd10a9a8e6796d2d3d6eaba9e42cebe9f9594459fca27c70cea0751dd23"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/password-reset/index.html",
+      "bytes": 7718,
+      "sha256": "47f4e7ffca79664a0c472e6fa941df085394afcc8751f30cff496a7ef8b3da52"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/patterns/index.html",
+      "bytes": 7286,
+      "sha256": "a39690fa792b6ca0c16e6493b17100a92b9f7f6fa5984ffb849b9620f485bb15"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/person/index.html",
+      "bytes": 7858,
+      "sha256": "0c753e7de9016015688d8c7f236b051cdb58a2676b15e44daed8f5c601b4f4b2"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/place/index.html",
+      "bytes": 7052,
+      "sha256": "cf8282a296d0adc5178d870b00050ab102ca46264c2166bddc5b25a924597e56"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/pricing/index.html",
+      "bytes": 7106,
+      "sha256": "d6413f7c6194a1946b17efae28f098ec9996a3bfdd1263dd612ad0f5b4189656"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/privacy/index.html",
+      "bytes": 7211,
+      "sha256": "89fb6f96db50e3a3602f50aa754d16ef5bf0c5219547e455002bcd2c69ef61eb"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/product/index.html",
+      "bytes": 6889,
+      "sha256": "a9652cdd650f1607eff42f124666460c0b474b5e12482af8262b419d36222343"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/projects/index.html",
+      "bytes": 6790,
+      "sha256": "be1d5c4d099ed56074e50ad7809cd733c59c27f6fe10bfd9c6c5efa2e058853d"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/reference/index.html",
+      "bytes": 9021,
+      "sha256": "99c020dc9625e37a8659e6753c30f04f1f8f818e02b81fe9bad4ca9b7428b6ab"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/report/index.html",
+      "bytes": 7876,
+      "sha256": "adccb42517606ab988a17805f7f04310ddf97cd9b2313d1921abaff3f1b2b9e0"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/scene/index.html",
+      "bytes": 6754,
+      "sha256": "804531055429e09bc6d84bb3a711fb7603c059e55bfad65f27c5817a9a5831ac"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/scientific-workspace/index.html",
+      "bytes": 8830,
+      "sha256": "c7fa68e15d6f11e909abaa297d1492e7e7328474cbe819e85082b96a1d181bc1"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/search/index.html",
+      "bytes": 16565,
+      "sha256": "fbe4495d94527d3473493592d4c37acc42c8d4e53d4b3c166c991b988354d16f"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/sensors/index.html",
+      "bytes": 6405,
+      "sha256": "8d6589e76918eb16c00042f6e2e670a7500ea59c38eeb25ae8680a838cf06713"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/server-error/index.html",
+      "bytes": 6272,
+      "sha256": "0a99cdf2e66d893d585bb5bc313e7bb67101bf0416f4fbed5f1b4f31c8d2297a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/service/index.html",
+      "bytes": 7205,
+      "sha256": "ca38848ac9c36bfddc42ec8dd8c80857a81542373b40b90025dddeaba0e22087"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/sign-in/index.html",
+      "bytes": 8036,
+      "sha256": "02a450dbf1365ac54e8b897da0707df4eeb10c41a440997ad14b595bffbbe288"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/sign-up/index.html",
+      "bytes": 8294,
+      "sha256": "3525cbdb17ccfacd9926b1b54df21135a2f4d1d33bafd9fd0d6922389a9e7235"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/software/index.html",
+      "bytes": 7278,
+      "sha256": "2fa02b461370b50bef4f036fd6b55e3de748d8bbee8aab0cde9a22ce9bb29792"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/stress-test/index.html",
+      "bytes": 11025,
+      "sha256": "fd545372d6dc3928e8b7c0ab4be089c7c6a7501db4f17ef75495577829b5a345"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/terms/index.html",
+      "bytes": 7205,
+      "sha256": "0e33d67d3a9f7f2e652bc85af8d10976fddb440372053aa525a0ffda46e13499"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/two-factor/index.html",
+      "bytes": 7893,
+      "sha256": "bb95b79389445a2d62bbd39e57cb37e4e6e39036fbb64072a24ca707fa6f4527"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/examples/workspace/index.html",
+      "bytes": 7585,
+      "sha256": "c823bd0247dc67fdf36a4865f04982e4410b5e5176bcdd8a93864e93b0e02e23"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/index.html",
+      "bytes": 6517,
+      "sha256": "af2749a4f695510798f7d68e930ca88bef25456981bf007782f618868b560bca"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/journal/index.html",
+      "bytes": 5327,
+      "sha256": "d1dfed277572a6ac345e8b7a9900bef58a39564b37fb1e6018d23dc7e72b85d9"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/journal/what-a-shell-should-own/index.html",
+      "bytes": 7326,
+      "sha256": "86585c1c37a8aae6cc1e5afffeb129c3d10f827753e34f41d7ce6e53f7330afc"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/language/index.html",
+      "bytes": 6778,
+      "sha256": "ca92bf8a52497474faecd66dba87d81f5222c767e935a2283dfd88a316e7d148"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar-local-evidence.json",
+      "bytes": 22842,
+      "sha256": "a5f4f6523ee3861c240236f6fe047888cf8739fbe8f8e58794a7f5c941109525"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar/PROVENANCE.json",
+      "bytes": 102395,
+      "sha256": "5bf971673e69fbf64e9d961ad5184d917d41617a7bd14b38cf877cf097d1e01f"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar/README.md",
+      "bytes": 1051,
+      "sha256": "89ba678d43f3438cefb2d115ac745045a8785339151fd48d9426e83912a38b53"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar/build.py",
+      "bytes": 2795,
+      "sha256": "2ea2fdd30b8566168dc25bcf567e6e3bf07d0d8a53a6ca46586c29c54db2c0ee"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar/ci-proposal.yml",
+      "bytes": 421,
+      "sha256": "1dd457b2f1935e83914e2c92a977dd7d4422231eb126f2e87822df3e23adb562"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar/source-files.json",
+      "bytes": 7202,
+      "sha256": "c897d02fa4ac94d931b6e2a9a8ae9b1ccfc9812f284a007d1561c2dab53b503a"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar/verify-html.py",
+      "bytes": 2306,
+      "sha256": "7ffbaa1bdb86b2965d6666d1960e6013f1808c60081b8bcd5af763720c953184"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/nightjar/verify.py",
+      "bytes": 4446,
+      "sha256": "9099ad8fbdfd36e68cd9ba1c3e9df79916af896e2ab1363bdb696b81550dab35"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/release-policy.json",
+      "bytes": 367,
+      "sha256": "5f9469307cbf414512d4aef74976554bc7dfb279bf3b4e92f72168156c46aec8"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/setup/index.html",
+      "bytes": 7562,
+      "sha256": "5e4be5ba474713182b1e39555abc3cd9e0fd035b2b2ec5a733f5cace4a8054f6"
+    },
+    {
+      "path": "preview/docs/v/1.0.0/template.zip",
+      "bytes": 775234,
+      "sha256": "de97e71a49f1a270c9b548b8fae10db2d8741ae77fecc9f01263e92097c33710"
+    },
+    {
+      "path": "preview/docs/versions/index.html",
+      "bytes": 474,
+      "sha256": "69f9288d30e285d4351140cca5fb7de9b9a8499e23f2338c6134a5f78cdc1fae"
+    }
+  ]
+}

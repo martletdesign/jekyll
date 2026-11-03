@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "family": "martlet",
+  "repository": "martletdesign/jekyll",
+  "accountId": "f6142510bef6212dfa78bc6932acc80f",
+  "targets": {
+    "develop": {
+      "worker": "martletdesign-jekyll-reference",
+      "environment": "jekyll-development",
+      "origin": "https://develop-martletdesign-jekyll-reference.k3jph.workers.dev",
+      "previewName": "develop"
+    },
+    "main": {
+      "worker": "martletdesign-jekyll-reference",
+      "environment": "jekyll-production",
+      "origin": "https://jekyll.martletdesign.dev"
+    }
+  }
+}

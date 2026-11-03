@@ -6,3 +6,7 @@ vendor/
 dist/
 node_modules/
 __pycache__/
+
+# Local Cloudflare build artifacts and provenance state
+.cloudflare-*
+.native-deployment-state.json
