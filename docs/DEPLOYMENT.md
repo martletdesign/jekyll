@@ -8,6 +8,13 @@ The build command is `bash scripts/deployment/build-cloudflare.sh`. That script 
 
 Replace each entire command field; do not append these commands to a generated `npm run build` or another existing value. Both repositories use the same three fields. No dashboard variables are mandatory.
 
+In the parent Worker's Settings → Builds section, select **Previews Base** for the preview build and Preview commands below. The production deploy command belongs to the separate **Production** tab. The top environment breadcrumb may still say Production while the Previews Base tab is selected. Keep the repository root directory `/`.
+
+Cloudflare copies base build settings into each new Preview. Updating the base does not automatically update every existing Preview; the Builds API supports `patch_existing_previews=true` for that purpose. A deleted `develop` Preview has no settings panel to inspect. Its absence must not be confused with a missing Git branch or a deleted parent Worker. See the [Builds API configuration rules](https://developers.cloudflare.com/workers/ci-cd/builds/api-reference/).
+
+Check the actual run's `Executing user build command` line. During recovery, recorded retries continued to execute an older malformed command even while the current base showed the correct command. A corrected base screenshot therefore does not prove that a queued or retried job uses it. After correcting the base and deleting a Preview, verify a fresh Git-triggered build of a normally checked `develop` merge. Do not repeatedly retry the same stale run, make direct empty commits to develop, or count a manual artifact upload as this verification.
+
+
 Build command:
 
 ```sh
