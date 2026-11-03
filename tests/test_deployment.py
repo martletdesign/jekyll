@@ -122,4 +122,33 @@ class BoundsTests(unittest.TestCase):
    REPORT.append({'case':'before,before,ownnew API readlag','result':'failedverificationrestoresoldversion','rollback':'restored'})
 
 
+
+class PreviewOutputTests(unittest.TestCase):
+    def parser(self):
+        spec=importlib.util.spec_from_file_location('native_output_reporting',ROOT/'scripts/deployment/native.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        return module
+    def payload(self):
+        return {'preview':{'id':'1'*32,'name':'develop','slug':'develop','urls':['https://develop-example.k3jph.workers.dev']},'deployment':{'id':'22222222-2222-2222-2222-222222222222','number':1,'created_on':'2026-11-03T13:45:00Z','main_module':'no-op-worker.js','annotations':{},'urls':['https://deployment-example.k3jph.workers.dev']}}
+    def test_actual_upload_log_shape_and_absent_optional_env(self):
+        module=self.parser();data=self.payload();raw='🌀 Building list of assets...\n+ /index.html\n✨ Success! Uploaded 12 files\n\n'+json.dumps(data,indent=2)+'\n'
+        self.assertEqual(module.parse_preview_output(raw),data)
+        self.assertEqual(module.parse_preview_output(json.dumps(data)),data)
+        self.assertNotIn('env',data['deployment'])
+    def test_malformed_json_and_missing_required_fields_fail(self):
+        module=self.parser()
+        for raw in ['upload only without JSON','upload\n{not-json',json.dumps({'preview':{}}),json.dumps([])]:
+            with self.assertRaises((AssertionError,ValueError)):module.parse_preview_output(raw)
+        data=self.payload();del data['deployment']['id']
+        with self.assertRaises(AssertionError):module.parse_preview_output(json.dumps(data))
+    def test_trailing_output_and_multiple_json_payloads_fail(self):
+        module=self.parser();valid=json.dumps(self.payload())
+        for raw in [valid+'\n'+valid,valid+'\n[]',valid+'\nnot-json',json.dumps({'diagnostic':True})+'\n'+valid]:
+            with self.assertRaises((AssertionError,ValueError)):module.parse_preview_output(raw)
+    def test_oversized_report_and_unexpected_runtime_env_fail(self):
+        module=self.parser()
+        with self.assertRaises(AssertionError):module.parse_preview_output('x'*(module.MAX_PREVIEW_OUTPUT_BYTES+1))
+        data=self.payload();data['deployment']['env']={'unexpected':{'type':'plain_text','text':'synthetic'}}
+        with self.assertRaises(AssertionError):module.parse_preview_output(json.dumps(data))
+
 if __name__=='__main__':unittest.main()
