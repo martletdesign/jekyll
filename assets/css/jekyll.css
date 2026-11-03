@@ -309,3 +309,29 @@ html[data-appearance="dark"] body.martlet .site-footer a:focus-visible {
 .site-header .brand img { flex:0 0 auto; }
 .site-header .brand span { min-inline-size:0; overflow-wrap:anywhere; }
 .site-header .menu-button { flex:0 0 auto; }
+
+
+/* Regression correction after grammar reconciliation.
+   Section artwork starts behind the fixed transparent header, rather than
+   after a spacer painted in the fallback brown. The headline's internal
+   spacing protects it from the actual header without shifting the photo.
+   The existing narrow image-above-copy layout remains deliberately separate. */
+@media (min-width:48.01rem) and (min-aspect-ratio:4/5) {
+  body.martlet.has-panoramic-hero .site-header[data-navigation-ready] + main .page-intro--section {
+    padding-top:0;
+  }
+  body.martlet.has-panoramic-hero .page-intro--section .page-intro__shade {
+    padding-top:clamp(6.2rem,9vw,7.5rem);
+    padding-bottom:1rem;
+  }
+}
+/* Plain/compact references should not look like a navbar stacked on a second
+   unrelated dark-brown band. The unscrolled navbar and the adjoining compact
+   masthead share one intentional warm surface; scrolled/menu behavior stays. */
+html[data-appearance] body.martlet .page-intro--compact:not(.page-intro--illustrated) {
+  background-color:#25170b;
+}
+html[data-appearance] body.martlet:not(.has-panoramic-hero) .site-header:not(.is-scrolled):not(.is-menu-open) {
+  border-bottom-color:transparent;
+  box-shadow:none;
+}
