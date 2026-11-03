@@ -51,7 +51,7 @@ try {
       const box=await art.boundingBox(),header=await page.locator('.site-header').boundingBox(),heading=await page.locator('h1').boundingBox();
       assert.ok(Math.abs(box.width/box.height-3)<.01,'Full 3:1 panorama is never distorted');
       assert.equal(await art.evaluate(img=>getComputedStyle(img).objectFit),'contain','Full wings and tail remain uncropped');
-      assert.ok(box.y+.5>=header.y+header.height,'Navigation does not cover the panorama');
+      assert.ok(box.y<=header.y+header.height && box.y+box.height>header.y,'Transparent navigation overlays actual panorama pixels at scroll origin');
       if(width<=768)assert.ok(heading.y>=box.y+box.height,'Mobile text sits below the complete image');
       assert.equal(await art.evaluate(img=>img.complete&&img.naturalWidth>0),true,'Approved artwork loads');
       assert.equal(await page.locator('html').getAttribute('data-appearance'),appearance);
