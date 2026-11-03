@@ -2,6 +2,7 @@
 """Cloudflare Workers Builds commands: verified build, then exact static deploy."""
 import argparse
 import json
+import re
 import os
 from pathlib import Path
 import subprocess
@@ -36,6 +37,33 @@ def source_verification(c,branch,sha):
 
 def run(args,timeout=300):subprocess.run(args,cwd=ROOT,check=True,timeout=timeout)
 
+MAX_PREVIEW_OUTPUT_BYTES=2*1024*1024
+
+def parse_preview_output(raw):
+    """Parse one final JSON object after Wrangler's human asset-upload log."""
+    assert isinstance(raw,str) and len(raw.encode('utf-8'))<=MAX_PREVIEW_OUTPUT_BYTES,'Preview output exceeds the bounded reporting limit'
+    first=re.search(r'(?m)^[ \t]*([\{\[])',raw)
+    assert first,'Wrangler did not emit a final Preview JSON object'
+    try:data,end=json.JSONDecoder().raw_decode(raw,first.start(1))
+    except json.JSONDecodeError as error:raise ValueError('Malformed final Wrangler Preview JSON') from error
+    assert not raw[end:].strip(),'Unexpected trailing output or multiple JSON payloads'
+    assert isinstance(data,dict) and set(data)=={'preview','deployment'},'Unexpected final Preview report schema'
+    preview,deployment=data['preview'],data['deployment']
+    assert isinstance(preview,dict) and isinstance(deployment,dict)
+    assert isinstance(preview.get('id'),str) and re.fullmatch(r'[a-f0-9]{32}',preview['id'])
+    assert preview.get('name')=='develop' and preview.get('slug')=='develop'
+    assert isinstance(deployment.get('id'),str) and re.fullmatch(r'[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}',deployment['id'])
+    assert isinstance(deployment.get('number'),int) and deployment['number']>=0
+    assert isinstance(deployment.get('created_on'),str) and deployment['created_on']
+    assert isinstance(deployment.get('main_module'),str) and deployment['main_module']
+    assert isinstance(deployment.get('annotations'),dict)
+    for item in (preview,deployment):
+        assert isinstance(item.get('urls'),list) and item['urls']
+        assert all(isinstance(url,str) and url.startswith('https://') for url in item['urls'])
+    # Empty env may be omitted by this API. Absence is NOT a binding readback.
+    if 'env' in deployment:assert deployment['env']=={},'Unexpected Preview runtime variables, secrets or bindings'
+    return data
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('operation',choices=['stage','finalize','verify','record']);p.add_argument('--branch',required=True,choices=['develop','main']);a=p.parse_args()
     c=read_config();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();guard(c,a.branch,sha)
@@ -69,10 +97,12 @@ def main():
         print(json.dumps({'status':'verified-before-wrangler','sourceCommit':sha},sort_keys=True))
     else:
         from artifact import verify_live
-        data=json.loads((ROOT/'.cloudflare-preview-result.json').read_text());assert a.branch=='develop','Production must use reviewed deployment verification and rollback helper'
+        raw_path=ROOT/'.cloudflare-preview-result.json';assert raw_path.stat().st_size<=MAX_PREVIEW_OUTPUT_BYTES,'Preview output exceeds the bounded reporting limit'
+        data=parse_preview_output(raw_path.read_text());assert a.branch=='develop','Production must use reviewed deployment verification and rollback helper'
+        (ROOT/'.cloudflare-preview-parsed.json').write_bytes(json_bytes(data))
         preview=data['preview'];deployment=data['deployment'];assert preview['name']=='develop' and preview['slug']=='develop' and deployment.get('env',{})=={}
         result=verify_live(c,a.branch,sha,directory)
-        receipt={'status':'passed','repository':c['repository'],'branch':a.branch,'sourceCommit':sha,'worker':c['targets'][a.branch]['worker'],'previewId':preview['id'],'deploymentId':deployment['id'],'previewUrls':preview.get('urls'),'deploymentUrls':deployment.get('urls'),'runtimeBindings':[],'runtimeSecrets':False,'productionDeployInvoked':False,'verification':result}
+        receipt={'status':'passed','repository':c['repository'],'branch':a.branch,'sourceCommit':sha,'worker':c['targets'][a.branch]['worker'],'previewId':preview['id'],'deploymentId':deployment['id'],'deployedAt':deployment['created_on'],'artifactSha256':result['artifactSha256'],'previewUrls':preview.get('urls'),'deploymentUrls':deployment.get('urls'),'configuredRuntimeBindings':[],'configuredRuntimeSecrets':False,'runtimeBindingEvidence':{'baseConfigIgnored':True,'deploymentEnvFieldPresent':'env' in deployment,'completeBindingReadbackClaimed':False},'productionDeployInvoked':False,'verification':result}
         (ROOT/'.cloudflare-deployment-receipt.json').write_bytes(json_bytes(receipt));print('NATIVE_DEPLOYMENT_RECEIPT '+json.dumps(receipt,sort_keys=True))
 
 if __name__=='__main__':main()
