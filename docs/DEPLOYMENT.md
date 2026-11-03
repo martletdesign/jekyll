@@ -35,3 +35,5 @@ The main-only production helper records the prior single-version deployment, pub
 Visual review still compares actual desktop/tablet/mobile, light/dark, imagery, source typography, navigation and cropping against jameshoward.us and krigsvold.org. Automated checks alone do not certify visual fidelity.
 
 Live payload verification has a 300-second overall deadline, at most four in-flight requests, and a 25-second whole-request deadline. Cancellation unwinds within at most 30 additional seconds. The Preview upload command has its own 300-second limit. Failed checks and timeouts remain failures.
+
+When Cloudflare supplies its documented native build UUID, commit and branch, `.well-known/deployment.json` records those three validated, whitelisted fields in `cloudflareBuild`. Builds outside native Cloudflare CI record `null`. These are environment-reported identifiers, not independent attestation; preserve the corresponding native build log/link to prove the trigger. No credentials or other environment values are copied.

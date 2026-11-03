@@ -162,4 +162,19 @@ class PreviewOutputTests(unittest.TestCase):
         data=self.payload();data['deployment']['env']={'unexpected':{'type':'plain_text','text':'synthetic'}}
         with self.assertRaises(AssertionError):module.parse_preview_output(json.dumps(data))
 
+class CloudflareBuildMetadataTests(unittest.TestCase):
+    def test_local_manual_build_has_no_native_build_claim(self):
+        self.assertIsNone(artifact.cloudflare_build_metadata('develop','a'*40,{}))
+    def test_native_fields_are_validated_and_secrets_never_copied(self):
+        values={'WORKERS_CI_BUILD_UUID':'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','WORKERS_CI_COMMIT_SHA':'a'*40,'WORKERS_CI_BRANCH':'develop','CLOUDFLARE_API_TOKEN':'private-synthetic-value','WORKERS_CI':'not-required'}
+        result=artifact.cloudflare_build_metadata('develop','a'*40,values)
+        self.assertEqual(result['buildUuid'],values['WORKERS_CI_BUILD_UUID']);self.assertEqual(result['commitSha'],'a'*40);self.assertEqual(result['branch'],'develop');self.assertIs(result['independentAttestationClaimed'],False)
+        self.assertNotIn('private-synthetic-value',json.dumps(result));self.assertNotIn('WORKERS_CI',result)
+    def test_mismatched_or_malformed_reported_values_fail(self):
+        valid={'WORKERS_CI_BUILD_UUID':'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','WORKERS_CI_COMMIT_SHA':'a'*40,'WORKERS_CI_BRANCH':'develop'}
+        for key,value in [('WORKERS_CI_BUILD_UUID','not-a-uuid'),('WORKERS_CI_COMMIT_SHA','b'*40),('WORKERS_CI_COMMIT_SHA','not-a-hash'),('WORKERS_CI_BRANCH','main')]:
+            with self.assertRaises(AssertionError):artifact.cloudflare_build_metadata('develop','a'*40,{**valid,key:value})
+        with self.assertRaises(AssertionError):artifact.cloudflare_build_metadata('develop','a'*40,{'WORKERS_CI_COMMIT_SHA':'b'*40})
+
+
 if __name__=='__main__':unittest.main()
