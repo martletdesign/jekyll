@@ -1,6 +1,6 @@
 # Martlet grammar reconciliation: collection and dossier tasks
 
-Tracks [work order #91](https://github.com/k3jph/design-workbench/issues/91). This independent feature began at accepted `develop` `0701a83e948964fd5bf2e05ee31e7385af7752d6`; the accepted reading wave must be merged normally before final validation. Fixture bytes, all 50 IDs/routes, section anchors, content, controls and the shared search controller remain unchanged. There are **23 Wave 3 ledger rows: two changed and 21 retained**, not a blanket restyling of every collection/detail/landing/dossier. Documentation belongs to Wave 2 and the interactive scene to Wave 4; neither is a new change in this wave.
+Tracks [work order #91](https://github.com/k3jph/design-workbench/issues/91). This independent feature began at accepted `develop` `0701a83e948964fd5bf2e05ee31e7385af7752d6`; the accepted reading wave `d983fcc22218de9e96dd932d5d0cb149740b1dbd` was integrated by a normal merge before final validation. Fixture bytes, all 50 IDs/routes, section anchors, content, controls and the shared search controller remain unchanged. There are **23 Wave 3 ledger rows: two changed and 21 retained**, not a blanket restyling of every collection/detail/landing/dossier. Documentation belongs to Wave 2 and the interactive scene to Wave 4; neither is a new change in this wave.
 
 ## Source and task decisions
 
