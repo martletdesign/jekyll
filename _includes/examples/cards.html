@@ -1,0 +1,9 @@
+<div class="example-cards">
+  {% for item in include.items %}
+  <article class="example-card">
+    {% if item.image %}<img src="{{ item.image | relative_url }}" alt="{{ item.alt | escape }}" width="720" height="480" loading="lazy">{% endif %}
+    <h3><a href="{% include examples/url.html url=item.url %}">{{ item.title | escape }}</a></h3>
+    <p>{{ item.summary | escape }}</p>
+  </article>
+  {% endfor %}
+</div>

@@ -1,0 +1,6 @@
+<div data-density="{{ include.density | default: 'comfortable' }}" class="example-table-scroll" role="region" aria-label="{{ include.block.title | escape }}" tabindex="0">
+  <table><caption>{{ include.block.title | escape }}</caption>
+    <thead><tr>{% for label in include.block.headers %}<th scope="col">{{ label | escape }}</th>{% endfor %}</tr></thead>
+    <tbody>{% for row in include.block.rows %}<tr>{% for cell in row %}{% if forloop.first %}<th scope="row">{{ cell | escape }}</th>{% else %}<td>{{ cell | escape }}</td>{% endif %}{% endfor %}</tr>{% endfor %}</tbody>
+  </table>
+</div>

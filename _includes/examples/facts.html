@@ -1,0 +1,3 @@
+<dl class="example-facts">
+  {% for fact in include.facts %}<div><dt>{{ fact.label | escape }}</dt><dd>{{ fact.value | escape }}</dd></div>{% endfor %}
+</dl>

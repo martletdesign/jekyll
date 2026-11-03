@@ -1,0 +1,7 @@
+<nav aria-label="Documentation versions" class="container docs-version-nav{% if page.dashboard %} docs-version-nav--dashboard{% endif %}">
+  <p>Documentation version: <strong>{{ site.archive_version | escape }}</strong>{% if site.archive_prerelease %} (prerelease){% endif %}. Support status not established.</p>
+  <ul>{% for version in site.archive_versions %}
+    <li><a href="{{ site.archive_prefix }}/docs/v/{{ version | escape }}/"{% if version == site.archive_version %} aria-current="page"{% endif %}>{{ version | escape }}{% if version == site.archive_version %} (current){% endif %}</a></li>
+  {% endfor %}</ul>
+  <p><a href="{{ site.archive_prefix }}/docs/versions/">Browse all documentation versions</a></p>
+</nav>

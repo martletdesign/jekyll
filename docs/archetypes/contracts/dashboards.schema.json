@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "synthetic": {
+      "const": true
+    },
+    "as_of": {
+      "type": "string",
+      "pattern": "^2026-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+00:00$"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "analytics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "pattern": "^2026-\\d{2}-\\d{2}$"
+          },
+          "category": {
+            "enum": [
+              "Research",
+              "Publications",
+              "Workshops"
+            ]
+          },
+          "sessions": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "downloads": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "completions": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "duration_seconds": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "date",
+          "category",
+          "sessions",
+          "downloads",
+          "completions",
+          "duration_seconds"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "people": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "pattern": "@example\\.invalid$"
+          },
+          "role": {
+            "enum": [
+              "Researcher",
+              "Editor",
+              "Coordinator"
+            ]
+          },
+          "status": {
+            "enum": [
+              "Active",
+              "Invited",
+              "Suspended"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "role",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "samples": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "time": {
+                  "type": "string",
+                  "pattern": "^2026-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+00:00$"
+                },
+                "latency_ms": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "queue": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "availability": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "required": [
+                "time",
+                "latency_ms",
+                "queue",
+                "availability"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "samples"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "alerts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "service_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "enum": [
+              "Critical",
+              "Warning",
+              "Info"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^2026-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+00:00$"
+          },
+          "acknowledged": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "service_id",
+          "severity",
+          "title",
+          "time",
+          "acknowledged"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "activity": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "service_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^2026-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+00:00$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "service_id",
+          "time",
+          "title"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "synthetic",
+    "as_of",
+    "categories",
+    "analytics",
+    "people",
+    "services",
+    "alerts",
+    "activity"
+  ],
+  "additionalProperties": false
+}

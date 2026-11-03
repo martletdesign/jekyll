@@ -1,0 +1,4 @@
+{% assign record = site.data.examples.pages | where: 'id', page.record_id | first %}
+{% if record.semantic_class == 'event' %}{% include examples/event-context.html event=record.event %}{% endif %}
+{% if record.semantic_class == 'article' %}{% include examples/article-context.html record=record %}{% endif %}
+{% for block in record.sections %}{% include examples/section.html block=block %}{% endfor %}

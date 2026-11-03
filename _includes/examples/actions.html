@@ -1,0 +1,7 @@
+{% if include.actions.size > 0 %}
+<div class="example-actions">
+  {% for action in include.actions %}
+  <a class="{% if forloop.first %}{% include examples/button-classes.html %}{% else %}{% include examples/button-classes.html secondary=true %}{% endif %}" href="{% include examples/url.html url=action.url %}"{% if action.download %} download="{{ action.download | escape }}"{% endif %}>{{ action.label | escape }}</a>
+  {% endfor %}
+</div>
+{% endif %}

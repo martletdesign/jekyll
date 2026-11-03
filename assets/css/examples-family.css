@@ -1,0 +1,38 @@
+/* Martlet compositions. Values resolve to the existing shell's semantic roles. */
+/* A fixed white-on-navy header can move over light content as scrolling starts.
+   Switch its background immediately rather than showing low-contrast blends. */
+body.martlet .site-header.is-ready { transition-property: border-color, box-shadow; }
+body.martlet .site-header.is-ready :is(.brand,nav a,.menu-button,.appearance-toggle) { transition-property: box-shadow, transform; }
+.example-root {
+  --ex-bg: var(--martlet-bg);
+  --ex-text: var(--martlet-text);
+  --ex-strong: var(--martlet-text-strong);
+  --ex-muted: var(--martlet-muted);
+  --ex-link: var(--martlet-link);
+  --ex-panel: var(--martlet-panel);
+  --ex-line: var(--martlet-line);
+  --ex-control-line: var(--martlet-control-line);
+  --ex-input: var(--martlet-input-bg);
+  --ex-focus: var(--martlet-focus-ring);
+  --ex-on-accent: var(--martlet-on-accent);
+  --ex-mono: "IBM Plex Mono", monospace;
+}
+.example-document { display: grid; grid-template-columns: 14rem minmax(0, 46rem); gap: clamp(2rem, 5vw, 5rem); }
+.example-document > .example-local-index { position: sticky; top: 7rem; align-self: start; }
+.example-frame--landing .example-section:first-of-type .example-prose { font-size: 1.2rem; max-width: 56ch; }
+.example-frame--landing .example-section:first-of-type { max-width: 60rem; }
+.example-frame--landing .example-cards { gap: 2.5rem; }
+.example-frame--dossier .example-section { max-width: 58rem; }
+.example-frame--dossier .example-section--facts { margin-inline-start: min(10vw, 7rem); }
+.example-frame--detail .example-section--figure { max-width: 54rem; }
+.example-frame--collection .example-list > li { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 2rem; }
+.example-frame--collection .example-list__meta { align-content: start; flex-direction: column; align-items: start; }
+@media (max-width: 64rem) { .example-document { display: block; } .example-document > .example-local-index { position: static; margin-bottom: 2rem; } }
+@media (max-width: 40rem) { .example-frame--collection .example-list > li { display: block; } .example-frame--dossier .example-section--facts { margin-inline-start: 0; } }
+/* Martlet moves from a browsable collection into a focused record below it. */
+.example-frame--workspace .example-workspace { display: block; }
+.example-frame--workspace .example-records { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1.5rem; }
+.example-frame--workspace .example-workspace__detail { margin-top: 2rem; max-width: 48rem; }
+
+/* Source .button owns appearance; keyboard focus mirrors its native hover state. */
+.example-root .button:focus-visible { color: #fff; background: var(--color-navy-900); border-color: var(--color-navy-900); }

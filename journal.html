@@ -1,0 +1,9 @@
+---
+layout: page
+permalink: /journal/
+title: Notes from the workshop.
+eyebrow: Journal
+description: Short essays on the relationships that hold a page together.
+---
+{% for post in site.posts %}<article><h2><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></h2><p><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %-d, %Y" }}</time> · {{ post.author | escape }}</p><p>{{ post.description | escape }}</p></article>{% endfor %}
+{% for tag in site.tags %}<section id="{{ tag[0] | slugify }}"><h2>{{ tag[0] | escape }}</h2><ul>{% for post in tag[1] %}<li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a></li>{% endfor %}</ul></section>{% endfor %}

@@ -1,0 +1,85 @@
+name: Verified Jekyll source release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+concurrency:
+  group: jekyll-source-release-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GITHUB_REF_PROTECTED: ${{ github.ref_protected }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+      - run: git fetch origin main:refs/remotes/origin/main
+      - run: python3 scripts/release_guard.py
+      - run: python3 -m unittest discover -s tests -p 'test_release_guard.py'
+      - run: python3 nightjar/verify.py
+        env:
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - name: Build and compare exact root and subpath source archives
+        run: |
+          python3 nightjar/build.py --destination "$RUNNER_TEMP/root"
+          python3 nightjar/build.py --baseurl /preview --destination "$RUNNER_TEMP/preview"
+          cmp "$RUNNER_TEMP/root/template.zip" "$RUNNER_TEMP/preview/template.zip"
+          mkdir "$RUNNER_TEMP/release"
+          cp "$RUNNER_TEMP/root/template.zip" "$RUNNER_TEMP/release/source.zip"
+          (cd "$RUNNER_TEMP/release" && sha256sum source.zip > SHA256SUMS)
+      - name: Verify the static documentation and source policy
+        run: python3 scripts/verify_docs.py --build "${{ runner.temp }}/root"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: jekyll-source
+          path: ${{ runner.temp }}/release/
+          if-no-files-found: error
+          retention-days: 7
+  release:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_REF_PROTECTED: ${{ github.ref_protected }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - run: git fetch origin main:refs/remotes/origin/main
+      - run: python3 scripts/release_guard.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: jekyll-source
+          path: release
+      - run: cd release && sha256sum --check SHA256SUMS
+      - name: Recheck the verified source archive before release
+        run: python3 scripts/verify_docs.py --archive release/source.zip
+      - name: Reject an existing release or an ambiguous API response
+        run: python3 scripts/check_release_absent.py
+      - name: Create GitHub Release only after checks
+        run: |
+          prerelease=()
+          [[ "$(cat VERSION)" != *-* ]] || prerelease+=(--prerelease)
+          gh release create "$GITHUB_REF_NAME" release/source.zip release/SHA256SUMS --verify-tag --generate-notes "${prerelease[@]}"
+      - name: Verify the published release bytes
+        run: |
+          mkdir downloaded
+          gh release download "$GITHUB_REF_NAME" --dir downloaded
+          cmp release/source.zip downloaded/source.zip
+          cmp release/SHA256SUMS downloaded/SHA256SUMS
+          (cd downloaded && sha256sum --check SHA256SUMS)
+          python3 scripts/release_guard.py

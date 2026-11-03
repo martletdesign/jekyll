@@ -1,0 +1,1 @@
+{% if page.toc %}<nav class="{% if include.variant == 'index' %}page-index{% else %}toc{% endif %}" aria-label="On this page"><p class="eyebrow">On this page</p><ul>{% for item in page.toc %}<li class="page-index__section"><a href="#{{ item.id | escape }}">{{ item.title | escape }}</a></li>{% endfor %}</ul></nav>{% endif %}

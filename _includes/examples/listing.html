@@ -1,0 +1,15 @@
+<div data-listing data-page-size="3">
+  <ul class="example-list">
+    {% for item in include.items %}
+    <li data-list-item>
+      <div class="example-list__meta">{% if item.date %}{% assign canonical_date = item.date | date: '%Y-%m-%d' %}{% assign date_epoch = item.date | date: '%s' %}{% assign date_year = item.date | slice: 0, 4 %}{% if canonical_date == item.date and date_epoch != item.date and date_year != '0000' %}<time datetime="{{ item.date | escape }}">{{ item.date | date: '%b %-d, %Y' | escape }}</time>{% else %}<span>Invalid date: {{ item.date | escape }}</span>{% endif %}{% endif %}{% if item.tag %}<span class="example-tag">{{ item.tag | escape }}</span>{% endif %}</div>
+      <div><h3><a href="{% include examples/url.html url=item.url %}">{{ item.title | escape }}</a></h3><p>{{ item.summary | escape }}</p></div>
+    </li>
+    {% endfor %}
+  </ul>
+  <nav class="example-pagination" aria-label="{{ include.id | escape }} pages" hidden>
+    <button class="{% include examples/button-classes.html %}" type="button" data-previous>Previous</button>
+    <span data-page-status role="status"></span>
+    <button class="{% include examples/button-classes.html %}" type="button" data-next>Next</button>
+  </nav>
+</div>
