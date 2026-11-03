@@ -36,3 +36,29 @@ body.martlet .site-header.is-ready :is(.brand,nav a,.menu-button,.appearance-tog
 
 /* Source .button owns appearance; keyboard focus mirrors its native hover state. */
 .example-root .button:focus-visible { color: #fff; background: var(--color-navy-900); border-color: var(--color-navy-900); }
+
+/* Documents have independent orientation and reading measures. The previous
+   46rem TOTAL wrapper squeezed both the 14rem index and the reading column. */
+.example-frame--document .example-wrap { max-width:74rem; }
+.example-frame--document .example-document { grid-template-columns:minmax(11rem,15rem) minmax(0,46rem); }
+.example-frame--document .example-section__body > .example-prose { font-family:"Cambo",serif; font-size:1.12rem; }
+.example-frame--document .example-local-index { font-family:"Lato",sans-serif; }
+.example-frame--document .example-local-index a { display:inline-block; padding-block:.25rem; }
+/* The source article uses its named inline TOC, rather than the document rail.
+   Reuse .toc itself; this is an observed object, not a new decorative panel. */
+.example-frame--reading[data-example="article"] .example-reading { max-width:48rem; }
+.example-frame--reading[data-example="article"] .toc { margin-block:0 2.5rem; }
+.example-frame--reading[data-example="article"] .toc h2 { font-size:1rem; line-height:1.4; margin:0 0 .5rem; }
+.example-frame--reading[data-example="article"] .toc :is(h2,a) { color:var(--color-navy-900,#0b1c33); }
+.example-frame--reading[data-example="article"] article > .example-section .example-prose { font-family:"Cambo",serif; font-size:1.12rem; }
+.example-frame--reading[data-example="article"] .example-context { font-family:"Lato",sans-serif; }
+/* Documentation is a choice of reading paths: annotations sit with their
+   destinations, and each next subject has room without a uniform card box. */
+.example-documentation-entries { list-style:none; padding:0; margin:0; max-width:52rem; }
+.example-documentation-entries li + li { margin-top:2.5rem; }
+.example-documentation-entries article { max-width:65ch; }
+.example-documentation-entries h3 { font-family:"Cambo",serif; font-size:1.5rem; max-width:28ch; }
+.example-documentation-entries p { margin:.6rem 0 0 1.5rem; max-width:58ch; font-family:"Cambo",serif; font-size:1.12rem; }
+@media(max-width:64rem) { .example-frame--document .example-document { display:block; } }
+@media(max-width:40rem) { .example-documentation-entries p { margin-inline-start:0; } }
+@media(forced-colors:active) { .example-frame--reading[data-example="article"] .toc :is(h2,a) { color:CanvasText; } }

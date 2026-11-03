@@ -1,0 +1,8 @@
+<ol class="example-documentation-entries" aria-label="Guides and reference">
+{% for item in include.items %}
+  <li><article>
+    <h3><a href="{% include examples/url.html url=item.url %}">{{ item.title | escape }}</a></h3>
+    <p>{{ item.summary | escape }}</p>
+  </article></li>
+{% endfor %}
+</ol>

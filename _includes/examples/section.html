@@ -4,7 +4,7 @@
   <div class="example-section__body">
     {% if block.body %}<div class="example-prose">{{ block.body | markdownify | escape | nightjar_sanitize: site.baseurl }}</div>{% endif %}
     {% case block.kind %}
-      {% when 'cards' %}{% include examples/cards.html items=block.items %}
+      {% when 'cards' %}{% if page.record_id == 'documentation' %}{% include examples/documentation-entries.html items=block.items %}{% else %}{% include examples/cards.html items=block.items %}{% endif %}
       {% when 'listing' %}{% include examples/listing.html items=block.items id=block.id %}
       {% when 'facts' %}{% include examples/facts.html facts=block.facts %}
       {% when 'figure' %}{% include examples/figure.html item=block %}
