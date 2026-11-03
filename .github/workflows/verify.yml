@@ -27,6 +27,7 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_hero.py'
           python3 -m unittest discover -s tests -p 'test_deployment.py'
           python3 -m unittest discover -s tests -p 'test_hero_contract.py'
+          python3 -m unittest discover -s tests -p 'test_grammar.py'
           python3 -m unittest discover -s tests -p 'test_pr_preview_verification.py'
         env:
           BUNDLE_FROZEN: 'true'
