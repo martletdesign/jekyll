@@ -62,6 +62,7 @@ try {
         assert.ok(Math.abs(box.y-heroBox.y)<=1,'Signature artwork begins at the hero top');
         assert.ok(Math.abs((box.y+box.height)-(heroBox.y+heroBox.height))<=1,'Signature artwork reaches the hero bottom without a solid brown seam');
         assert.ok(Math.abs(box.width-heroBox.width)<=1,'Signature artwork fills the hero width');
+        assert.ok(heroBox.height+1>=width/3,'Wide signature retains the full 3:1 source composition unless copy requires more height');
       }
       assert.equal(await art.evaluate(img=>img.complete&&img.naturalWidth>0),true,'Approved artwork loads');
       assert.equal(await page.locator('html').getAttribute('data-appearance'),appearance);
