@@ -49,10 +49,24 @@ try {
       assert.equal(artRequests.length,1,'Native srcset loads one image, never the master or duplicate fallback');
       assert.ok(!artRequests.some(url=>url.endsWith('.png')),'Archival master is not a runtime download');
       const box=await art.boundingBox(),header=await page.locator('.site-header').boundingBox(),heading=await page.locator('h1').boundingBox();
-      assert.ok(Math.abs(box.width/box.height-3)<.01,'Full 3:1 panorama is never distorted');
-      assert.equal(await art.evaluate(img=>getComputedStyle(img).objectFit),'contain','Full wings and tail remain uncropped');
+      const heroBox=await hero.boundingBox();
       assert.ok(box.y<=header.y+header.height && box.y+box.height>header.y,'Transparent navigation overlays actual panorama pixels at scroll origin');
-      if(width<=768)assert.ok(heading.y>=box.y+box.height,'Mobile text sits below the complete image');
+      const decoded=await art.evaluate(async img=>{await img.decode();return {width:img.naturalWidth,height:img.naturalHeight,src:new URL(img.currentSrc).pathname}});
+      assert.ok(decoded.width>0&&decoded.height>0,'Selected responsive image decodes successfully');
+      const encodedRatio=decoded.width/decoded.height;
+      assert.ok(Math.abs(encodedRatio-3)<.035,`Selected responsive source preserves the approximate 3:1 framing: ${decoded.src} ${decoded.width}x${decoded.height}`);
+      if(width<=768){
+        assert.ok(Math.abs(box.width/box.height-3)<.01,'Mobile displays the full 3:1 image without distortion');
+        assert.equal(await art.evaluate(img=>getComputedStyle(img).objectFit),'contain','Mobile wings and tail remain uncropped');
+        assert.ok(heading.y>=box.y+box.height,'Mobile text sits below the complete image');
+      }else{
+        assert.equal(await art.evaluate(img=>getComputedStyle(img).objectFit),'cover','Desktop artwork covers a content-driven signature hero');
+        assert.equal(await art.evaluate(img=>getComputedStyle(img).objectPosition),'100% 50%','Right-aligned focal position protects the martlet');
+        assert.ok(Math.abs(box.y-heroBox.y)<=1,'Signature artwork begins at the hero top');
+        assert.ok(Math.abs((box.y+box.height)-(heroBox.y+heroBox.height))<=1,'Signature artwork reaches the hero bottom without a solid brown seam');
+        assert.ok(Math.abs(box.width-heroBox.width)<=1,'Signature artwork fills the hero width');
+        assert.ok(heroBox.height+1>=width/3,'Wide signature retains the full 3:1 source composition unless copy requires more height');
+      }
       assert.equal(await art.evaluate(img=>img.complete&&img.naturalWidth>0),true,'Approved artwork loads');
       assert.equal(await page.locator('html').getAttribute('data-appearance'),appearance);
       const footer=page.locator('.site-footer');
