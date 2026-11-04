@@ -35,10 +35,22 @@ try {
     if(variant==='section'){
      assert.equal(await hero.locator('img').evaluate(img=>img.complete&&img.naturalWidth>0),true,'Distinct local section image loads');
      assert.ok((await hero.locator('img').getAttribute('src')).startsWith(`${base}/assets/images/sections/`));
-     const rect=await hero.boundingBox();if(width>=1024)assert.ok(rect.height>=250&&rect.height<=360,`Section height including navigation is restrained (${rect.height})`);
+     const rect=await hero.boundingBox();if(width>=1024)assert.ok(rect.height>=250&&rect.height<=360,`Section height including navigation is restrained (${rect.height})`);if(width>=1024){
+       const bar=await page.locator('.site-header').boundingBox(),image=await hero.locator('.page-intro__art').boundingBox(),title=await hero.locator('h1').boundingBox();
+       assert.ok(image.y<=bar.y+1 && image.y+image.height>bar.y+bar.height,'Section image extends beneath the transparent header rather than starting below a brown strip');
+       assert.ok(title.y>=bar.y+bar.height,'Section title remains clear of fixed navigation');
+       assert.equal(await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)','Illustrated section navigation is transparent at origin');
+      }
      if(width<=768){const art=await hero.locator('img').boundingBox(),h1=await hero.locator('h1').boundingBox();assert.equal(await hero.locator('img').evaluate(i=>getComputedStyle(i).objectFit),'contain');assert.ok(h1.y>=art.y+art.height,'Mobile section text follows complete image')}
      const credit=page.getByRole('complementary',{name:'Section image credit'});assert.equal(await credit.isVisible(),true);assert.ok(await credit.getByRole('link',{name:/CC BY/}).getAttribute('href'));assert.equal(await credit.getByRole('link',{name:'All image credits and source files'}).getAttribute('href'),`${base}/image-credits/`);
-    }else assert.equal(await hero.locator('img').count(),0,'Compact/plain pages have no forced imagery');
+    }else{
+      assert.equal(await hero.locator('img').count(),0,'Compact/plain pages have no forced imagery');
+      if(variant==='compact' && !page.url().includes('/journal/what-a-shell-should-own/')){
+       const navColor=await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor);
+       const heroColor=await hero.evaluate(el=>getComputedStyle(el).backgroundColor);
+       assert.equal(heroColor,navColor,'Compact hero and unscrolled opaque Martlet nav share a continuous warm background');
+      }
+     }
    }
    assert.equal(await page.locator('.page-intro--signature').count(),0,'Cinematic signature appears only at homepage');
    const menu=page.locator('.menu-button');if(await menu.isVisible()){await menu.focus();await page.keyboard.press('Enter');assert.equal(await menu.getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await menu.evaluate(el=>document.activeElement===el),true)}
