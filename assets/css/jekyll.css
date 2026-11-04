@@ -187,6 +187,26 @@ body.has-panoramic-hero .page-intro--illustrated::before {
   body.has-panoramic-hero .page-intro--illustrated::before { display:none; }
 }
 
+/* Signature-only full-frame coverage. The original 3:1 photograph must
+   cover the rendered hero, whose editorial content can be taller than the
+   image's intrinsic ratio. Anchor the crop to the right to retain the
+   martlet's wings and tail; overflow is clipped by the existing hero frame.
+   The golden tint remains the existing CSS ::before overlay, not image pixels.
+   Below 48rem, preserve the separate uncropped image-above-text composition. */
+@media (min-width:48.01rem) {
+  body.martlet[data-hero-variant="signature"] .page-intro--signature .page-intro__art {
+    position:absolute;
+    inset:0;
+    z-index:0;
+    width:100%;
+    height:100%;
+    max-width:none;
+    aspect-ratio:auto;
+    object-fit:cover;
+    object-position:100% 50%;
+  }
+}
+
 /* Reference-host identity: composition only, not replacement foundation tokens.
    Homepage artwork/tint declarations above are intentionally unchanged. */
 html[data-appearance] body.martlet .site-header,
