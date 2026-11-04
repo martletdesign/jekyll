@@ -194,6 +194,11 @@ body.has-panoramic-hero .page-intro--illustrated::before {
    The golden tint remains the existing CSS ::before overlay, not image pixels.
    Below 48rem, preserve the separate uncropped image-above-text composition. */
 @media (min-width:48.01rem) {
+  /* Preserve the complete natural panorama on wide screens. Shorter desktop
+     frames expand only when needed to accommodate editorial copy. */
+  body.martlet[data-hero-variant="signature"] .page-intro--signature {
+    min-height:33.333333vw;
+  }
   body.martlet[data-hero-variant="signature"] .page-intro--signature .page-intro__art {
     position:absolute;
     inset:0;
