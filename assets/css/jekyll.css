@@ -344,23 +344,66 @@ html[data-appearance] body.martlet:not(.has-panoramic-hero) .site-header:not(.is
   }
 }
 
-/* Section panoramas can be bright behind the right-hand navigation. Preserve
-   the approved transparent signature/home masthead, but provide a warm
-   translucent contrast scrim across section navigation at scroll origin.
-   This does not reserve another layout band or crop the image. */
+/* Section heroes: the image must cover the *actual* content-driven hero
+   height. Fixed-height grid artwork previously stopped above the hero bottom,
+   exposing a flat brown band between the photograph and the image credit.
+   Fill the existing frame instead; keep the full image-above-copy mobile mode. */
+@media (min-width:48.01rem) and (min-aspect-ratio:4/5) {
+  body.martlet[data-hero-variant="section"] .page-intro--section .page-intro__art {
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    align-self:stretch;
+    object-fit:cover;
+    object-position:var(--martlet-hero-focal,center);
+    aspect-ratio:auto;
+  }
+  /* Apply the navigation's warm legibility treatment to the *hero* image,
+     feathering to transparency well below the bar. The navbar itself stays
+     transparent at the origin and is never a hard-edged opaque rectangle. */
+  body.martlet[data-hero-variant="section"] .page-intro--section::after {
+    content:"";
+    position:absolute;
+    inset:0 0 auto;
+    z-index:1;
+    height:clamp(9rem,14vw,12rem);
+    pointer-events:none;
+    background:linear-gradient(180deg,
+      rgb(37 23 11 / .87) 0%,
+      rgb(37 23 11 / .57) 42%,
+      rgb(37 23 11 / 0) 100%);
+  }
+}
 html[data-appearance] body.martlet[data-hero-variant="section"]
   .site-header[data-navigation-ready]:not(.is-scrolled):not(.is-menu-open) {
   background-color:transparent;
-  background-image:linear-gradient(180deg,
-    rgb(37 23 11 / .91),
-    rgb(37 23 11 / .78));
-  border-bottom-color:rgb(230 199 125 / .12);
+  background-image:none;
+  border-bottom-color:transparent;
+  box-shadow:none;
+}
+/* examples-family.css otherwise suppresses header background transitions.
+   Restore the actual fade into burnished brown when the section nav scrolls
+   or opens, without changing the source's behavior on plain or home pages. */
+html[data-appearance] body.martlet[data-hero-variant="section"] .site-header.is-ready {
+  transition-property:background-color,border-color,box-shadow;
+  transition-duration:.42s;
+  transition-timing-function:ease;
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-appearance] body.martlet[data-hero-variant="section"] .site-header.is-ready {
+    transition-duration:0s;
+  }
 }
 @media (forced-colors:active) {
+  body.martlet[data-hero-variant="section"] .page-intro--section::after {display:none;}
   html[data-appearance] body.martlet[data-hero-variant="section"]
     .site-header[data-navigation-ready]:not(.is-scrolled):not(.is-menu-open) {
     background-image:none;
     background-color:Canvas !important;
     border-bottom-color:CanvasText !important;
   }
+}
+@media print {
+  body.martlet[data-hero-variant="section"] .page-intro--section::after {display:none;}
 }
