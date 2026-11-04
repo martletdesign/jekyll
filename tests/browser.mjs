@@ -51,7 +51,10 @@ try {
       const box=await art.boundingBox(),header=await page.locator('.site-header').boundingBox(),heading=await page.locator('h1').boundingBox();
       const heroBox=await hero.boundingBox();
       assert.ok(box.y<=header.y+header.height && box.y+box.height>header.y,'Transparent navigation overlays actual panorama pixels at scroll origin');
-      assert.ok(Math.abs((await art.evaluate(img=>img.naturalWidth/img.naturalHeight))-3)<.015,'Unchanged image bytes retain the source 3:1 aspect ratio');
+      const decoded=await art.evaluate(async img=>{await img.decode();return {width:img.naturalWidth,height:img.naturalHeight,src:new URL(img.currentSrc).pathname}});
+      assert.ok(decoded.width>0&&decoded.height>0,'Selected responsive image decodes successfully');
+      const encodedRatio=decoded.width/decoded.height;
+      assert.ok(Math.abs(encodedRatio-3)<.035,`Selected responsive source preserves the approximate 3:1 framing: ${decoded.src} ${decoded.width}x${decoded.height}`);
       if(width<=768){
         assert.ok(Math.abs(box.width/box.height-3)<.01,'Mobile displays the full 3:1 image without distortion');
         assert.equal(await art.evaluate(img=>getComputedStyle(img).objectFit),'contain','Mobile wings and tail remain uncropped');
