@@ -40,6 +40,9 @@ try {
        assert.ok(image.y<=bar.y+1 && image.y+image.height>bar.y+bar.height,'Section image extends beneath the transparent header rather than starting below a brown strip');
        assert.ok(title.y>=bar.y+bar.height,'Section title remains clear of fixed navigation');
        assert.equal(await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundColor),'rgba(0, 0, 0, 0)','Illustrated section navigation is transparent at origin');
+       const sectionNavImage=await page.locator('.site-header').evaluate(el=>getComputedStyle(el).backgroundImage);
+       assert.ok(sectionNavImage.includes('linear-gradient'),'Section navigation uses a warm translucent contrast scrim over bright image areas');
+
       }
      if(width<=768){const art=await hero.locator('img').boundingBox(),h1=await hero.locator('h1').boundingBox();assert.equal(await hero.locator('img').evaluate(i=>getComputedStyle(i).objectFit),'contain');assert.ok(h1.y>=art.y+art.height,'Mobile section text follows complete image')}
      const credit=page.getByRole('complementary',{name:'Section image credit'});assert.equal(await credit.isVisible(),true);assert.ok(await credit.getByRole('link',{name:/CC BY/}).getAttribute('href'));assert.equal(await credit.getByRole('link',{name:'All image credits and source files'}).getAttribute('href'),`${base}/image-credits/`);
