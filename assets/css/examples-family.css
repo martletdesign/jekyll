@@ -13,6 +13,7 @@ body.martlet .site-header.is-ready :is(.brand,nav a,.menu-button,.appearance-tog
   --ex-line: var(--martlet-line);
   --ex-control-line: var(--martlet-control-line);
   --ex-input: var(--martlet-input-bg);
+  --ex-placeholder: var(--martlet-input-placeholder);
   --ex-focus: var(--martlet-focus-ring);
   --ex-on-accent: var(--martlet-on-accent);
   --ex-mono: "IBM Plex Mono", monospace;
