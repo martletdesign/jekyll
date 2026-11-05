@@ -106,7 +106,7 @@ try {
     const span=brand?.querySelector('span');
     const menu=document.querySelector('.site-header .menu-button');
     if(!brand||!span||!menu)return null;
-    const t=span.firstChild;const length=t.textContent.trim().split(/\\s+/)[0].length;
+    const t=span.firstChild;const length=t.textContent.trim().split(' ')[0].length;
     const range=document.createRange();range.setStart(t,0);range.setEnd(t,length);
     const a=span.getBoundingClientRect(),b=menu.getBoundingClientRect();
     const overlap=a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
