@@ -73,6 +73,12 @@ html[data-appearance=dark] .example-prose :is(blockquote,.footnotes) { color: va
 .example-root legend { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; }
 .example-root label { display: block; font-weight: 700; margin: 1rem 0 .4rem; }
 .example-root :is(input:not([type=checkbox]),select,textarea) { width: 100%; min-height: 2.75rem; border: 1px solid var(--ex-control-line); background: var(--ex-input); color: var(--ex-text); padding: .7rem; font: inherit; border-radius: .15rem; }
+/* Match placeholder ink to the explicit accessible control token; do not rely
+   on browser-default placeholder gray/opacity in light or dark appearance. */
+.example-root :is(input:not([type=checkbox]),textarea)::placeholder {
+  color: var(--ex-placeholder);
+  opacity: 1;
+}
 .example-root textarea { resize: vertical; }
 .example-root [data-conversation] label textarea { display: block; margin-top: .4rem; font-weight: 400; }
 .example-root .example-checkbox { display: flex; gap: .75rem; align-items: start; font-weight: 400; }
