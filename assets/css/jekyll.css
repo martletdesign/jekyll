@@ -172,8 +172,11 @@ body.has-panoramic-hero .page-intro--illustrated::before {
 /* Warm but unobtrusive header states, and deliberate behavior for the
    original image-above-copy mobile treatment. */
 @media (max-width: 48rem) {
+  /* At enlarged text sizes a fixed flex-wrapping header becomes taller.
+     Keep the first words below that header without introducing a permanent
+     spacer at ordinary mobile font sizes: artwork is always 3:1 here. */
   body.has-panoramic-hero .page-intro--illustrated .page-intro__shade {
-    padding-top: 2rem;
+    padding-top: max(2rem, calc(7rem - 33.333vw));
   }
   body.has-panoramic-hero .page-intro--illustrated::before {
     background: linear-gradient(103deg,
