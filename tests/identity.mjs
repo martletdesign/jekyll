@@ -93,6 +93,35 @@ try {
 
   await context.close();
  }
+ // Brand and Menu must reflow as intact controls, even when the viewer
+ // enlarges text beyond the standard mobile typographic size.
+ for(const base of ['', '/preview'])for(const width of [320,375])for(const scale of [100,200,400]){
+  const context=await browser.newContext({viewport:{width,height:1100},reducedMotion:'reduce'});
+  try{
+   const page=await context.newPage();page.setDefaultTimeout(10000);
+   await page.goto(`http://127.0.0.1:${port}${base}/`,{waitUntil:'load'});
+   await page.evaluate(v=>document.documentElement.style.fontSize=v+'%',scale);
+   const measured=await page.evaluate(()=>{
+    const brand=document.querySelector('.site-header .brand');
+    const span=brand?.querySelector('span');
+    const menu=document.querySelector('.site-header .menu-button');
+    if(!brand||!span||!menu)return null;
+    const t=span.firstChild;const length=t.textContent.trim().split(/\\s+/)[0].length;
+    const range=document.createRange();range.setStart(t,0);range.setEnd(t,length);
+    const a=span.getBoundingClientRect(),b=menu.getBoundingClientRect();
+    const overlap=a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+    return {brandVisible:a.width>0&&a.height>0,wholeFirstWord:range.getClientRects().length===1,
+     wrap:getComputedStyle(span).overflowWrap,wordBreak:getComputedStyle(span).wordBreak,
+     menuVisible:b.width>0&&b.height>0,overlap,overflow:document.documentElement.scrollWidth>innerWidth};
+   });
+   assert.ok(measured,`Navigation elements exist at ${base} ${width}px ${scale}%`);
+   assert.ok(measured.brandVisible&&measured.menuVisible&&!measured.overlap,
+    `Brand and Menu remain separate at ${base} ${width}px ${scale}%: ${JSON.stringify(measured)}`);
+   assert.ok(measured.wholeFirstWord&&measured.wrap==='normal'&&measured.wordBreak==='normal',
+    `Brand never fractures Martlet into letters at ${base} ${width}px ${scale}%: ${JSON.stringify(measured)}`);
+   assert.equal(measured.overflow,false,`No horizontal overflow at ${base} ${width}px ${scale}%`);
+  }finally{await context.close();}
+ }
  for(const base of ['', '/preview']) {
   const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:375,height:1000}}),page=await context.newPage();
   for(const [route,variant]of routes){await page.goto(`http://127.0.0.1:${port}${base}/${route}`,{waitUntil:'load'});assert.equal(await page.locator('main h1').isVisible(),true);if(variant==='section')assert.equal(await page.locator('.page-intro img').evaluate(i=>i.complete&&i.naturalWidth>0),true)}
