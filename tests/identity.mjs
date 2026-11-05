@@ -13,6 +13,20 @@ async function bounded(label,operation,ms){
  try{return await Promise.race([operation(),new Promise((_,reject)=>{timeout=setTimeout(()=>reject(Error(`Timed out: ${label} after ${ms}ms`)),ms)})])}
  finally{clearTimeout(timeout);console.log(`END ${label}`)}
 }
+
+/* Test browser-computed placeholder colors, not merely palette tokens. */
+function placeholderContrast(ink,background) {
+ const luminance=color=>{
+  const values=color.match(/[0-9.]+/g);
+  assert.ok(values&&values.length>=3,'Expected RGB computed style: '+color);
+  const [r,g,b]=values.slice(0,3).map(Number).map(c=>{
+   const v=c/255;return v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4;
+  });
+  return 0.2126*r+0.7152*g+0.0722*b;
+ };
+ const first=luminance(ink),second=luminance(background);
+ return (Math.max(first,second)+0.05)/(Math.min(first,second)+0.05);
+}
 const routes=[['language/','section'],['examples/','section'],['journal/','section'],['setup/','compact'],['journal/what-a-shell-should-own/','compact'],['404.html','plain'],['examples/dashboard-analytics/','dashboard']];
 try {
  for(const base of ['', '/preview'])assert.equal(spawnSync('python3',['nightjar/build.py','--destination',join(tmp,base||'.'),'--baseurl',base],{encoding:'utf8',timeout:120000}).status,0,'Identity build');
@@ -65,6 +79,18 @@ try {
    await page.emulateMedia({forcedColors:'active'});assert.equal(await page.locator('main h1').isVisible(),true);assert.equal(await page.locator('.page-intro img').isVisible(),false,'Forced colors remove decoration');await page.emulateMedia({forcedColors:'none'});
    assert.deepEqual(errors,[],'Identity renders without script errors');
   }
+  if(width===1440) {
+   const response=await page.goto(`http://127.0.0.1:${port}${base}/examples/search/`,{waitUntil:'load'});
+   assert.equal(response.status(),200,'Placeholder contrast reference route exists');
+   const input=page.locator('.example-root input[placeholder]').first();
+   assert.equal(await input.count(),1,'Example search exposes a placeholder');
+   const styles=await input.evaluate(el=>({ink:getComputedStyle(el,'::placeholder').color,
+     opacity:getComputedStyle(el,'::placeholder').opacity,background:getComputedStyle(el).backgroundColor}));
+   assert.equal(Number(styles.opacity),1,'Placeholder must be fully opaque in '+mode);
+   const contrast=placeholderContrast(styles.ink,styles.background);
+   assert.ok(contrast>=4.5,`${engineName} ${mode} placeholder must meet 4.5:1 (observed ${contrast.toFixed(2)}:1)`);
+  }
+
   await context.close();
  }
  for(const base of ['', '/preview']) {
