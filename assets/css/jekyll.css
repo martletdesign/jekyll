@@ -176,7 +176,7 @@ body.has-panoramic-hero .page-intro--illustrated::before {
      Keep the first words below that header without introducing a permanent
      spacer at ordinary mobile font sizes: artwork is always 3:1 here. */
   body.has-panoramic-hero .page-intro--illustrated .page-intro__shade {
-    padding-top: max(2rem, calc(7rem - 33.333vw));
+    padding-top: max(2rem, calc(8rem - 33.333vw));
   }
   body.has-panoramic-hero .page-intro--illustrated::before {
     background: linear-gradient(103deg,
