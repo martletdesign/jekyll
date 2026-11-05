@@ -31,6 +31,11 @@ try {
    if(javaScriptEnabled)await bounded('navigation font readiness',()=>page.evaluate(()=>document.fonts.ready.then(()=>true)),15000);
    else await page.evaluate(m=>document.documentElement.dataset.appearance=m,mode);
    if(scale===2)await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+   if(javaScriptEnabled)await page.waitForFunction(()=>{
+     const header=document.querySelector('.site-header'),inner=header.querySelector('.header-inner');
+     const wrapped=inner.getBoundingClientRect().height>(parseFloat(getComputedStyle(inner).minHeight)||0)+2;
+     return header.classList.contains('is-reflowing')===wrapped;
+   },null,{timeout:5000});
    const data=await page.evaluate(()=>{
     const nodes=[...document.querySelectorAll('.site-header .brand,.site-header .menu-button,.site-header .nav-link,.site-header .appearance-toggle')].filter(n=>n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden');
     const rect=n=>{const range=document.createRange();range.selectNodeContents(n);const b=range.getBoundingClientRect();return{x:b.x,y:b.y,width:b.width,height:b.height,right:b.right,bottom:b.bottom}};
