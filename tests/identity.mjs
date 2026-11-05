@@ -101,6 +101,11 @@ try {
    const page=await context.newPage();page.setDefaultTimeout(10000);
    await page.goto(`http://127.0.0.1:${port}${base}/`,{waitUntil:'load'});
    await page.evaluate(v=>document.documentElement.style.fontSize=v+'%',scale);
+   await page.waitForFunction(()=>{
+    const header=document.querySelector('.site-header'),inner=header.querySelector('.header-inner');
+    const wrapped=inner.getBoundingClientRect().height>(parseFloat(getComputedStyle(inner).minHeight)||0)+2;
+    return header.classList.contains('is-reflowing')===wrapped;
+   },null,{timeout:5000});
    const measured=await page.evaluate(()=>{
     const brand=document.querySelector('.site-header .brand');
     const span=brand?.querySelector('span');
