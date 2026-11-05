@@ -31,6 +31,11 @@ try {
    if(javaScriptEnabled)await bounded('navigation font readiness',()=>page.evaluate(()=>document.fonts.ready.then(()=>true)),15000);
    else await page.evaluate(m=>document.documentElement.dataset.appearance=m,mode);
    if(scale===2)await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+   if(javaScriptEnabled)await page.waitForFunction(()=>{
+     const header=document.querySelector('.site-header'),inner=header.querySelector('.header-inner');
+     const wrapped=inner.getBoundingClientRect().height>(parseFloat(getComputedStyle(inner).minHeight)||0)+2;
+     return header.classList.contains('is-reflowing')===wrapped;
+   },null,{timeout:5000});
    const data=await page.evaluate(()=>{
     const nodes=[...document.querySelectorAll('.site-header .brand,.site-header .menu-button,.site-header .nav-link,.site-header .appearance-toggle')].filter(n=>n.getClientRects().length&&getComputedStyle(n).visibility!=='hidden');
     const rect=n=>{const range=document.createRange();range.selectNodeContents(n);const b=range.getBoundingClientRect();return{x:b.x,y:b.y,width:b.width,height:b.height,right:b.right,bottom:b.bottom}};
@@ -39,7 +44,7 @@ try {
     const brand=document.querySelector('.brand'),collapse=document.querySelector('#site-nav'),nav=document.querySelector('.site-header');
     return{items,overlaps,rootFont:getComputedStyle(document.documentElement).fontSize,contentTop:Math.min(...[...document.querySelectorAll('main .eyebrow,main h1')].filter(n=>n.getClientRects().length).map(n=>n.getBoundingClientRect().top)),headingTop:document.querySelector('main h1')?.getBoundingClientRect().top,navBottom:nav.getBoundingClientRect().bottom,overflow:document.documentElement.scrollWidth>innerWidth,brand:{flex:getComputedStyle(brand).flex,width:brand.getBoundingClientRect().width,scrollWidth:brand.scrollWidth,whiteSpace:getComputedStyle(brand).whiteSpace},navbar:{flexWrap:getComputedStyle(nav.querySelector('.header-inner')).flexWrap},collapse:{flex:getComputedStyle(collapse).flex,display:getComputedStyle(collapse).display},toggleVisible:!!document.querySelector('.menu-button').getClientRects().length};
    });
-   assert.equal(data.overflow,false);if(data.headingTop!==undefined)assert.ok(data.contentTop>=data.navBottom-1,'Closed navigation must clear the first masthead text and heading');assert.deepEqual(data.overlaps,[]);assert.ok(data.brand.scrollWidth<=data.brand.width+2,'Painted brand must fit its allocated width');
+   assert.equal(data.overflow,false);if(data.headingTop!==undefined)assert.ok(data.contentTop>=data.navBottom-1,`Closed navigation must clear the first masthead text and heading: ${JSON.stringify({width,mode,route,scale,navBottom:data.navBottom,contentTop:data.contentTop,headingTop:data.headingTop,brand:data.brand})}`);assert.deepEqual(data.overlaps,[]);assert.ok(data.brand.scrollWidth<=data.brand.width+2,'Painted brand must fit its allocated width');
    let keyboard=null;
    if(javaScriptEnabled&&data.toggleVisible){const toggle=page.locator('.menu-button');await toggle.focus();await page.keyboard.press('Enter');await page.waitForFunction(()=>document.querySelector('.menu-button').getAttribute('aria-expanded')==='true');assert.equal(await page.locator('#site-nav .nav-link').first().isVisible(),true);await page.keyboard.press('Escape');assert.equal(await toggle.getAttribute('aria-expanded'),'false');assert.equal(await toggle.evaluate(n=>n===document.activeElement),true);keyboard='Enter open / Escape close and focus return PASS';}
    if(!javaScriptEnabled){assert.equal(await page.locator('.menu-button').isVisible(),false);assert.equal(await page.locator('#site-nav .nav-link').first().isVisible(),true);}

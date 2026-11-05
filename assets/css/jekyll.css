@@ -330,9 +330,12 @@ html[data-appearance="dark"] body.martlet .site-footer a:focus-visible {
 /* Host text resizing: reserve the existing Menu control's intrinsic width and
    let the adjacent brand wrap inside its own allocation, never paint over it. */
 .site-header .header-inner { flex-wrap:wrap; row-gap:.25rem; }
-.site-header .brand { min-inline-size:0; flex:1 1 max-content; }
+/* Preserve whole words in the site's identity when zoom or text sizing
+   forces the brand and Menu controls onto separate flex rows. The mark and
+   title may also wrap as units; do not fragment the name character by character. */
+.site-header .brand { min-inline-size:0; flex:1 1 max-content; flex-wrap:wrap; }
 .site-header .brand img { flex:0 0 auto; }
-.site-header .brand span { min-inline-size:0; overflow-wrap:anywhere; }
+.site-header .brand span { min-inline-size:0; overflow-wrap:normal; word-break:normal; hyphens:none; }
 .site-header .menu-button { flex:0 0 auto; }
 
 
@@ -431,4 +434,17 @@ html[data-appearance] body.martlet[data-hero-variant="section"] .site-header.is-
 }
 @media print {
   body.martlet[data-hero-variant="section"] .page-intro--section::after {display:none;}
+}
+
+/* The header may grow beyond its single-row minimum when people enlarge
+   text. Let only that actually wrapped state enter normal flow, rather than
+   calculating arbitrary hero offsets at specific zoom/viewport combinations.
+   No-JS fallback is independently in flow in the source shell already. */
+html[data-appearance] body.martlet .site-header[data-navigation-ready].is-reflowing {
+  position:relative;
+  background-color:rgb(37 23 11);
+}
+html[data-appearance] body.martlet .site-header[data-navigation-ready].is-reflowing + main
+  :is(.page-intro--section,.page-intro--compact,.page-intro--plain) {
+  padding-top:0;
 }
