@@ -115,7 +115,13 @@ try {
     const range=document.createRange();range.setStart(t,0);range.setEnd(t,length);
     const a=span.getBoundingClientRect(),b=menu.getBoundingClientRect();
     const overlap=a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
-    return {brandVisible:a.width>0&&a.height>0,wholeFirstWord:range.getClientRects().length===1,
+    // Whole-word fragments can still be cropped inside an overflow-hidden hero.
+    const fits=el=>{if(!el)return false;const r=document.createRange();r.selectNodeContents(el);
+     return [...r.getClientRects()].every(x=>x.left>=-.5&&x.right<=innerWidth+.5);};
+    const firstWordFits=[...range.getClientRects()].every(x=>x.left>=-.5&&x.right<=innerWidth+.5);
+    return {firstWordFits,eyebrowFits:fits(document.querySelector('main .eyebrow')),
+     headingFits:fits(document.querySelector('main h1')),
+     brandVisible:a.width>0&&a.height>0,wholeFirstWord:range.getClientRects().length===1,
      wrap:getComputedStyle(span).overflowWrap,wordBreak:getComputedStyle(span).wordBreak,
      menuVisible:b.width>0&&b.height>0,overlap,overflow:document.documentElement.scrollWidth>innerWidth};
    });
@@ -125,6 +131,8 @@ try {
    assert.ok(measured.wholeFirstWord&&measured.wrap==='normal'&&measured.wordBreak==='normal',
     `Brand never fractures Martlet into letters at ${base} ${width}px ${scale}%: ${JSON.stringify(measured)}`);
    assert.equal(measured.overflow,false,`No horizontal overflow at ${base} ${width}px ${scale}%`);
+   assert.ok(measured.firstWordFits&&measured.eyebrowFits&&measured.headingFits,
+    `Navigation and hero text must remain in viewport at ${base} ${width}px ${scale}%: ${JSON.stringify(measured)}`);
    // PR #30's in-flow header stops overlaying the section artwork. Its warm
    // background must then win against the transparent hero-navigation rules.
    // Test the actual section route, not just the signature homepage.
