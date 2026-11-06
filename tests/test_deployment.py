@@ -246,7 +246,7 @@ class ReleasePreviewTargetTests(unittest.TestCase):
         return module
 
     def test_feature_release_and_hotfix_have_only_their_gitflow_target(self):
-        verifier=self.verifier();repo='martletdesign/jekyll' if 'martlet' in str(ROOT) else 'krigsvolddesign/jekyll'
+        verifier=self.verifier();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
         c={'repository':repo};sha='a'*40
         for branch,expected_base in [('feature/readability','develop'),('fix/contrast','develop'),
                                      ('release/1.1.0','main'),('hotfix/1.0.1','main')]:
@@ -264,7 +264,7 @@ class ReleasePreviewTargetTests(unittest.TestCase):
                         self.assertIn('base='+expected_base,listing.call_args.args[0])
 
     def test_preview_rejects_stale_sha_or_foreign_repository(self):
-        verifier=self.verifier();repo='martletdesign/jekyll' if 'martlet' in str(ROOT) else 'krigsvolddesign/jekyll'
+        verifier=self.verifier();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
         c={'repository':repo};sha='a'*40;branch='release/1.1.0'
         pr={'number':42,'state':'open','merged_at':None,
             'base':{'ref':'main','repo':{'full_name':repo}},
