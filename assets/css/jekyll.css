@@ -451,3 +451,12 @@ html[data-appearance] body.martlet .site-header[data-navigation-ready].is-reflow
   :is(.page-intro--section,.page-intro--compact,.page-intro--plain) {
   padding-top:0;
 }
+
+/* At 320 CSS px and extreme root-text resizing, the hero's single long
+   eyebrow token must wrap rather than disappear behind the clipped image
+   frame. Keep original letter spacing, weight and text size. The identity
+   itself may scale to the available mobile line, preserving whole words. */
+@media (max-width:400px) {
+  .page-intro .eyebrow { overflow-wrap:anywhere; word-break:normal; }
+  .site-header .brand span { font-size:min(1em, 10vw); }
+}
