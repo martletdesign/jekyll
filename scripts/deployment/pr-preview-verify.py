@@ -45,9 +45,13 @@ def current_pr(c,branch,sha):
     # Preview publication runs alongside CI; all six checks remain merge gates.
     live=artifact.github('repos/'+c['repository']+'/git/ref/heads/'+urllib.parse.quote(branch,safe=''))
     assert live['object']['sha']==sha,'Superseded PR source must not upload'
-    prs=artifact.github_list('repos/'+c['repository']+'/pulls?state=open&base=develop&head='+urllib.parse.quote(c['repository'].split('/')[0]+':'+branch,safe=''))
-    matches=[p for p in prs if p.get('state')=='open' and not p.get('merged_at') and p.get('base',{}).get('ref')=='develop' and p.get('base',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('ref')==branch and p.get('head',{}).get('sha')==sha]
-    assert len(matches)==1,'An open same-repository PR targeting develop must exist before upload; retry the native build after opening it'
+    # GitFlow feature/repair previews target develop; legitimate release and
+    # hotfix candidates target main. Both require an open exact-SHA PR in the
+    # same repository before an isolated preview may be published.
+    base='main' if branch.startswith(('release/','hotfix/')) else 'develop'
+    prs=artifact.github_list('repos/'+c['repository']+'/pulls?state=open&base='+base+'&head='+urllib.parse.quote(c['repository'].split('/')[0]+':'+branch,safe=''))
+    matches=[p for p in prs if p.get('state')=='open' and not p.get('merged_at') and p.get('base',{}).get('ref')==base and p.get('base',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('ref')==branch and p.get('head',{}).get('sha')==sha]
+    assert len(matches)==1,'An open same-repository PR targeting '+base+' at the exact source SHA must exist before preview upload'
     return matches[0]['number']
 
 def validate(c,branch,sha,name):
