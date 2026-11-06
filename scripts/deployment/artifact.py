@@ -148,7 +148,7 @@ def finalize(c, branch, sha, destination):
     for f in inputs:
         assert digest((ROOT/f['path']).read_bytes())==f['sha256']
         assert digest((ROOT/'.cloudflare-source'/f['path']).read_bytes())==f['sha256']
-    subprocess.run(['git','diff','--quiet'],cwd=ROOT,check=True,timeout=30)
+    subprocess.run(['git','diff','--quiet','HEAD'],cwd=ROOT,check=True,timeout=30)
     with zipfile.ZipFile(destination/'template.zip','w',zipfile.ZIP_DEFLATED) as archive:
         for entry in entries:
             source=ROOT/entry;assert source.is_file() and not source.is_symlink()
