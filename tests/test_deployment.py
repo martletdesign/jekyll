@@ -235,4 +235,46 @@ class PropagationTests(unittest.TestCase):
  def test_permanent_corruption_fails(self):self.check('permanent')
  def test_503_fails_without_retry(self):self.check('503')
 
+class ReleasePreviewTargetTests(unittest.TestCase):
+    """PR previews respect GitFlow's exact target branch without main deployment."""
+    def verifier(self):
+        import types
+        with patch.dict(sys.modules,{'native':types.SimpleNamespace(parse_preview_output=lambda value:value)}):
+            spec=importlib.util.spec_from_file_location('isolated_preview_target',ROOT/'scripts/deployment/pr-preview-verify.py')
+            module=importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+        return module
+
+    def test_feature_release_and_hotfix_have_only_their_gitflow_target(self):
+        verifier=self.verifier();repo='martletdesign/jekyll' if 'martlet' in str(ROOT) else 'krigsvolddesign/jekyll'
+        c={'repository':repo};sha='a'*40
+        for branch,expected_base in [('feature/readability','develop'),('fix/contrast','develop'),
+                                     ('release/1.1.0','main'),('hotfix/1.0.1','main')]:
+            for actual_base in ['develop','main']:
+                pr={'number':42,'state':'open','merged_at':None,
+                    'base':{'ref':actual_base,'repo':{'full_name':repo}},
+                    'head':{'ref':branch,'sha':sha,'repo':{'full_name':repo}}}
+                with self.subTest(branch=branch,base=actual_base):
+                    with patch.object(artifact,'github',return_value={'object':{'sha':sha}}),patch.object(artifact,'github_list',return_value=[pr]) as listing:
+                        if actual_base==expected_base:
+                            self.assertEqual(verifier.current_pr(c,branch,sha),42)
+                        else:
+                            with self.assertRaisesRegex(AssertionError,'exact source SHA'):
+                                verifier.current_pr(c,branch,sha)
+                        self.assertIn('base='+expected_base,listing.call_args.args[0])
+
+    def test_preview_rejects_stale_sha_or_foreign_repository(self):
+        verifier=self.verifier();repo='martletdesign/jekyll' if 'martlet' in str(ROOT) else 'krigsvolddesign/jekyll'
+        c={'repository':repo};sha='a'*40;branch='release/1.1.0'
+        pr={'number':42,'state':'open','merged_at':None,
+            'base':{'ref':'main','repo':{'full_name':repo}},
+            'head':{'ref':branch,'sha':sha,'repo':{'full_name':'untrusted/jekyll'}}}
+        with patch.object(artifact,'github',return_value={'object':{'sha':sha}}),patch.object(artifact,'github_list',return_value=[pr]):
+            with self.assertRaises(AssertionError):verifier.current_pr(c,branch,sha)
+        with patch.object(artifact,'github',return_value={'object':{'sha':'b'*40}}),patch.object(artifact,'github_list') as listing:
+            with self.assertRaisesRegex(AssertionError,'Superseded'):
+                verifier.current_pr(c,branch,sha)
+            listing.assert_not_called()
+
+
 if __name__=='__main__':unittest.main()
