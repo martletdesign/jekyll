@@ -64,6 +64,10 @@ def parse_preview_output(raw, *, expected_name="develop"):
     if 'env' in deployment:assert deployment['env']=={},'Unexpected Preview runtime variables, secrets or bindings'
     return data
 
+def require_clean_tracked_checkout():
+    """Reject staged and unstaged modifications to reviewed tracked source."""
+    run(['git','diff','--quiet','HEAD','--'],30)
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('operation',choices=['stage','finalize','verify','record']);p.add_argument('--branch',required=True,choices=['develop','main']);a=p.parse_args()
     c=read_config();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();guard(c,a.branch,sha)
@@ -71,6 +75,7 @@ def main():
     if a.operation=='stage':
         assert not state.exists() and not (ROOT/'.cloudflare-source').exists() and not directory.exists(),'Never reuse a previous native build'
         evidence=source_verification(c,a.branch,sha)
+        require_clean_tracked_checkout()
         run(['python3','-m','unittest','discover','-s','tests','-p','test_deployment.py'],120)
         run(['python3','-m','unittest','discover','-s','tests','-p','test_hero.py'],120)
         entries=json.loads((ROOT/'nightjar/source-files.json').read_text());assert entries and len(entries)==len(set(entries));inputs=[]
@@ -80,6 +85,7 @@ def main():
             for part in relative.parts:source=source/part;assert not source.is_symlink()
             assert source.is_file();target=ROOT/'.cloudflare-source'/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target)
             inputs.append({'path':entry,'sha256':digest(source.read_bytes())})
+        require_clean_tracked_checkout()
         (ROOT/'.cloudflare-source-inputs.json').write_bytes(json_bytes(inputs))
         (ROOT/'.cloudflare-render.yml').write_text('source_archive: true\n')
         state.write_bytes(json_bytes({'branch':a.branch,'sourceCommit':sha,'directory':str(directory),'sourceVerification':evidence}))
