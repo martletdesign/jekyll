@@ -277,4 +277,28 @@ class ReleasePreviewTargetTests(unittest.TestCase):
             listing.assert_not_called()
 
 
+
+class CleanTrackedSourceGateTests(unittest.TestCase):
+    """Production provenance must reject modifications in either Git index or worktree."""
+    def test_clean_staged_and_unstaged_source(self):
+        spec=importlib.util.spec_from_file_location('native_clean_source',ROOT/'scripts/deployment/native.py')
+        native=importlib.util.module_from_spec(spec);spec.loader.exec_module(native)
+        with tempfile.TemporaryDirectory() as directory:
+            work=Path(directory)
+            def git(*args):
+                subprocess.run(['git','-C',str(work),*args],check=True,stdout=subprocess.DEVNULL)
+            git('init','-q')
+            tracked=work/'tracked.txt';tracked.write_text('reviewed\n')
+            git('add','tracked.txt')
+            git('-c','user.name=CI Test','-c','user.email=ci@example.invalid','commit','-qm','baseline')
+            with patch.object(native,'ROOT',work):
+                native.require_clean_tracked_checkout()
+                tracked.write_text('different\n')
+                with self.assertRaises(subprocess.CalledProcessError):
+                    native.require_clean_tracked_checkout()
+                git('add','tracked.txt')
+                with self.assertRaises(subprocess.CalledProcessError):
+                    native.require_clean_tracked_checkout()
+        self.assertIn("['git','diff','--quiet','HEAD']", (ROOT/'scripts/deployment/artifact.py').read_text())
+
 if __name__=='__main__':unittest.main()
