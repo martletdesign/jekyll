@@ -125,6 +125,43 @@ try {
    assert.ok(measured.wholeFirstWord&&measured.wrap==='normal'&&measured.wordBreak==='normal',
     `Brand never fractures Martlet into letters at ${base} ${width}px ${scale}%: ${JSON.stringify(measured)}`);
    assert.equal(measured.overflow,false,`No horizontal overflow at ${base} ${width}px ${scale}%`);
+   // PR #30's in-flow header stops overlaying the section artwork. Its warm
+   // background must then win against the transparent hero-navigation rules.
+   // Test the actual section route, not just the signature homepage.
+   if(scale>=200){
+    await page.goto(`http://127.0.0.1:${port}${base}/language/`,{waitUntil:'load'});
+    await page.evaluate(v=>document.documentElement.style.fontSize=v+'%',scale);
+    await page.waitForFunction(()=>{
+     const h=document.querySelector('.site-header'),inner=h.querySelector('.header-inner');
+     const wraps=inner.getBoundingClientRect().height>(parseFloat(getComputedStyle(inner).minHeight)||0)+2;
+     return h.classList.contains('is-reflowing')===wraps;
+    },null,{timeout:5000});
+    for(const mode of ['light','dark']){
+     await page.evaluate(v=>{document.documentElement.dataset.appearance=v},mode);
+     const state=await page.evaluate(()=>{
+      const header=document.querySelector('.site-header');
+      return {reflowing:header.classList.contains('is-reflowing'),
+       background:getComputedStyle(header).backgroundColor,
+       brandInk:getComputedStyle(header.querySelector('.brand')).color,
+       menuInk:getComputedStyle(header.querySelector('.menu-button')).color,
+       headerBottom:header.getBoundingClientRect().bottom,
+       headingTop:document.querySelector('main h1').getBoundingClientRect().top,
+       overflow:document.documentElement.scrollWidth>innerWidth};
+     });
+     if(scale===400)assert.equal(state.reflowing,true,
+      `400% section navigation must be in flow at ${base} ${width}px ${mode}: ${JSON.stringify(state)}`);
+     if(state.reflowing){
+      assert.equal(state.background,'rgb(37, 23, 11)',
+       `In-flow section header must have opaque bronze background at ${base} ${width}px ${scale}% ${mode}: ${JSON.stringify(state)}`);
+      assert.ok(placeholderContrast(state.brandInk,state.background)>=4.5 &&
+       placeholderContrast(state.menuInk,state.background)>=4.5,
+       `In-flow section controls must contrast >=4.5:1 at ${base} ${width}px ${scale}% ${mode}: ${JSON.stringify(state)}`);
+      assert.ok(state.headingTop>=state.headerBottom-1,
+       `In-flow section header must not obscure heading at ${base} ${width}px ${scale}% ${mode}: ${JSON.stringify(state)}`);
+     }
+     assert.equal(state.overflow,false,`No section overflow at ${base} ${width}px ${scale}% ${mode}`);
+    }
+   }
   }finally{await context.close();}
  }
  for(const base of ['', '/preview']) {
