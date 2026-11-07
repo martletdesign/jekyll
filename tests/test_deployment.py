@@ -44,18 +44,54 @@ class DeploymentTests(unittest.TestCase):
         self.assertIn('Production cannot use a Preview command',denied.stderr)
 
     def test_only_reviewed_gitflow_promotion_shape(self):
-        sha='a'*40
-        good={'merged_at':'2026-11-03T00:00:00Z','merge_commit_sha':sha,'base':{'ref':'main'},'head':{'ref':'release/hero','sha':sha},'user':{'login':'author'}}
-        reviews=[{'id':1,'state':'APPROVED','user':{'login':'reviewer'},'commit_id':sha}]
-        self.assertTrue(artifact.promotion_ok(good,sha,reviews))
-        for head in ['feature/hero','main','anything']:
-            self.assertFalse(artifact.promotion_ok({**good,'head':{'ref':head,'sha':sha}},sha,reviews))
-        self.assertFalse(artifact.promotion_ok({**good,'merged_at':None},sha,reviews))
-        self.assertFalse(artifact.promotion_ok(good,'b'*40,reviews))
-        self.assertFalse(artifact.promotion_ok({**good,'base':{'ref':'develop'}},sha,reviews))
-        self.assertFalse(artifact.promotion_ok(good,sha,[]))
-        self.assertFalse(artifact.promotion_ok(good,sha,[{**reviews[0],'commit_id':'b'*40}]))
-        self.assertFalse(artifact.promotion_ok(good,sha,reviews+[{'id':2,'state':'CHANGES_REQUESTED','user':{'login':'reviewer'}}]))
+        # A sole-maintainer release is authorized by its actual GitFlow merger
+        # and ALL six native exact-head CI results; no invented GitHub approval.
+        sha='a'*40;head_sha='b'*40
+        good={'merged_at':'2026-11-03T00:00:00Z','merge_commit_sha':sha,
+              'base':{'ref':'main'},'head':{'ref':'release/1.1.0','sha':head_sha},
+              'user':{'login':'howardjp'},'merged_by':{'login':'howardjp'}}
+        names=sorted(artifact.PROMOTION_CHECKS)
+        def verified_checks():
+            runs=[{'name':name,'head_sha':head_sha,'status':'completed',
+                   'conclusion':'success','app':{'slug':'github-actions'}} for name in names]
+            return {'total_count':len(runs),'check_runs':runs}
+        checks=verified_checks()
+        self.assertTrue(artifact.promotion_ok(good,sha,[],checks))
+        other={**good,'user':{'login':'author'},'merged_by':{'login':'reviewer'}}
+        approved=[{'id':1,'state':'APPROVED','user':{'login':'reviewer'},'commit_id':head_sha}]
+        self.assertTrue(artifact.promotion_ok(other,sha,approved,checks))
+        for ref in ['feature/not-release','main','anything']:
+            self.assertFalse(artifact.promotion_ok({**good,'head':{**good['head'],'ref':ref}},sha,[],checks))
+        self.assertFalse(artifact.promotion_ok({**good,'merged_at':None},sha,[],checks))
+        self.assertFalse(artifact.promotion_ok(good,'c'*40,[],checks))
+        self.assertFalse(artifact.promotion_ok({**good,'base':{'ref':'develop'}},sha,[],checks))
+        self.assertFalse(artifact.promotion_ok({**good,'merged_by':{'login':'another'}},sha,[],checks))
+        self.assertFalse(artifact.promotion_ok({**good,'user':{'login':'another'}},sha,[],checks))
+        self.assertFalse(artifact.promotion_ok(other,sha,[],checks))
+        self.assertFalse(artifact.promotion_ok(other,sha,[{**approved[0],'commit_id':'c'*40}],checks))
+        blocked=approved+[{'id':2,'state':'CHANGES_REQUESTED','user':{'login':'skeptic'}}]
+        self.assertFalse(artifact.promotion_ok(good,sha,blocked,checks))
+        self.assertFalse(artifact.promotion_ok(other,sha,blocked,checks))
+        self.assertFalse(artifact.promotion_ok(good,sha,[],None))
+        for name in names:
+            with self.subTest(missing=name):
+                broken=verified_checks()
+                broken['check_runs']=[r for r in broken['check_runs'] if r['name']!=name]
+                broken['total_count']-=1
+                self.assertFalse(artifact.promotion_ok(good,sha,[],broken))
+            for field,value in [('head_sha','c'*40),('status','in_progress'),
+                                ('conclusion','failure'),('app',{'slug':'other-app'})]:
+                with self.subTest(check=name,field=field):
+                    broken=verified_checks()
+                    for run in broken['check_runs']:
+                        if run['name']==name:run[field]=value
+                    self.assertFalse(artifact.promotion_ok(good,sha,[],broken))
+        broken=verified_checks()
+        broken['check_runs'].append(dict(broken['check_runs'][0]))
+        broken['total_count']+=1
+        self.assertFalse(artifact.promotion_ok(good,sha,[],broken),'Duplicate check names fail closed')
+        broken=verified_checks();broken['total_count']+=1
+        self.assertFalse(artifact.promotion_ok(good,sha,[],broken),'Incomplete check-run pages fail closed')
 
     def test_artifact_rejects_tampering_and_wrong_commit(self):
         c=artifact.read_config(ROOT);sha='a'*40
