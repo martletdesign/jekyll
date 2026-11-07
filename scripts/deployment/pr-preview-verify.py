@@ -89,8 +89,11 @@ def current_pr(c,branch,sha):
         assert len(matches)==1,'An open same-repository PR targeting '+base+' at the exact source SHA must exist before preview upload'
         return matches[0]['number']
     except AssertionError as error:
-        denial='Public GitHub verification denied or failed ('
-        if not (str(error).startswith(denial) and ('(403)' in str(error) or '(429)' in str(error))):
+        # Only bounded GitHub REST transient/quotas and anonymous-denial statuses
+        # may use the independently verified Git transport preview fallback.
+        # Authentication errors and incorrect PR identity must still fail closed.
+        denial='Public GitHub verification denied or failed '
+        if not re.fullmatch(re.escape(denial)+r'\((403|429|502|503|504)\); never deploy without evidence',str(error)):
             raise
         return current_pr_by_git_refs(c,branch,sha,base)
 
