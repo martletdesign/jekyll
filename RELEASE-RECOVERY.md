@@ -8,23 +8,10 @@ The ordinary static documentation/source path is verified explicitly; advanced r
 
 The release guard compares fetched `origin/main` with the live remote main tip before trusting first-parent ancestry. Missing or stale production refs fail closed; review remote changes, fetch approved main, and retry verification. This does not replace administrator-enforced protection or prove later concurrent branch updates cannot occur.
 
-## Single-maintainer GitFlow production gate
+## Accepted branches and separate source publication
 
-Both design-language repositories have one human maintainer (`howardjp`).
-GitHub does not permit a pull-request author to approve their own PR.
-The production deployment gate therefore accepts either:
+Follow the canonical [GitFlow acceptance policy](https://github.com/k3jph/design-workbench/blob/develop/docs/GITFLOW-ACCEPTANCE.md). Pull-request integration into protected `develop` or `main` is the acceptance event. Jekyll has one required fast check, `verify`, and zero required human reviewers. Extended browser, archive, compatibility and visual checks remain advisory; their historical results are not reconstructed by the deployment host.
 
-1. A genuine independent `APPROVED` review of the exact PR head, or
-2. An actual merge by `howardjp` of a PR authored by `howardjp`, provided
-   the PR targets `main`, uses an accepted `develop`/`release/*`/`hotfix/*`
-   head, and all six GitHub Actions jobs succeed at that **exact head SHA**.
+Production delivery verifies the current accepted `main` SHA, builder/checkout identity, deterministic artifact and live payload. It does not query PR approvals, reviewers or check-run history. Source or artifact identity failures remain failures, and controlled rollback is preserved.
 
-The six mandatory results are `verify`, `guard`, `archive-build`,
-`browser (chromium)`, `browser (firefox)`, and `browser (webkit)`.
-A stale, missing, duplicate, non-GitHub-Actions or failed check blocks release;
-outstanding `CHANGES_REQUESTED` reviews also block promotion.
-No comments are represented as independent approvals. This replaces an
-impossible second-reviewer condition; it does not bypass any GitHub protection
-or relax protected-tag, source-archive, payload, or deployment identity checks.
-
-If the check-runs API is unreachable or incomplete, release fails closed.
+After production verification, source publication separately requires the exact release `VERSION`, a new protected immutable tag on eligible main first-parent history, deterministic `source.zip`, verified `SHA256SUMS` and genuine GitHub Release assets. Never replace an existing tag, release or asset. These publication safeguards remain mandatory and do not introduce another human review or deployment-attestation stage. No npm publication is involved.
