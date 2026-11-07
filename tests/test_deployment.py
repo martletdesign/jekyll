@@ -93,6 +93,61 @@ class DeploymentTests(unittest.TestCase):
         broken=verified_checks();broken['total_count']+=1
         self.assertFalse(artifact.promotion_ok(good,sha,[],broken),'Incomplete check-run pages fail closed')
 
+    def test_main_guard_uses_full_pr_when_commit_association_omits_merger(self):
+        """Exercise GitHub's actual list-response shape, which omits merged_by."""
+        sha='a'*40
+        head_sha='b'*40
+        repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
+        summary={'number':30,'merged_at':'2026-11-07T01:46:28Z',
+                 'merge_commit_sha':sha,'base':{'ref':'main'},
+                 'head':{'ref':'release/1.1.0','sha':head_sha},
+                 'user':{'login':'howardjp'}}
+        self.assertNotIn('merged_by',summary)
+        detail={**summary,'merged_by':{'login':'howardjp'}}
+        runs=[{'name':name,'head_sha':head_sha,'status':'completed',
+               'conclusion':'success','app':{'slug':'github-actions'}}
+              for name in sorted(artifact.PROMOTION_CHECKS)]
+        checks={'total_count':len(runs),'check_runs':runs}
+        state={'detail':detail,'checks':checks}
+        used=[]
+        def github(path):
+            used.append(path)
+            if path==f"repos/{repo}/git/ref/heads/main":
+                return {'object':{'sha':sha}}
+            if path==f"repos/{repo}/pulls/30":
+                return state['detail']
+            if path==f"repos/{repo}/commits/{head_sha}/check-runs?filter=latest&per_page=100":
+                return state['checks']
+            raise AssertionError('Unexpected GitHub request: '+path)
+        def github_list(path):
+            used.append(path)
+            if path.startswith(f"repos/{repo}/commits/{sha}/pulls"):
+                return [summary]
+            if path.startswith(f"repos/{repo}/pulls/30/reviews"):
+                return []
+            raise AssertionError('Unexpected GitHub list: '+path)
+        with patch.dict(os.environ,{'GITHUB_REPOSITORY':repo}), \
+             patch.object(artifact.subprocess,'check_output',return_value=sha+'\n'), \
+             patch.object(artifact,'github',side_effect=github), \
+             patch.object(artifact,'github_list',side_effect=github_list):
+            c={'repository':repo,'targets':{'main':{}}}
+            artifact.guard(c,'main',sha)
+            self.assertIn(f"repos/{repo}/pulls/30",used)
+            for changed in [
+                {**detail,'merged_by':None},
+                {**detail,'merged_by':{'login':'someone-else'}},
+                {**detail,'head':{**detail['head'],'sha':'c'*40}},
+                {**detail,'merge_commit_sha':'c'*40},
+            ]:
+                with self.subTest(changed=changed):
+                    state['detail']=changed
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(c,'main',sha)
+            state['detail']=detail
+            state['checks']={'total_count':0,'check_runs':[]}
+            with self.assertRaises(AssertionError):
+                artifact.guard(c,'main',sha)
+
     def test_artifact_rejects_tampering_and_wrong_commit(self):
         c=artifact.read_config(ROOT);sha='a'*40
         with tempfile.TemporaryDirectory() as temp:
