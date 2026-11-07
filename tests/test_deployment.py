@@ -271,6 +271,56 @@ class PropagationTests(unittest.TestCase):
  def test_permanent_corruption_fails(self):self.check('permanent')
  def test_503_fails_without_retry(self):self.check('503')
 
+class PublicGitPreviewFallbackTests(unittest.TestCase):
+    """An anonymous GitHub REST refusal must not authorize an unverified preview."""
+    def loader(self):
+        import types
+        with patch.dict(sys.modules,{'native':types.SimpleNamespace(parse_preview_output=lambda v:v)}):
+            spec=importlib.util.spec_from_file_location('preview_fallback',ROOT/'scripts/deployment/pr-preview-verify.py')
+            module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        return module
+
+    def test_403_requires_current_branch_and_matching_virtual_merge(self):
+        module=self.loader();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
+        sha='a'*40;base='b'*40;virtual='c'*40
+        def lines(head=sha,target=base,prhead=sha,include_merge=True):
+            entries=[(head,'refs/heads/release/1.1.0'),(target,'refs/heads/main'),
+                     (prhead,'refs/pull/34/head')]
+            if include_merge:entries.append((virtual,'refs/pull/34/merge'))
+            return '\n'.join(h+'\t'+ref for h,ref in entries)+'\n'
+        class Result:
+            def __init__(self,text=''):self.stdout=text
+        def run(args,**kw):
+            if args[1]=='ls-remote':return Result(run.refs)
+            if args[1]=='fetch':return Result()
+            if args[1]=='cat-file':return Result('tree '+('d'*40)+'\nparent '+run.base+'\nparent '+sha+'\nauthor example\n')
+            if args[1]=='rev-parse':return Result(virtual+'\n')
+            raise AssertionError('unexpected git invocation '+repr(args))
+        run.refs=lines();run.base=base
+        with patch.object(artifact,'github',side_effect=AssertionError('Public GitHub verification denied or failed (403); never deploy without evidence')),patch.object(module.subprocess,'run',side_effect=run):
+            self.assertEqual(module.current_pr({'repository':repo},'release/1.1.0',sha),34)
+            for broken in [lines(head='e'*40),lines(prhead='e'*40),lines(include_merge=False)]:
+                run.refs=broken
+                with self.assertRaises(AssertionError):
+                    module.current_pr({'repository':repo},'release/1.1.0',sha)
+            run.refs=lines(target='e'*40)
+            with self.assertRaisesRegex(AssertionError,'merge parents'):
+                module.current_pr({'repository':repo},'release/1.1.0',sha)
+            run.refs=lines();run.base='e'*40
+            with self.assertRaisesRegex(AssertionError,'merge parents'):
+                module.current_pr({'repository':repo},'release/1.1.0',sha)
+        with patch.object(artifact,'github',side_effect=AssertionError('Superseded PR source must not upload')),patch.object(module.subprocess,'run') as git:
+            with self.assertRaisesRegex(AssertionError,'Superseded'):
+                module.current_pr({'repository':repo},'release/1.1.0',sha)
+            git.assert_not_called()
+
+    def test_other_rest_denials_do_not_trigger_fallback(self):
+        module=self.loader();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
+        with patch.object(artifact,'github',side_effect=AssertionError('Public GitHub verification denied or failed (401); never deploy without evidence')),patch.object(module.subprocess,'run') as git:
+            with self.assertRaisesRegex(AssertionError,'401'):
+                module.current_pr({'repository':repo},'release/1.1.0','a'*40)
+            git.assert_not_called()
+
 class ReleasePreviewTargetTests(unittest.TestCase):
     """PR previews respect GitFlow's exact target branch without main deployment."""
     def verifier(self):
