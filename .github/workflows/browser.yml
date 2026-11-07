@@ -27,12 +27,53 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Use the supported Ubuntu package mirror
+        run: |
+          if [ -f /etc/apt/apt-mirrors.txt ]; then
+            sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g' /etc/apt/apt-mirrors.txt
+          fi
       - run: npx playwright install --with-deps ${{ matrix.browser }}
         timeout-minutes: 5
       - run: npm run test:browser
         env:
           BROWSER: ${{ matrix.browser }}
           BUNDLE_FROZEN: 'true'
+      - run: npm run test:identity
+        timeout-minutes: 6
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - run: npm run test:grammar
+        timeout-minutes: 4
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - run: npm run test:reading
+        timeout-minutes: 5
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - run: npm run test:collections
+        timeout-minutes: 4
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - run: npm run test:navigation
+        timeout-minutes: 3
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+      - run: npm run test:workspaces
+        timeout-minutes: 3
+        env:
+          BROWSER: ${{ matrix.browser }}
+          BUNDLE_FROZEN: 'true'
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
       - run: node tests/docs-browser.mjs
         env:
           BROWSER: ${{ matrix.browser }}

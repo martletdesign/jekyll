@@ -1,1 +1,18 @@
-{"name":"nightjar-jekyll-verification","private":true,"type":"module","scripts":{"test:browser":"node tests/browser.mjs"},"devDependencies":{"@axe-core/playwright":"4.11.1","@playwright/test":"1.64.1"}}
+{
+  "name": "nightjar-jekyll-verification",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:browser": "node tests/browser.mjs",
+    "test:identity": "node tests/identity.mjs",
+    "test:reading": "node tests/reading.mjs",
+    "test:grammar": "node tests/grammar.mjs",
+    "test:navigation": "node tests/navigation.mjs",
+    "test:workspaces": "node tests/workspaces.mjs",
+    "test:collections": "node tests/collections.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.1",
+    "@playwright/test": "1.64.1"
+  }
+}

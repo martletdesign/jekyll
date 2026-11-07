@@ -1,0 +1,8 @@
+<div class="example-component-catalog">
+{% for block in include.record.sections %}
+  <section class="example-section example-component-catalog__entry" aria-labelledby="{{ block.id | escape }}">
+    <h2 id="{{ block.id | escape }}">{{ block.title | escape }}</h2>
+    <div class="example-prose">{{ block.body | markdownify | escape | nightjar_sanitize: site.baseurl }}</div>
+  </section>
+{% endfor %}
+</div>

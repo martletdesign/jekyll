@@ -1,0 +1,15 @@
+{%- assign hero_variant = page.hero_variant | default: '' -%}
+{%- assign hero_art = page.hero_image | default: '' | strip -%}
+{%- if hero_variant == '' -%}
+  {%- if hero_art != '' -%}
+    {%- if page.url == '/' -%}{%- assign hero_variant = 'signature' -%}{%- else -%}{%- assign hero_variant = 'section' -%}{%- endif -%}
+  {%- else -%}{%- assign hero_variant = 'compact' -%}{%- endif -%}
+{%- endif -%}
+{%- assign supported_hero_variants = 'signature,section,compact,plain' | split: ',' -%}
+{%- unless supported_hero_variants contains hero_variant -%}{%- assign hero_variant = 'compact' -%}{%- endunless -%}
+{%- if hero_variant == 'signature' and page.url != '/' -%}{%- assign hero_variant = 'compact' -%}{%- endif -%}
+{%- assign hero_has_image = false -%}
+{%- if hero_art != '' -%}
+  {%- if hero_variant == 'signature' or hero_variant == 'section' -%}{%- assign hero_has_image = true -%}{%- endif -%}
+{%- endif -%}
+{%- if page.dashboard -%}{%- assign hero_variant = 'plain' -%}{%- assign hero_has_image = false -%}{%- endif -%}

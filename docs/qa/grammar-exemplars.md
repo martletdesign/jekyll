@@ -1,0 +1,25 @@
+# Martlet grammar reconciliation: first reference exemplars
+
+Tracks [work order #91](https://github.com/k3jph/design-workbench/issues/91) and the [audit #92](https://github.com/k3jph/design-workbench/pull/92). Baseline is `ac0a64c6cd5167ccbdf96bb20e46e5d547a49a5d`, after the accepted hero composition work. This wave changes three recipes, not the other 47. `_data/examples.json`, route generation, stable section IDs, controller modules, source shell, canonical tokens, imagery and warm site-wide chrome/footer remain unchanged.
+
+## Sources and classification
+
+The source authority is [jameshoward.us](https://jameshoward.us/), observed directly on 2026-11-03, including its served `/_astro/BaseLayout.Vddcf7CK.css`. The homepage groups the latest writing, projects, subjects and archives by task; articles remain grouped within those regions. This supplies evidence for relationships and ordered attention, not a requirement to copy the homepage onto every document. The existing Jekyll left document index is retained; its purpose and reflow follow the [Martlet grammar](https://github.com/k3jph/design-workbench/blob/main/docs/languages/martlet/grammar.md), especially relationships, readable sequence, frame selection and continuity. Cambo supports reading; Lato supports interface and date context. No new palette or ornamental badge represents the language.
+
+The current Martlet React catalog (`examples/react-catalog/src/app.tsx` on `develop`) is supporting implementation evidence for bounded article and collection-to-reading organization. It is not a replacement authority. The Jekyll component reference contains four capability sections, not React's separate 22-component inventory; no component records or capabilities have been invented.
+
+## Three decisions
+
+| Route | Task and composition | Preserved content and behavior | Classification |
+|---|---|---|---|
+| `faq` | Two related reading groups place orientation questions before local behavior. The question remains its native disclosure trigger; expanded help stays beside that question. No individual question card or custom disclosure script. | Four exact questions and answers, original order, `questions` anchor, Enter/Space native toggle and no-JavaScript access. Group labels and `faq-about`/`faq-using` IDs match the paired Krigsvold rendition. | Contextual translation of proximity and readable sequence. |
+| `changelog` | A chronological list places release/version and date context in a margin beside the complete account of that release. At narrow widths the context precedes the body in reading order. | Full original headings, `v1-2`/`v1-1`/`v1-0` anchors, bodies and migration instructions. Machine dates derive from existing headings; no new release facts. | Contextual translation of sequence and contextual annotation. |
+| `dashboard-components` | An annotated reference catalog keeps the browse index and a bounded reading sequence. Each capability's heading and explanatory text form one unit, with stronger separation between subjects than within an entry. It remains reference material rather than becoming an application dashboard. | All four original sections (`composition`, `metrics`, `behaviour`, `authority`), full text and links. No invented 22-item catalog, new disclosure state, dependency or controller. | Application-reference extension of the existing document index/reading relationship. |
+
+The former 46rem limit wrapped both the 14rem index and the article. Only these three examples now use the existing 74rem overall measure, preserving an independently bounded 46rem reading column. The index reflows above the article at 64rem. Other document and collection distinctions remain intact. Wave 2 must audit the same total-wrapper constraint on guide, privacy, terms, article and stress-test against the source’s independent index and bounded reading body; preserving their semantics does not justify an incorrect reading measure. This is a reading-task decision, not an application-wide article layout. Pricing and patterns retain their existing FAQ renderer; this first wave does not relabel their questions.
+
+## Verification and limits
+
+`tests/grammar.mjs` tests the three actual generated routes at 320, 768 and 1440px, light/dark, root and `/preview` (36 cases), plus six no-JavaScript cases. It checks exact question/answer/body/title text, section anchors, machine dates, native keyboard behavior, 200% text reflow, forced colors, print answer visibility, no horizontal page overflow and full-page axe. Accessibility scans have individual deadlines, cleanup is bounded, and the overall test deadline fails after four minutes. The existing three-engine/max-two CI matrix runs this gate without adding workflow dispatches or matrix jobs. Existing 50-recipe and hero gates remain enabled.
+
+Paired source-data equivalence, independent masked screenshots and visual review are separate acceptance evidence. Automated checks do not establish universal language fidelity or manual assistive-technology certification. Subsequent document, collection/detail/landing/dossier and workspace decisions remain outside this first implementation wave.

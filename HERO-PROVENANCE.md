@@ -1,0 +1,17 @@
+# Approved responsive Martlet panorama
+
+The maintainer-supplied `martlet-krigsvold-approved-responsive-heroes.zip` (SHA-256 `2b1e7baa26ef3aef804c06a8c4817a84f59e3f13f3ad974f23f32c7048108649`) supersedes the earlier 1536px panorama. The approved 2172 × 724 PNG master depicts a footless martlet in an illuminated sunset. It is host-owned decorative artwork, not a substitute heraldic mark or a photograph taken from jameshoward.us. The master and all five supplied WebP derivatives are retained byte-for-byte with checksums in `assets/images/heroes/PROVENANCE.json`. No optional 16:9 crop, regenerated artwork, color grading, or external image hotlink is used.
+
+The complete panorama remains uncropped at every viewport. An independent fixed-navigation band prevents the menu from covering the upper wing. Narrow screens through 768px display the complete image above the text on a solid warm-ink field. Larger screens overlay a bounded left text column while keeping the bird and wing tips clear. Native `srcset` selects among 640, 960, 1440, 1920 and 2172px WebPs, with intrinsic dimensions and a 3:1 frame. The archival PNG is not referenced by rendered markup and is not a runtime image request.
+
+## Source authority and contextual gold treatment
+
+https://jameshoward.us/ remains the authority for existing Martlet palette, typography, spacing and navigation; its blue identity is unchanged. The exported `assets/css/shell.css`, `assets/css/fonts.css`, and canonical navy, blue, gold and cream definitions are unchanged. The illustrated Jekyll homepage is a contextual composition: layered CSS adds deep warm ink / bronze at left, translucent antique gold through the center, and a restrained right-edge tint that preserves the approved bird and sunset. None of that tint is baked into the files or redefined as a core color token.
+
+Cream typography and gold accents retain the original source roles. Illustrated top navigation is transparent over a protected warm hero field; the full panorama begins below the fixed controls, including at desktop sizes where the appearance button would otherwise cross the upper wing tip. Only this homepage uses burnished-brown open/scrolled navigation with cream links and gold current/hover cues. Other pages retain their canonical navy/cream header states. Other mastheads remain image-free. Without JavaScript the source header remains in flow, and the complete image still loads. Image failure preserves the reserved image space and readable warm-ink text region. Forced colors and print remove decoration and use appropriate readable colors.
+
+`hero_image` remains the opt-in property. New `hero_image_variants` entries provide all supplied WebP widths; the earlier optional small/medium front-matter shape remains supported for copied consumers. Every image URL passes through `relative_url`, including `/preview`.
+
+## Verification limits
+
+The existing 50 recipe assertions remain intact. Checks cover root and subpath, 320/375/640/768/1024/1440/1920/3440px, light/dark, uncropped aspect and header separation, one selected image download, no-JavaScript, image failure, forced colors, print and menu keyboard/focus behavior. Exact checksums and complete source archives preserve the approved bytes. Axe incomplete findings remain incomplete; independent screenshot/text-contrast review is separate, and neither automated checks nor source hashes certify manual assistive technology or copyright ownership.

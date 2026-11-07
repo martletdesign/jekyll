@@ -1,0 +1,9 @@
+{
+  "name": "jekyll-cloudflare-deployment",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Pinned non-publishing deployment tooling",
+  "dependencies": {
+    "wrangler": "4.156.2"
+  }
+}
