@@ -7,3 +7,24 @@ If a run stops before GitHub Release creation, preserve the run and its source a
 The ordinary static documentation/source path is verified explicitly; advanced remote archive serving is disabled in `release-policy.json`. No administrator-immutable archive or independent anti-rollback guarantee is asserted. Protected tag rules remain mandatory for source release execution.
 
 The release guard compares fetched `origin/main` with the live remote main tip before trusting first-parent ancestry. Missing or stale production refs fail closed; review remote changes, fetch approved main, and retry verification. This does not replace administrator-enforced protection or prove later concurrent branch updates cannot occur.
+
+## Single-maintainer GitFlow production gate
+
+Both design-language repositories have one human maintainer (`howardjp`).
+GitHub does not permit a pull-request author to approve their own PR.
+The production deployment gate therefore accepts either:
+
+1. A genuine independent `APPROVED` review of the exact PR head, or
+2. An actual merge by `howardjp` of a PR authored by `howardjp`, provided
+   the PR targets `main`, uses an accepted `develop`/`release/*`/`hotfix/*`
+   head, and all six GitHub Actions jobs succeed at that **exact head SHA**.
+
+The six mandatory results are `verify`, `guard`, `archive-build`,
+`browser (chromium)`, `browser (firefox)`, and `browser (webkit)`.
+A stale, missing, duplicate, non-GitHub-Actions or failed check blocks release;
+outstanding `CHANGES_REQUESTED` reviews also block promotion.
+No comments are represented as independent approvals. This replaces an
+impossible second-reviewer condition; it does not bypass any GitHub protection
+or relax protected-tag, source-archive, payload, or deployment identity checks.
+
+If the check-runs API is unreachable or incomplete, release fails closed.

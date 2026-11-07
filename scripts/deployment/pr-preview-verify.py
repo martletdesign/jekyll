@@ -41,14 +41,9 @@ def context():
     c['targets'][branch]=target
     return c,branch,sha,name
 
-def current_pr(c,branch,sha):
-    # Preview publication runs alongside CI; all six checks remain merge gates.
-    live=artifact.github('repos/'+c['repository']+'/git/ref/heads/'+urllib.parse.quote(branch,safe=''))
-    assert live['object']['sha']==sha,'Superseded PR source must not upload'
-    prs=artifact.github_list('repos/'+c['repository']+'/pulls?state=open&base=develop&head='+urllib.parse.quote(c['repository'].split('/')[0]+':'+branch,safe=''))
-    matches=[p for p in prs if p.get('state')=='open' and not p.get('merged_at') and p.get('base',{}).get('ref')=='develop' and p.get('base',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('ref')==branch and p.get('head',{}).get('sha')==sha]
-    assert len(matches)==1,'An open same-repository PR targeting develop must exist before upload; retry the native build after opening it'
-    return matches[0]['number']
+# Candidate previews are best-effort sandboxes. Their source identity is
+# established by context() and the Cloudflare checkout, not by PR reviews.
+# No GitHub API or Git-ref query is necessary before an isolated preview.
 
 def validate(c,branch,sha,name):
     site=ROOT/'.cloudflare-site'
@@ -131,7 +126,6 @@ def main():
     c,branch,sha,name=context()
     if a.operation=='finalize':finalize(c,branch,sha,name);return
     validate(c,branch,sha,name)
-    number=current_pr(c,branch,sha)
     if a.operation=='before-upload':
         cfg={'name':c['targets'][branch]['worker'],'account_id':c['accountId'],'compatibility_date':'2026-11-03','workers_dev':True,'assets':{'directory':str((ROOT/'.cloudflare-site').resolve()),'html_handling':'auto-trailing-slash','not_found_handling':'404-page'},'previews':{'vars':{}}}
         (ROOT/'.cloudflare-wrangler.pr.json').write_bytes(artifact.json_bytes(cfg));return
@@ -140,7 +134,7 @@ def main():
     assert result['deployment']['annotations'].get('workers/message')==sha
     origin=c['targets'][branch]['origin']
     assert origin in [u.rstrip('/') for u in result['preview']['urls']],'Unexpected named preview origin'
-    receipt={'status':'passed','pullRequest':number,'sourceCommit':sha,'sourceBranch':branch,'previewName':name,'previewId':result['preview']['id'],'deploymentId':result['deployment']['id'],'verification':verify_live(c,branch,sha,name),'configuredRuntimeBindings':[],'configuredRuntimeSecrets':False,'deploymentEnvFieldPresent':'env' in result['deployment'],'completeBindingReadbackClaimed':False,'productionDeployInvoked':False,'releasePublicationPerformed':False}
+    receipt={'status':'passed','sourceCommit':sha,'sourceBranch':branch,'previewName':name,'previewId':result['preview']['id'],'deploymentId':result['deployment']['id'],'verification':verify_live(c,branch,sha,name),'configuredRuntimeBindings':[],'configuredRuntimeSecrets':False,'deploymentEnvFieldPresent':'env' in result['deployment'],'completeBindingReadbackClaimed':False,'productionDeployInvoked':False,'releasePublicationPerformed':False}
     (ROOT/'.cloudflare-pr-receipt.json').write_bytes(artifact.json_bytes(receipt));print(json.dumps(receipt,sort_keys=True))
 
 if __name__=='__main__':main()

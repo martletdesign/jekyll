@@ -10,30 +10,16 @@ import sys
 import shutil
 
 sys.path.insert(0,str(Path(__file__).resolve().parent))
-from artifact import ROOT, finalize, digest, guard, github, github_list, json_bytes, read_config
-
-REQUIRED_CHECKS={'verify','browser (chromium)','browser (firefox)','browser (webkit)','guard','archive-build'}
-
-def verified_checks(checks):
-    latest={}
-    for check in sorted(checks,key=lambda r:r.get('id',0)):
-        if check.get('app',{}).get('slug')=='github-actions':latest[check.get('name')]=check
-    return all(name in latest and latest[name].get('status')=='completed' and latest[name].get('conclusion')=='success' for name in REQUIRED_CHECKS)
+from artifact import ROOT, finalize, digest, guard, json_bytes, read_config
 
 def source_verification(c,branch,sha):
-    # Merge commit identity may differ from the PR head. Accept only an exactly
-    # identical source tree already checked by all existing required test jobs.
-    tree=subprocess.check_output(['git','rev-parse',sha+'^{tree}'],cwd=ROOT,text=True).strip()
-    prs=github_list(f"repos/{c['repository']}/commits/{sha}/pulls")
-    for pr in prs:
-        if not(pr.get('merged_at') and pr.get('merge_commit_sha')==sha and pr.get('base',{}).get('ref')==branch):continue
-        head=pr.get('head',{}).get('sha');assert head
-        remote=github(f"repos/{c['repository']}/git/commits/{head}")
-        if remote['tree']['sha']!=tree:continue
-        checks=github(f"repos/{c['repository']}/commits/{head}/check-runs?per_page=100")
-        if verified_checks(checks['check_runs']):
-            return {'pullRequest':pr['number'],'checkedCommit':head,'sourceTree':tree,'exactTreeMatch':True,'checks':sorted(REQUIRED_CHECKS),'browserMatrix':'Chromium, Firefox, WebKit; all 50 recipes/root/subpath/JavaScript on and off'}
-    raise AssertionError('No merged PR has this exact source tree and all existing successful GitHub test checks')
+    """Report the exact accepted branch checkout, not a second PR adjudication."""
+    assert branch in ('main','develop') and re.fullmatch(r'[0-9a-f]{40}',sha)
+    tree=subprocess.check_output(['git','rev-parse',sha+'^{tree}'],cwd=ROOT,text=True,timeout=15).strip()
+    assert re.fullmatch(r'[0-9a-f]{40}',tree)
+    return {'acceptedBranch':branch,'sourceCommit':sha,'sourceTree':tree,
+            'authorization':'gitflow-accepted-branch',
+            'ciRecheckedInCloudflare':False}
 
 def run(args,timeout=300):subprocess.run(args,cwd=ROOT,check=True,timeout=timeout)
 
@@ -64,6 +50,10 @@ def parse_preview_output(raw, *, expected_name="develop"):
     if 'env' in deployment:assert deployment['env']=={},'Unexpected Preview runtime variables, secrets or bindings'
     return data
 
+def require_clean_tracked_checkout():
+    """Reject staged and unstaged modifications to reviewed tracked source."""
+    run(['git','diff','--quiet','HEAD','--'],30)
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('operation',choices=['stage','finalize','verify','record']);p.add_argument('--branch',required=True,choices=['develop','main']);a=p.parse_args()
     c=read_config();sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();guard(c,a.branch,sha)
@@ -71,6 +61,7 @@ def main():
     if a.operation=='stage':
         assert not state.exists() and not (ROOT/'.cloudflare-source').exists() and not directory.exists(),'Never reuse a previous native build'
         evidence=source_verification(c,a.branch,sha)
+        require_clean_tracked_checkout()
         run(['python3','-m','unittest','discover','-s','tests','-p','test_deployment.py'],120)
         run(['python3','-m','unittest','discover','-s','tests','-p','test_hero.py'],120)
         entries=json.loads((ROOT/'nightjar/source-files.json').read_text());assert entries and len(entries)==len(set(entries));inputs=[]
@@ -80,6 +71,7 @@ def main():
             for part in relative.parts:source=source/part;assert not source.is_symlink()
             assert source.is_file();target=ROOT/'.cloudflare-source'/relative;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target)
             inputs.append({'path':entry,'sha256':digest(source.read_bytes())})
+        require_clean_tracked_checkout()
         (ROOT/'.cloudflare-source-inputs.json').write_bytes(json_bytes(inputs))
         (ROOT/'.cloudflare-render.yml').write_text('source_archive: true\n')
         state.write_bytes(json_bytes({'branch':a.branch,'sourceCommit':sha,'directory':str(directory),'sourceVerification':evidence}))

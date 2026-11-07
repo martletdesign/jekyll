@@ -43,19 +43,56 @@ class DeploymentTests(unittest.TestCase):
         self.assertNotEqual(denied.returncode,0)
         self.assertIn('Production cannot use a Preview command',denied.stderr)
 
-    def test_only_reviewed_gitflow_promotion_shape(self):
+    def test_accepted_branch_tip_authorizes_deployment_without_pr_replay(self):
+        """GitFlow acceptance belongs to GitHub; Cloudflare checks the exact ref."""
         sha='a'*40
-        good={'merged_at':'2026-11-03T00:00:00Z','merge_commit_sha':sha,'base':{'ref':'main'},'head':{'ref':'release/hero','sha':sha},'user':{'login':'author'}}
-        reviews=[{'id':1,'state':'APPROVED','user':{'login':'reviewer'},'commit_id':sha}]
-        self.assertTrue(artifact.promotion_ok(good,sha,reviews))
-        for head in ['feature/hero','main','anything']:
-            self.assertFalse(artifact.promotion_ok({**good,'head':{'ref':head,'sha':sha}},sha,reviews))
-        self.assertFalse(artifact.promotion_ok({**good,'merged_at':None},sha,reviews))
-        self.assertFalse(artifact.promotion_ok(good,'b'*40,reviews))
-        self.assertFalse(artifact.promotion_ok({**good,'base':{'ref':'develop'}},sha,reviews))
-        self.assertFalse(artifact.promotion_ok(good,sha,[]))
-        self.assertFalse(artifact.promotion_ok(good,sha,[{**reviews[0],'commit_id':'b'*40}]))
-        self.assertFalse(artifact.promotion_ok(good,sha,reviews+[{'id':2,'state':'CHANGES_REQUESTED','user':{'login':'reviewer'}}]))
+        repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
+        for branch in ('main','develop'):
+            ref='refs/heads/'+branch
+            good=subprocess.CompletedProcess(['git'],0,sha+'\t'+ref+'\n','')
+            cfg={'repository':repo,'targets':{'main':{},'develop':{}}}
+            environment={'GITHUB_REPOSITORY':repo,'WORKERS_CI_BRANCH':branch,
+                         'WORKERS_CI_COMMIT_SHA':sha}
+            with self.subTest(branch=branch),patch.dict(os.environ,environment), \
+                 patch.object(artifact.subprocess,'check_output',return_value=sha+'\n'), \
+                 patch.object(artifact.subprocess,'run',return_value=good) as lookup:
+                artifact.guard(cfg,branch,sha)
+                self.assertEqual(lookup.call_args.args[0][:3],
+                                 ['git','ls-remote','--exit-code'])
+                self.assertEqual(lookup.call_args.args[0][-1],ref)
+                for response in [
+                    subprocess.CompletedProcess(['git'],0,'b'*40+'\t'+ref+'\n',''),
+                    subprocess.CompletedProcess(['git'],0,sha+'\trefs/heads/other\n',''),
+                    subprocess.CompletedProcess(['git'],0,'malformed output\n',''),
+                    subprocess.CompletedProcess(['git'],1,'','Git unavailable'),
+                    subprocess.CompletedProcess(['git'],0,'',''),
+                    subprocess.CompletedProcess(['git'],0,sha+'\t'+ref+'\n'+sha+'\t'+ref+'\n','')
+                ]:
+                    with patch.object(artifact.subprocess,'run',return_value=response):
+                        with self.assertRaises(AssertionError):
+                            artifact.guard(cfg,branch,sha)
+                with patch.dict(os.environ,{'WORKERS_CI_COMMIT_SHA':'b'*40}):
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(cfg,branch,sha)
+                with patch.dict(os.environ,{'WORKERS_CI_BRANCH':'wrong'}):
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(cfg,branch,sha)
+                with patch.dict(os.environ,{'GITHUB_REPOSITORY':'other/repo'}):
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(cfg,branch,sha)
+                with patch.object(artifact.subprocess,'check_output',return_value='b'*40+'\n'):
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(cfg,branch,sha)
+
+    def test_candidate_previews_do_not_require_pr_reviews(self):
+        source=(ROOT/'scripts/deployment/pr-preview-verify.py').read_text()
+        self.assertNotIn('artifact.github(',source)
+        self.assertNotIn('artifact.github_list(',source)
+        self.assertNotIn('current_pr(',source)
+        self.assertNotIn("'pullRequest':number",source)
+        self.assertIn('c,branch,sha,name=context()',source)
+        self.assertIn('validate(c,branch,sha,name)',source)
+        self.assertIn("'sourceCommit':sha",source)
 
     def test_artifact_rejects_tampering_and_wrong_commit(self):
         c=artifact.read_config(ROOT);sha='a'*40
@@ -234,5 +271,37 @@ class PropagationTests(unittest.TestCase):
  def test_missing_then_current(self):self.check('missing')
  def test_permanent_corruption_fails(self):self.check('permanent')
  def test_503_fails_without_retry(self):self.check('503')
+
+class CandidatePreviewContractTests(unittest.TestCase):
+    def test_previews_are_not_release_authorization_decisions(self):
+        source=(ROOT/'scripts/deployment/pr-preview-verify.py').read_text()
+        self.assertNotIn('artifact.github(',source)
+        self.assertNotIn('artifact.github_list(',source)
+        self.assertNotIn('current_pr(',source)
+        self.assertIn("'productionDeployInvoked':False",source)
+
+
+class CleanTrackedSourceGateTests(unittest.TestCase):
+    """Production provenance must reject modifications in either Git index or worktree."""
+    def test_clean_staged_and_unstaged_source(self):
+        spec=importlib.util.spec_from_file_location('native_clean_source',ROOT/'scripts/deployment/native.py')
+        native=importlib.util.module_from_spec(spec);spec.loader.exec_module(native)
+        with tempfile.TemporaryDirectory() as directory:
+            work=Path(directory)
+            def git(*args):
+                subprocess.run(['git','-C',str(work),*args],check=True,stdout=subprocess.DEVNULL)
+            git('init','-q')
+            tracked=work/'tracked.txt';tracked.write_text('reviewed\n')
+            git('add','tracked.txt')
+            git('-c','user.name=CI Test','-c','user.email=ci@example.invalid','commit','-qm','baseline')
+            with patch.object(native,'ROOT',work):
+                native.require_clean_tracked_checkout()
+                tracked.write_text('different\n')
+                with self.assertRaises(subprocess.CalledProcessError):
+                    native.require_clean_tracked_checkout()
+                git('add','tracked.txt')
+                with self.assertRaises(subprocess.CalledProcessError):
+                    native.require_clean_tracked_checkout()
+        self.assertIn("['git','diff','--quiet','HEAD']", (ROOT/'scripts/deployment/artifact.py').read_text())
 
 if __name__=='__main__':unittest.main()

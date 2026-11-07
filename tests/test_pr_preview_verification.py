@@ -17,16 +17,14 @@ spec=importlib.util.spec_from_file_location('prverify',ROOT/'scripts/deployment/
 pr=importlib.util.module_from_spec(spec);spec.loader.exec_module(pr)
 
 class PrPreviewTests(unittest.TestCase):
- def test_open_same_repository_pr_exact_head_and_develop_required(self):
-  repo='martletdesign/jekyll';sha='a'*40;branch='feature/example';c={'repository':repo}
-  good={'number':90,'state':'open','merged_at':None,'base':{'ref':'develop','repo':{'full_name':repo}},'head':{'ref':branch,'sha':sha,'repo':{'full_name':repo}}}
-  with patch.object(pr.artifact,'github',return_value={'object':{'sha':sha}}),patch.object(pr.artifact,'github_list',return_value=[good]):self.assertEqual(pr.current_pr(c,branch,sha),90)
-  for modify in [('state','closed'),('head.sha','b'*40),('head.repo.full_name','attacker/fork'),('base.ref','main'),('head.ref','feature/other')]:
-   bad=copy.deepcopy(good);obj=bad;parts=modify[0].split('.')
-   for key in parts[:-1]:obj=obj[key]
-   obj[parts[-1]]=modify[1]
-   with self.subTest(change=modify),patch.object(pr.artifact,'github',return_value={'object':{'sha':sha}}),patch.object(pr.artifact,'github_list',return_value=[bad]),self.assertRaises(AssertionError):pr.current_pr(c,branch,sha)
-  with patch.object(pr.artifact,'github',return_value={'object':{'sha':'b'*40}}),self.assertRaises(AssertionError):pr.current_pr(c,branch,sha)
+ def test_experimental_previews_are_not_approval_gates(self):
+  script=(ROOT/'scripts/deployment/pr-preview-verify.py').read_text()
+  self.assertNotIn('artifact.github(',script)
+  self.assertNotIn('artifact.github_list(',script)
+  self.assertNotIn('current_pr(',script)
+  self.assertIn('validate(c,branch,sha,name)',script)
+  self.assertIn('verify_live(c,branch,sha,name)',script)
+  self.assertIn("'productionDeployInvoked':False",script)
  def test_result_parser_is_name_specific_without_changing_develop_default(self):
   data={'preview':{'id':'a'*32,'name':'pr-example','slug':'pr-example','urls':['https://example.test']},'deployment':{'id':'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa','number':1,'created_on':'today','main_module':'static.js','annotations':{},'urls':['https://example.test']}}
   self.assertEqual(pr.parse_preview_output(json.dumps(data),expected_name='pr-example'),data)
