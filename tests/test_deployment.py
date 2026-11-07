@@ -335,7 +335,7 @@ class PublicGitPreviewFallbackTests(unittest.TestCase):
             module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
         return module
 
-    def test_403_requires_current_branch_and_matching_virtual_merge(self):
+    def test_transient_rest_denials_require_exact_git_pr_merge(self):
         module=self.loader();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
         sha='a'*40;base='b'*40;virtual='c'*40
         def lines(head=sha,target=base,prhead=sha,include_merge=True):
@@ -352,7 +352,11 @@ class PublicGitPreviewFallbackTests(unittest.TestCase):
             if args[1]=='rev-parse':return Result(virtual+'\n')
             raise AssertionError('unexpected git invocation '+repr(args))
         run.refs=lines();run.base=base
-        with patch.object(artifact,'github',side_effect=AssertionError('Public GitHub verification denied or failed (403); never deploy without evidence')),patch.object(module.subprocess,'run',side_effect=run):
+        for status in (403,429,502,503,504):
+            with self.subTest(http_status=status),patch.object(artifact,'github',side_effect=AssertionError(f'Public GitHub verification denied or failed ({status}); never deploy without evidence')),patch.object(module.subprocess,'run',side_effect=run):
+                run.refs=lines();run.base=base
+                self.assertEqual(module.current_pr({'repository':repo},'release/1.1.0',sha),34)
+        with patch.object(artifact,'github',side_effect=AssertionError('Public GitHub verification denied or failed (504); never deploy without evidence')),patch.object(module.subprocess,'run',side_effect=run):
             self.assertEqual(module.current_pr({'repository':repo},'release/1.1.0',sha),34)
             for broken in [lines(head='e'*40),lines(prhead='e'*40),lines(include_merge=False)]:
                 run.refs=broken
@@ -371,6 +375,11 @@ class PublicGitPreviewFallbackTests(unittest.TestCase):
 
     def test_other_rest_denials_do_not_trigger_fallback(self):
         module=self.loader();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
+        for code in (400,401,404,422,500):
+            with self.subTest(http_status=code),patch.object(artifact,'github',side_effect=AssertionError(f'Public GitHub verification denied or failed ({code}); never deploy without evidence')),patch.object(module.subprocess,'run') as git:
+                with self.assertRaisesRegex(AssertionError,str(code)):
+                    module.current_pr({'repository':repo},'release/1.1.0','a'*40)
+                git.assert_not_called()
         with patch.object(artifact,'github',side_effect=AssertionError('Public GitHub verification denied or failed (401); never deploy without evidence')),patch.object(module.subprocess,'run') as git:
             with self.assertRaisesRegex(AssertionError,'401'):
                 module.current_pr({'repository':repo},'release/1.1.0','a'*40)
