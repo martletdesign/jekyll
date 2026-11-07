@@ -26,7 +26,7 @@ Local Jekyll builds and rendered-link checks run for both families at deployment
 
 Desktop cloud-browser checks compared analytics metrics and filtered source rows across both languages, exercised administration confirmation and draft validation, and checked operational threshold and acknowledgement changes. The shared fixture and source shell hashes are checked automatically.
 
-The checked-in Jekyll CI adds paired browser workflows, initial-data parity, validation and error recovery, cancellation, safe text rendering, mobile sidebar keyboard behaviour, 320/768/1100/1440px reflow, and light/dark axe checks. It saves screenshots and failure traces. Those PR checks are the authoritative final acceptance result. Existing workbench CI continues to test the original component packages and examples.
+The checked-in Jekyll CI adds paired browser workflows, initial-data parity, validation and error recovery, cancellation, safe text rendering, mobile sidebar keyboard behaviour, 320/768/1100/1440px reflow, and light/dark axe checks. It saves screenshots and failure traces as advisory quality evidence. Under the [GitFlow acceptance policy](https://github.com/k3jph/design-workbench/blob/develop/docs/GITFLOW-ACCEPTANCE.md), Jekyll's required check is `verify`, zero human reviews are required, and integration into an accepted branch is the acceptance event. Existing workbench CI continues to test the original component packages and examples.
 
 ## Remaining limits and recommended next work
 

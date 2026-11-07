@@ -48,9 +48,6 @@ def read_config(root=ROOT):
     assert c['targets']['develop']['origin']=='https://develop-'+c['family']+'design-jekyll-reference.k3jph.workers.dev'
     return c
 
-# Both organizations have one human maintainer. Their production gate must
-# verify source, review state and exact-head CI; it must not demand a second
-# reviewer who cannot exist. Separate protected tag rules remain unchanged.
 # GitHub owns acceptance of main/develop through its branch rules and CI.
 # Cloudflare checks only that it is building the current accepted ref, and
 # separately verifies artifact integrity before and after publication.
