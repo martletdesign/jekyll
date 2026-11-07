@@ -82,7 +82,7 @@ def promotion_ok(pr, sha, reviews, checks):
     independent_approval=any(r.get('state')=='APPROVED' and r.get('commit_id')==head.get('sha') and
                              login and login!=pr.get('user',{}).get('login') for login,r in latest.items())
     sole_maintainer_merge=(pr.get('user',{}).get('login')==SOLO_MAINTAINER and
-                            pr.get('merged_by',{}).get('login')==SOLO_MAINTAINER)
+                            (pr.get('merged_by') or {}).get('login')==SOLO_MAINTAINER)
     return independent_approval or sole_maintainer_merge
 
 def github(path):
