@@ -51,80 +51,31 @@ def read_config(root=ROOT):
 # Both organizations have one human maintainer. Their production gate must
 # verify source, review state and exact-head CI; it must not demand a second
 # reviewer who cannot exist. Separate protected tag rules remain unchanged.
-SOLO_MAINTAINER = 'howardjp'
-PROMOTION_CHECKS = frozenset({'verify','guard','archive-build',
-                              'browser (chromium)','browser (firefox)','browser (webkit)'})
-
-def promotion_checks_ok(head, checks):
-    if not SHA.fullmatch(head or '') or not isinstance(checks,dict):return False
-    runs=checks.get('check_runs')
-    if not isinstance(runs,list) or checks.get('total_count')!=len(runs) or len(runs)>100:return False
-    for name in PROMOTION_CHECKS:
-        matching=[run for run in runs if run.get('name')==name]
-        if len(matching)!=1:return False
-        run=matching[0]
-        if (run.get('head_sha')!=head or run.get('status')!='completed' or
-                run.get('conclusion')!='success' or
-                run.get('app',{}).get('slug')!='github-actions'):return False
-    return True
-
-def promotion_ok(pr, sha, reviews, checks):
-    head=pr.get('head',{})
-    shape=(pr.get('merged_at') is not None and pr.get('merge_commit_sha')==sha and
-           pr.get('base',{}).get('ref')=='main' and
-           (head.get('ref')=='develop' or head.get('ref','').startswith(('release/','hotfix/'))))
-    if not shape or not promotion_checks_ok(head.get('sha'),checks):return False
-    latest={}
-    for review in sorted(reviews,key=lambda r:r.get('id',0)):
-        if review.get('state') in ('APPROVED','CHANGES_REQUESTED','DISMISSED'):
-            latest[review.get('user',{}).get('login')]=review
-    if any(r.get('state')=='CHANGES_REQUESTED' for r in latest.values()):return False
-    independent_approval=any(r.get('state')=='APPROVED' and r.get('commit_id')==head.get('sha') and
-                             login and login!=pr.get('user',{}).get('login') for login,r in latest.items())
-    sole_maintainer_merge=(pr.get('user',{}).get('login')==SOLO_MAINTAINER and
-                            (pr.get('merged_by') or {}).get('login')==SOLO_MAINTAINER)
-    return independent_approval or sole_maintainer_merge
-
-def github(path):
-    headers={'Accept':'application/vnd.github+json','User-Agent':'JekyllNativeBuildVerification','X-GitHub-Api-Version':'2022-11-28'}
-    token=os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
-    if token:headers['Authorization']='Bearer '+token
-    code,b,_=request('https://api.github.com/'+path,headers=headers)
-    assert code==200,f'Public GitHub verification denied or failed ({code}); never deploy without evidence'
-    return json.loads(b)
-
-def github_list(path):
-    result=[];page=1
-    while True:
-        values=github(path+('&' if '?' in path else '?')+f'per_page=100&page={page}')
-        assert isinstance(values,list)
-        result.extend(values)
-        if len(values)<100:return result
-        page+=1;assert page<=20,'Unexpected GitHub pagination'
-
+# GitHub owns acceptance of main/develop through its branch rules and CI.
+# Cloudflare checks only that it is building the current accepted ref, and
+# separately verifies artifact integrity before and after publication.
+# No PR-history, reviewer, or CI API reconstruction belongs here.
 def guard(c, branch, sha):
-    assert branch in c['targets'] and SHA.fullmatch(sha),'Only exact main/develop commits can deploy'
-    assert os.environ.get('GITHUB_REPOSITORY',c['repository'])==c['repository']
-    assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()==sha
-    live=github(f"repos/{c['repository']}/git/ref/heads/{branch}")
-    assert live['object']['sha']==sha,'Superseded commit must not deploy'
-    if branch=='main':
-        prs=github_list(f"repos/{c['repository']}/commits/{sha}/pulls")
-        approved=False
-        for summary in prs:
-            # The commit-associated PR collection is a GitHub summary response
-            # and does not contain merged_by. Fetch the actual PR resource:
-            # only it establishes who merged the production promotion.
-            number=summary.get('number')
-            head=summary.get('head',{}).get('sha','')
-            if not isinstance(number,int) or number<1 or not SHA.fullmatch(head):continue
-            pr=github(f"repos/{c['repository']}/pulls/{number}")
-            assert pr.get('number')==number and pr.get('head',{}).get('sha')==head, 'Full promotion PR identity differs from commit association'
-            assert pr.get('merge_commit_sha')==sha, 'Full promotion PR does not identify the current production commit'
-            reviews=github_list(f"repos/{c['repository']}/pulls/{number}/reviews")
-            checks=github(f"repos/{c['repository']}/commits/{head}/check-runs?filter=latest&per_page=100")
-            if promotion_ok(pr,sha,reviews,checks):approved=True
-        assert approved,'Production requires a merged GitFlow PR, six exact-head successful checks, and independent approval or the sole maintainer as merger'
+    assert branch in c['targets'] and SHA.fullmatch(sha),'Only accepted main/develop commits can deploy'
+    assert os.environ.get('GITHUB_REPOSITORY',c['repository'])==c['repository'],'Repository identity differs'
+    local=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True,timeout=15).strip()
+    assert local==sha,'Checked-out commit differs from requested deployment'
+    reported_branch=os.environ.get('WORKERS_CI_BRANCH')
+    reported_sha=os.environ.get('WORKERS_CI_COMMIT_SHA')
+    assert reported_branch is None or reported_branch==branch,'Cloudflare branch differs from target'
+    assert reported_sha is None or reported_sha==sha,'Cloudflare commit differs from checked-out commit'
+    # A single public Git ref lookup prevents an older build from superseding a
+    # newer accepted branch tip. No GitHub REST credentials or PR-history calls.
+    remote='https://github.com/'+c['repository']+'.git'
+    ref='refs/heads/'+branch
+    result=subprocess.run(['git','ls-remote','--exit-code',remote,ref],
+                          cwd=ROOT,capture_output=True,text=True,timeout=30,check=False)
+    assert result.returncode==0,'Could not verify current trusted branch ref'
+    lines=result.stdout.strip().splitlines()
+    assert len(lines)==1,'Expected exactly one trusted branch ref'
+    parts=lines[0].split('\t')
+    assert len(parts)==2 and parts[1]==ref and SHA.fullmatch(parts[0]),'Invalid trusted branch ref'
+    assert parts[0]==sha,'Superseded commit must not deploy'
 
 def verify_history(directory, lock):
     files={x['path']:x for x in lock['files']}

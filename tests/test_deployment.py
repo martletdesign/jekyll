@@ -43,110 +43,56 @@ class DeploymentTests(unittest.TestCase):
         self.assertNotEqual(denied.returncode,0)
         self.assertIn('Production cannot use a Preview command',denied.stderr)
 
-    def test_only_reviewed_gitflow_promotion_shape(self):
-        # A sole-maintainer release is authorized by its actual GitFlow merger
-        # and ALL six native exact-head CI results; no invented GitHub approval.
-        sha='a'*40;head_sha='b'*40
-        good={'merged_at':'2026-11-03T00:00:00Z','merge_commit_sha':sha,
-              'base':{'ref':'main'},'head':{'ref':'release/1.1.0','sha':head_sha},
-              'user':{'login':'howardjp'},'merged_by':{'login':'howardjp'}}
-        names=sorted(artifact.PROMOTION_CHECKS)
-        def verified_checks():
-            runs=[{'name':name,'head_sha':head_sha,'status':'completed',
-                   'conclusion':'success','app':{'slug':'github-actions'}} for name in names]
-            return {'total_count':len(runs),'check_runs':runs}
-        checks=verified_checks()
-        self.assertTrue(artifact.promotion_ok(good,sha,[],checks))
-        other={**good,'user':{'login':'author'},'merged_by':{'login':'reviewer'}}
-        approved=[{'id':1,'state':'APPROVED','user':{'login':'reviewer'},'commit_id':head_sha}]
-        self.assertTrue(artifact.promotion_ok(other,sha,approved,checks))
-        for ref in ['feature/not-release','main','anything']:
-            self.assertFalse(artifact.promotion_ok({**good,'head':{**good['head'],'ref':ref}},sha,[],checks))
-        self.assertFalse(artifact.promotion_ok({**good,'merged_at':None},sha,[],checks))
-        self.assertFalse(artifact.promotion_ok(good,'c'*40,[],checks))
-        self.assertFalse(artifact.promotion_ok({**good,'base':{'ref':'develop'}},sha,[],checks))
-        self.assertFalse(artifact.promotion_ok({**good,'merged_by':{'login':'another'}},sha,[],checks))
-        self.assertFalse(artifact.promotion_ok({**good,'user':{'login':'another'}},sha,[],checks))
-        self.assertFalse(artifact.promotion_ok(other,sha,[],checks))
-        self.assertFalse(artifact.promotion_ok(other,sha,[{**approved[0],'commit_id':'c'*40}],checks))
-        blocked=approved+[{'id':2,'state':'CHANGES_REQUESTED','user':{'login':'skeptic'}}]
-        self.assertFalse(artifact.promotion_ok(good,sha,blocked,checks))
-        self.assertFalse(artifact.promotion_ok(other,sha,blocked,checks))
-        self.assertFalse(artifact.promotion_ok(good,sha,[],None))
-        for name in names:
-            with self.subTest(missing=name):
-                broken=verified_checks()
-                broken['check_runs']=[r for r in broken['check_runs'] if r['name']!=name]
-                broken['total_count']-=1
-                self.assertFalse(artifact.promotion_ok(good,sha,[],broken))
-            for field,value in [('head_sha','c'*40),('status','in_progress'),
-                                ('conclusion','failure'),('app',{'slug':'other-app'})]:
-                with self.subTest(check=name,field=field):
-                    broken=verified_checks()
-                    for run in broken['check_runs']:
-                        if run['name']==name:run[field]=value
-                    self.assertFalse(artifact.promotion_ok(good,sha,[],broken))
-        broken=verified_checks()
-        broken['check_runs'].append(dict(broken['check_runs'][0]))
-        broken['total_count']+=1
-        self.assertFalse(artifact.promotion_ok(good,sha,[],broken),'Duplicate check names fail closed')
-        broken=verified_checks();broken['total_count']+=1
-        self.assertFalse(artifact.promotion_ok(good,sha,[],broken),'Incomplete check-run pages fail closed')
-
-    def test_main_guard_uses_full_pr_when_commit_association_omits_merger(self):
-        """Exercise GitHub's actual list-response shape, which omits merged_by."""
+    def test_accepted_branch_tip_authorizes_deployment_without_pr_replay(self):
+        """GitFlow acceptance belongs to GitHub; Cloudflare checks the exact ref."""
         sha='a'*40
-        head_sha='b'*40
         repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
-        summary={'number':30,'merged_at':'2026-11-07T01:46:28Z',
-                 'merge_commit_sha':sha,'base':{'ref':'main'},
-                 'head':{'ref':'release/1.1.0','sha':head_sha},
-                 'user':{'login':'howardjp'}}
-        self.assertNotIn('merged_by',summary)
-        detail={**summary,'merged_by':{'login':'howardjp'}}
-        runs=[{'name':name,'head_sha':head_sha,'status':'completed',
-               'conclusion':'success','app':{'slug':'github-actions'}}
-              for name in sorted(artifact.PROMOTION_CHECKS)]
-        checks={'total_count':len(runs),'check_runs':runs}
-        state={'detail':detail,'checks':checks}
-        used=[]
-        def github(path):
-            used.append(path)
-            if path==f"repos/{repo}/git/ref/heads/main":
-                return {'object':{'sha':sha}}
-            if path==f"repos/{repo}/pulls/30":
-                return state['detail']
-            if path==f"repos/{repo}/commits/{head_sha}/check-runs?filter=latest&per_page=100":
-                return state['checks']
-            raise AssertionError('Unexpected GitHub request: '+path)
-        def github_list(path):
-            used.append(path)
-            if path.startswith(f"repos/{repo}/commits/{sha}/pulls"):
-                return [summary]
-            if path.startswith(f"repos/{repo}/pulls/30/reviews"):
-                return []
-            raise AssertionError('Unexpected GitHub list: '+path)
-        with patch.dict(os.environ,{'GITHUB_REPOSITORY':repo}), \
-             patch.object(artifact.subprocess,'check_output',return_value=sha+'\n'), \
-             patch.object(artifact,'github',side_effect=github), \
-             patch.object(artifact,'github_list',side_effect=github_list):
-            c={'repository':repo,'targets':{'main':{}}}
-            artifact.guard(c,'main',sha)
-            self.assertIn(f"repos/{repo}/pulls/30",used)
-            for changed in [
-                {**detail,'merged_by':None},
-                {**detail,'merged_by':{'login':'someone-else'}},
-                {**detail,'head':{**detail['head'],'sha':'c'*40}},
-                {**detail,'merge_commit_sha':'c'*40},
-            ]:
-                with self.subTest(changed=changed):
-                    state['detail']=changed
+        for branch in ('main','develop'):
+            ref='refs/heads/'+branch
+            good=subprocess.CompletedProcess(['git'],0,sha+'\t'+ref+'\n','')
+            cfg={'repository':repo,'targets':{'main':{},'develop':{}}}
+            environment={'GITHUB_REPOSITORY':repo,'WORKERS_CI_BRANCH':branch,
+                         'WORKERS_CI_COMMIT_SHA':sha}
+            with self.subTest(branch=branch),patch.dict(os.environ,environment), \
+                 patch.object(artifact.subprocess,'check_output',return_value=sha+'\n'), \
+                 patch.object(artifact.subprocess,'run',return_value=good) as lookup:
+                artifact.guard(cfg,branch,sha)
+                self.assertEqual(lookup.call_args.args[0][:3],
+                                 ['git','ls-remote','--exit-code'])
+                self.assertEqual(lookup.call_args.args[0][-1],ref)
+                for response in [
+                    subprocess.CompletedProcess(['git'],0,'b'*40+'\t'+ref+'\n',''),
+                    subprocess.CompletedProcess(['git'],0,sha+'\trefs/heads/other\n',''),
+                    subprocess.CompletedProcess(['git'],0,'malformed output\n',''),
+                    subprocess.CompletedProcess(['git'],1,'','Git unavailable'),
+                    subprocess.CompletedProcess(['git'],0,'',''),
+                    subprocess.CompletedProcess(['git'],0,sha+'\t'+ref+'\n'+sha+'\t'+ref+'\n','')
+                ]:
+                    with patch.object(artifact.subprocess,'run',return_value=response):
+                        with self.assertRaises(AssertionError):
+                            artifact.guard(cfg,branch,sha)
+                with patch.dict(os.environ,{'WORKERS_CI_COMMIT_SHA':'b'*40}):
                     with self.assertRaises(AssertionError):
-                        artifact.guard(c,'main',sha)
-            state['detail']=detail
-            state['checks']={'total_count':0,'check_runs':[]}
-            with self.assertRaises(AssertionError):
-                artifact.guard(c,'main',sha)
+                        artifact.guard(cfg,branch,sha)
+                with patch.dict(os.environ,{'WORKERS_CI_BRANCH':'wrong'}):
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(cfg,branch,sha)
+                with patch.dict(os.environ,{'GITHUB_REPOSITORY':'other/repo'}):
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(cfg,branch,sha)
+                with patch.object(artifact.subprocess,'check_output',return_value='b'*40+'\n'):
+                    with self.assertRaises(AssertionError):
+                        artifact.guard(cfg,branch,sha)
+
+    def test_candidate_previews_do_not_require_pr_reviews(self):
+        source=(ROOT/'scripts/deployment/pr-preview-verify.py').read_text()
+        self.assertNotIn('artifact.github(',source)
+        self.assertNotIn('artifact.github_list(',source)
+        self.assertNotIn('current_pr(',source)
+        self.assertNotIn("'pullRequest':number",source)
+        self.assertIn('c,branch,sha,name=context()',source)
+        self.assertIn('validate(c,branch,sha,name)',source)
+        self.assertIn("'sourceCommit':sha",source)
 
     def test_artifact_rejects_tampering_and_wrong_commit(self):
         c=artifact.read_config(ROOT);sha='a'*40
@@ -326,106 +272,13 @@ class PropagationTests(unittest.TestCase):
  def test_permanent_corruption_fails(self):self.check('permanent')
  def test_503_fails_without_retry(self):self.check('503')
 
-class PublicGitPreviewFallbackTests(unittest.TestCase):
-    """An anonymous GitHub REST refusal must not authorize an unverified preview."""
-    def loader(self):
-        import types
-        with patch.dict(sys.modules,{'native':types.SimpleNamespace(parse_preview_output=lambda v:v)}):
-            spec=importlib.util.spec_from_file_location('preview_fallback',ROOT/'scripts/deployment/pr-preview-verify.py')
-            module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-        return module
-
-    def test_transient_rest_denials_require_exact_git_pr_merge(self):
-        module=self.loader();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
-        sha='a'*40;base='b'*40;virtual='c'*40
-        def lines(head=sha,target=base,prhead=sha,include_merge=True):
-            entries=[(head,'refs/heads/release/1.1.0'),(target,'refs/heads/main'),
-                     (prhead,'refs/pull/34/head')]
-            if include_merge:entries.append((virtual,'refs/pull/34/merge'))
-            return '\n'.join(h+'\t'+ref for h,ref in entries)+'\n'
-        class Result:
-            def __init__(self,text=''):self.stdout=text
-        def run(args,**kw):
-            if args[1]=='ls-remote':return Result(run.refs)
-            if args[1]=='fetch':return Result()
-            if args[1]=='cat-file':return Result('tree '+('d'*40)+'\nparent '+run.base+'\nparent '+sha+'\nauthor example\n')
-            if args[1]=='rev-parse':return Result(virtual+'\n')
-            raise AssertionError('unexpected git invocation '+repr(args))
-        run.refs=lines();run.base=base
-        for status in (403,429,502,503,504):
-            with self.subTest(http_status=status),patch.object(artifact,'github',side_effect=AssertionError(f'Public GitHub verification denied or failed ({status}); never deploy without evidence')),patch.object(module.subprocess,'run',side_effect=run):
-                run.refs=lines();run.base=base
-                self.assertEqual(module.current_pr({'repository':repo},'release/1.1.0',sha),34)
-        with patch.object(artifact,'github',side_effect=AssertionError('Public GitHub verification denied or failed (504); never deploy without evidence')),patch.object(module.subprocess,'run',side_effect=run):
-            self.assertEqual(module.current_pr({'repository':repo},'release/1.1.0',sha),34)
-            for broken in [lines(head='e'*40),lines(prhead='e'*40),lines(include_merge=False)]:
-                run.refs=broken
-                with self.assertRaises(AssertionError):
-                    module.current_pr({'repository':repo},'release/1.1.0',sha)
-            run.refs=lines(target='e'*40)
-            with self.assertRaisesRegex(AssertionError,'merge parents'):
-                module.current_pr({'repository':repo},'release/1.1.0',sha)
-            run.refs=lines();run.base='e'*40
-            with self.assertRaisesRegex(AssertionError,'merge parents'):
-                module.current_pr({'repository':repo},'release/1.1.0',sha)
-        with patch.object(artifact,'github',side_effect=AssertionError('Superseded PR source must not upload')),patch.object(module.subprocess,'run') as git:
-            with self.assertRaisesRegex(AssertionError,'Superseded'):
-                module.current_pr({'repository':repo},'release/1.1.0',sha)
-            git.assert_not_called()
-
-    def test_other_rest_denials_do_not_trigger_fallback(self):
-        module=self.loader();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
-        for code in (400,401,404,422,500):
-            with self.subTest(http_status=code),patch.object(artifact,'github',side_effect=AssertionError(f'Public GitHub verification denied or failed ({code}); never deploy without evidence')),patch.object(module.subprocess,'run') as git:
-                with self.assertRaisesRegex(AssertionError,str(code)):
-                    module.current_pr({'repository':repo},'release/1.1.0','a'*40)
-                git.assert_not_called()
-        with patch.object(artifact,'github',side_effect=AssertionError('Public GitHub verification denied or failed (401); never deploy without evidence')),patch.object(module.subprocess,'run') as git:
-            with self.assertRaisesRegex(AssertionError,'401'):
-                module.current_pr({'repository':repo},'release/1.1.0','a'*40)
-            git.assert_not_called()
-
-class ReleasePreviewTargetTests(unittest.TestCase):
-    """PR previews respect GitFlow's exact target branch without main deployment."""
-    def verifier(self):
-        import types
-        with patch.dict(sys.modules,{'native':types.SimpleNamespace(parse_preview_output=lambda value:value)}):
-            spec=importlib.util.spec_from_file_location('isolated_preview_target',ROOT/'scripts/deployment/pr-preview-verify.py')
-            module=importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-        return module
-
-    def test_feature_release_and_hotfix_have_only_their_gitflow_target(self):
-        verifier=self.verifier();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
-        c={'repository':repo};sha='a'*40
-        for branch,expected_base in [('feature/readability','develop'),('fix/contrast','develop'),
-                                     ('release/1.1.0','main'),('hotfix/1.0.1','main')]:
-            for actual_base in ['develop','main']:
-                pr={'number':42,'state':'open','merged_at':None,
-                    'base':{'ref':actual_base,'repo':{'full_name':repo}},
-                    'head':{'ref':branch,'sha':sha,'repo':{'full_name':repo}}}
-                with self.subTest(branch=branch,base=actual_base):
-                    with patch.object(artifact,'github',return_value={'object':{'sha':sha}}),patch.object(artifact,'github_list',return_value=[pr]) as listing:
-                        if actual_base==expected_base:
-                            self.assertEqual(verifier.current_pr(c,branch,sha),42)
-                        else:
-                            with self.assertRaisesRegex(AssertionError,'exact source SHA'):
-                                verifier.current_pr(c,branch,sha)
-                        self.assertIn('base='+expected_base,listing.call_args.args[0])
-
-    def test_preview_rejects_stale_sha_or_foreign_repository(self):
-        verifier=self.verifier();repo=json.loads((ROOT/'release-policy.json').read_text())['authority']
-        c={'repository':repo};sha='a'*40;branch='release/1.1.0'
-        pr={'number':42,'state':'open','merged_at':None,
-            'base':{'ref':'main','repo':{'full_name':repo}},
-            'head':{'ref':branch,'sha':sha,'repo':{'full_name':'untrusted/jekyll'}}}
-        with patch.object(artifact,'github',return_value={'object':{'sha':sha}}),patch.object(artifact,'github_list',return_value=[pr]):
-            with self.assertRaises(AssertionError):verifier.current_pr(c,branch,sha)
-        with patch.object(artifact,'github',return_value={'object':{'sha':'b'*40}}),patch.object(artifact,'github_list') as listing:
-            with self.assertRaisesRegex(AssertionError,'Superseded'):
-                verifier.current_pr(c,branch,sha)
-            listing.assert_not_called()
-
+class CandidatePreviewContractTests(unittest.TestCase):
+    def test_previews_are_not_release_authorization_decisions(self):
+        source=(ROOT/'scripts/deployment/pr-preview-verify.py').read_text()
+        self.assertNotIn('artifact.github(',source)
+        self.assertNotIn('artifact.github_list(',source)
+        self.assertNotIn('current_pr(',source)
+        self.assertIn("'productionDeployInvoked':False",source)
 
 
 class CleanTrackedSourceGateTests(unittest.TestCase):
