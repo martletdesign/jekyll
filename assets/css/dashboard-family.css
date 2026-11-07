@@ -20,3 +20,11 @@
 /* The shell's broad label rule is column-oriented; native checkbox assistance
    belongs beside its control in the dashboard task, not beneath it. */
 .dash-app .example-checkbox { flex-direction:row; }
+
+/* Keep narrow navigation's normal gutters while enlarged type gains room.
+   The native type, button padding and focus behavior remain unchanged. */
+@media(max-width:26rem) {
+ .dash-layout { width:calc(100% - min(2rem,32px)); }
+ .dash-sidebar { padding-inline:min(1rem,16px); }
+ .dash-sidebar .eyebrow { margin-inline-end:0; }
+}
