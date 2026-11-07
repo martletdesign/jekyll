@@ -41,61 +41,9 @@ def context():
     c['targets'][branch]=target
     return c,branch,sha,name
 
-def current_pr_by_git_refs(c,branch,sha,base):
-    """Public Git transport fallback if GitHub's anonymous REST access is denied.
-
-    This operates ONLY on isolated, noindex previews, never production.
-    Require an exact public branch and a unique GitHub-generated PR merge
-    whose parents are the current target branch and exact reviewed head.
-    """
-    remote='https://github.com/'+c['repository']+'.git'
-    patterns=['refs/heads/'+branch,'refs/heads/'+base,'refs/pull/*/head','refs/pull/*/merge']
-    result=subprocess.run(['git','ls-remote',remote,*patterns],cwd=ROOT,capture_output=True,text=True,timeout=45,check=True)
-    assert len(result.stdout)<1024*1024,'GitHub refs output exceeds bounded allowance'
-    refs={}
-    for line in result.stdout.splitlines():
-        match=re.fullmatch(r'([0-9a-f]{40})\t(refs/(?:heads/[A-Za-z0-9._/-]+|pull/[1-9][0-9]*/(?:head|merge)))',line)
-        assert match,'Unexpected GitHub ref output'
-        ref=match.group(2)
-        assert ref not in refs,'Duplicate GitHub ref'
-        refs[ref]=match.group(1)
-    assert refs.get('refs/heads/'+branch)==sha,'Remote preview branch no longer matches reviewed HEAD'
-    target=refs.get('refs/heads/'+base)
-    assert target and artifact.SHA.fullmatch(target),'Missing current GitFlow target branch'
-    candidates=[]
-    for ref,head in refs.items():
-        match=re.fullmatch(r'refs/pull/([1-9][0-9]*)/head',ref)
-        if match and head==sha and 'refs/pull/'+match.group(1)+'/merge' in refs:
-            candidates.append(int(match.group(1)))
-    assert len(candidates)==1,'Expected one exact-head GitHub-generated PR merge ref'
-    number=candidates[0]
-    merge_ref='refs/pull/'+str(number)+'/merge'
-    merge_sha=refs[merge_ref]
-    subprocess.run(['git','fetch','--no-tags','--quiet',remote,merge_ref],cwd=ROOT,capture_output=True,text=True,timeout=60,check=True)
-    commit=subprocess.run(['git','cat-file','-p','FETCH_HEAD'],cwd=ROOT,capture_output=True,text=True,timeout=15,check=True)
-    assert commit.stdout.startswith('tree '),'Expected a GitHub virtual merge commit'
-    parents=[line.split(' ',1)[1] for line in commit.stdout.splitlines() if line.startswith('parent ')]
-    actual=subprocess.run(['git','rev-parse','FETCH_HEAD'],cwd=ROOT,capture_output=True,text=True,timeout=15,check=True).stdout.strip()
-    assert actual==merge_sha and parents==[target,sha],'GitHub PR merge parents must match the current target and source'
-    return number
-
-def current_pr(c,branch,sha):
-    base='main' if branch.startswith(('release/','hotfix/')) else 'develop'
-    try:
-        live=artifact.github('repos/'+c['repository']+'/git/ref/heads/'+urllib.parse.quote(branch,safe=''))
-        assert live['object']['sha']==sha,'Superseded PR source must not upload'
-        prs=artifact.github_list('repos/'+c['repository']+'/pulls?state=open&base='+base+'&head='+urllib.parse.quote(c['repository'].split('/')[0]+':'+branch,safe=''))
-        matches=[p for p in prs if p.get('state')=='open' and not p.get('merged_at') and p.get('base',{}).get('ref')==base and p.get('base',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('repo',{}).get('full_name')==c['repository'] and p.get('head',{}).get('ref')==branch and p.get('head',{}).get('sha')==sha]
-        assert len(matches)==1,'An open same-repository PR targeting '+base+' at the exact source SHA must exist before preview upload'
-        return matches[0]['number']
-    except AssertionError as error:
-        # Only bounded GitHub REST transient/quotas and anonymous-denial statuses
-        # may use the independently verified Git transport preview fallback.
-        # Authentication errors and incorrect PR identity must still fail closed.
-        denial='Public GitHub verification denied or failed '
-        if not re.fullmatch(re.escape(denial)+r'\((403|429|502|503|504)\); never deploy without evidence',str(error)):
-            raise
-        return current_pr_by_git_refs(c,branch,sha,base)
+# Candidate previews are best-effort sandboxes. Their source identity is
+# established by context() and the Cloudflare checkout, not by PR reviews.
+# No GitHub API or Git-ref query is necessary before an isolated preview.
 
 def validate(c,branch,sha,name):
     site=ROOT/'.cloudflare-site'
@@ -178,7 +126,6 @@ def main():
     c,branch,sha,name=context()
     if a.operation=='finalize':finalize(c,branch,sha,name);return
     validate(c,branch,sha,name)
-    number=current_pr(c,branch,sha)
     if a.operation=='before-upload':
         cfg={'name':c['targets'][branch]['worker'],'account_id':c['accountId'],'compatibility_date':'2026-11-03','workers_dev':True,'assets':{'directory':str((ROOT/'.cloudflare-site').resolve()),'html_handling':'auto-trailing-slash','not_found_handling':'404-page'},'previews':{'vars':{}}}
         (ROOT/'.cloudflare-wrangler.pr.json').write_bytes(artifact.json_bytes(cfg));return
@@ -187,7 +134,7 @@ def main():
     assert result['deployment']['annotations'].get('workers/message')==sha
     origin=c['targets'][branch]['origin']
     assert origin in [u.rstrip('/') for u in result['preview']['urls']],'Unexpected named preview origin'
-    receipt={'status':'passed','pullRequest':number,'sourceCommit':sha,'sourceBranch':branch,'previewName':name,'previewId':result['preview']['id'],'deploymentId':result['deployment']['id'],'verification':verify_live(c,branch,sha,name),'configuredRuntimeBindings':[],'configuredRuntimeSecrets':False,'deploymentEnvFieldPresent':'env' in result['deployment'],'completeBindingReadbackClaimed':False,'productionDeployInvoked':False,'releasePublicationPerformed':False}
+    receipt={'status':'passed','sourceCommit':sha,'sourceBranch':branch,'previewName':name,'previewId':result['preview']['id'],'deploymentId':result['deployment']['id'],'verification':verify_live(c,branch,sha,name),'configuredRuntimeBindings':[],'configuredRuntimeSecrets':False,'deploymentEnvFieldPresent':'env' in result['deployment'],'completeBindingReadbackClaimed':False,'productionDeployInvoked':False,'releasePublicationPerformed':False}
     (ROOT/'.cloudflare-pr-receipt.json').write_bytes(artifact.json_bytes(receipt));print(json.dumps(receipt,sort_keys=True))
 
 if __name__=='__main__':main()
