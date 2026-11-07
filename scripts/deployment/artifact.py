@@ -48,15 +48,42 @@ def read_config(root=ROOT):
     assert c['targets']['develop']['origin']=='https://develop-'+c['family']+'design-jekyll-reference.k3jph.workers.dev'
     return c
 
-def promotion_ok(pr, sha, reviews):
-    shape=pr.get('merged_at') is not None and pr.get('merge_commit_sha')==sha and pr.get('base',{}).get('ref')=='main' and (pr.get('head',{}).get('ref')=='develop' or pr.get('head',{}).get('ref','').startswith(('release/','hotfix/')))
-    if not shape:return False
+# Both organizations have one human maintainer. Their production gate must
+# verify source, review state and exact-head CI; it must not demand a second
+# reviewer who cannot exist. Separate protected tag rules remain unchanged.
+SOLO_MAINTAINER = 'howardjp'
+PROMOTION_CHECKS = frozenset({'verify','guard','archive-build',
+                              'browser (chromium)','browser (firefox)','browser (webkit)'})
+
+def promotion_checks_ok(head, checks):
+    if not SHA.fullmatch(head or '') or not isinstance(checks,dict):return False
+    runs=checks.get('check_runs')
+    if not isinstance(runs,list) or checks.get('total_count')!=len(runs) or len(runs)>100:return False
+    for name in PROMOTION_CHECKS:
+        matching=[run for run in runs if run.get('name')==name]
+        if len(matching)!=1:return False
+        run=matching[0]
+        if (run.get('head_sha')!=head or run.get('status')!='completed' or
+                run.get('conclusion')!='success' or
+                run.get('app',{}).get('slug')!='github-actions'):return False
+    return True
+
+def promotion_ok(pr, sha, reviews, checks):
+    head=pr.get('head',{})
+    shape=(pr.get('merged_at') is not None and pr.get('merge_commit_sha')==sha and
+           pr.get('base',{}).get('ref')=='main' and
+           (head.get('ref')=='develop' or head.get('ref','').startswith(('release/','hotfix/'))))
+    if not shape or not promotion_checks_ok(head.get('sha'),checks):return False
     latest={}
     for review in sorted(reviews,key=lambda r:r.get('id',0)):
         if review.get('state') in ('APPROVED','CHANGES_REQUESTED','DISMISSED'):
             latest[review.get('user',{}).get('login')]=review
     if any(r.get('state')=='CHANGES_REQUESTED' for r in latest.values()):return False
-    return any(r.get('state')=='APPROVED' and r.get('commit_id')==pr.get('head',{}).get('sha') and login and login!=pr.get('user',{}).get('login') for login,r in latest.items())
+    independent_approval=any(r.get('state')=='APPROVED' and r.get('commit_id')==head.get('sha') and
+                             login and login!=pr.get('user',{}).get('login') for login,r in latest.items())
+    sole_maintainer_merge=(pr.get('user',{}).get('login')==SOLO_MAINTAINER and
+                            pr.get('merged_by',{}).get('login')==SOLO_MAINTAINER)
+    return independent_approval or sole_maintainer_merge
 
 def github(path):
     headers={'Accept':'application/vnd.github+json','User-Agent':'JekyllNativeBuildVerification','X-GitHub-Api-Version':'2022-11-28'}
@@ -85,9 +112,12 @@ def guard(c, branch, sha):
         prs=github_list(f"repos/{c['repository']}/commits/{sha}/pulls")
         approved=False
         for pr in prs:
+            head=pr.get('head',{}).get('sha','')
+            if not SHA.fullmatch(head):continue
             reviews=github_list(f"repos/{c['repository']}/pulls/{pr['number']}/reviews")
-            if promotion_ok(pr,sha,reviews):approved=True
-        assert approved,'Production requires a merged GitFlow promotion PR with an actual approval of its exact head'
+            checks=github(f"repos/{c['repository']}/commits/{head}/check-runs?filter=latest&per_page=100")
+            if promotion_ok(pr,sha,reviews,checks):approved=True
+        assert approved,'Production requires a merged GitFlow PR, six exact-head successful checks, and independent approval or the sole maintainer as merger'
 
 def verify_history(directory, lock):
     files={x['path']:x for x in lock['files']}
