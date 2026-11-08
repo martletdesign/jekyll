@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Martlet, in plain sight.
+title: Martlet for Jekyll
 eyebrow: The Jekyll reference
 hero_variant: signature
 hero_image: /assets/images/heroes/martlet-hero-2172.webp
@@ -12,7 +12,7 @@ hero_image_variants:
   - {url: /assets/images/heroes/martlet-hero-1440.webp, width: 1440}
   - {url: /assets/images/heroes/martlet-hero-1920.webp, width: 1920}
   - {url: /assets/images/heroes/martlet-hero-2172.webp, width: 2172}
-description: The same shell. Markdown, Liquid, and a little JavaScript. Nothing hiding the design.
+description: Jekyll layouts and examples for publishing, services, and applications.
 ---
 ## A smaller engine. The same language.
 
