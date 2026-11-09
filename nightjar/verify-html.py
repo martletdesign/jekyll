@@ -3,15 +3,17 @@
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote, urljoin
-import argparse
+import argparse, hashlib, json
 
 class Document(HTMLParser):
     def __init__(self, text):
         super().__init__(convert_charrefs=True)
-        self.ids=set(); self.duplicates=[]; self.links=[]; self.h1=0
+        self.ids=set(); self.duplicates=[]; self.links=[]; self.h1=0; self.inline_css=False; self.stylesheets=[]
         self.feed(text)
     def handle_starttag(self, tag, attrs):
         a=dict(attrs)
+        if tag=='style' or 'style' in a:self.inline_css=True
+        if tag=='link' and a.get('rel')=='stylesheet':self.stylesheets.append(a.get('href',''))
         if tag=='h1': self.h1+=1
         if a.get('id'):
             if a['id'] in self.ids:self.duplicates.append(a['id'])
@@ -25,7 +27,12 @@ parser.add_argument('--baseurl',default='')
 a=parser.parse_args(); root=a.directory.resolve(); documents={}
 for file in root.rglob('*.html'): documents[file]=Document(file.read_text())
 errors=[]; count=0
+manifest=json.loads((root/'assets/css/core-styles.json').read_text())
+for name,expected in manifest['files'].items():
+    if hashlib.sha256((root/'assets/css'/name).read_bytes()).hexdigest()!=expected:errors.append(f'{name}: differs from canonical Core export')
 for file,doc in documents.items():
+    if doc.inline_css:errors.append(f'{file.relative_to(root)}: inline CSS is forbidden')
+    if len(doc.stylesheets)!=2 or {urlsplit(url).path.rsplit('/',1)[-1] for url in doc.stylesheets}!={'reference.css','fonts.css'}:errors.append(f'{file.relative_to(root)}: page must use only canonical reference and font stylesheets')
     if doc.h1!=1:errors.append(f'{file.relative_to(root)}: {doc.h1} h1 elements')
     for duplicate in doc.duplicates:errors.append(f'{file.relative_to(root)}: duplicate ID {duplicate}')
     relative=file.relative_to(root).as_posix()

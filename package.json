@@ -9,10 +9,15 @@
     "test:grammar": "node tests/grammar.mjs",
     "test:navigation": "node tests/navigation.mjs",
     "test:workspaces": "node tests/workspaces.mjs",
-    "test:collections": "node tests/collections.mjs"
+    "test:collections": "node tests/collections.mjs",
+    "styles:sync": "node scripts/sync-core-styles.mjs",
+    "styles:check": "node scripts/sync-core-styles.mjs --check && node scripts/style-audit.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.11.1",
     "@playwright/test": "1.64.1"
+  },
+  "dependencies": {
+    "@martlet/core": "2.3.0"
   }
 }
