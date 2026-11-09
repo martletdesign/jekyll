@@ -2449,7 +2449,8 @@ html[data-appearance=dark] body
 @media(forced-colors:active) { .dash-chart-line,.dash-chart-grid,.dash-chart-threshold { stroke:CanvasText; } .dash-chart-primary,.dash-chart-secondary { fill:CanvasText; } }
 @media print { .dash-sidebar,.dash-toolbar,.dash-heading__meta a { display:none; } .dash-layout { display:block; width:100%; } .dash-app { padding:0; } .dash-panel { break-inside:avoid; } }
 /* Dense tables retain whole action labels; overflow stays in the named table region. */
-.dash-app table .example-button { white-space: nowrap; }
+body.martlet.dashboard-page main .dash-app table .martlet-button,
+.dash-app table .example-button { white-space:nowrap; max-width:none; overflow-wrap:normal; }
 .dash-app table th { overflow-wrap: normal; }
 
 /* New application contexts resolve text roles instead of inheriting fixed host defaults. */
