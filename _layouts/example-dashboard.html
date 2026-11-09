@@ -13,6 +13,13 @@ layout: default
         <ul>{% for view in site.data.dashboard_navigation %}<li><a href="{{ view.url | relative_url }}"{% if page.dashboard == view.id %} aria-current="page"{% endif %}>{{ view.title | escape }}</a></li>{% endfor %}</ul>
         <p class="dash-sidebar__caption">One dataset.<br>Two design languages.</p>
         <a href="{{ '/examples/' | relative_url }}">All page examples</a>
+        <div class="dashboard-ownership">
+          <a class="dashboard-ownership__identity" href="https://jameshoward.us/" aria-label="James Howard website">
+            <img src="{{ '/assets/owner.svg' | relative_url }}" alt="" width="56" height="56">
+            <span><strong>{{ site.title | escape }}</strong><br>A website of James Howard</span>
+          </a>
+          <p>Copyright © {{ site.time | date: "%Y" }} <span>James P. Howard, II</span></p>
+        </div>
       </nav>
     </aside>
     <div class="dash-main" id="dashboard-main">

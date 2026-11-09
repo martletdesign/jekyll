@@ -86,6 +86,7 @@
   "_plugins/nightjar_markdown.rb",
   "_posts/2026-10-28-what-a-shell-should-own.md",
   "assets/css/dashboard-family.css",
+  "assets/css/dashboard-navigation.css",
   "assets/css/dashboard.css",
   "assets/css/examples-family.css",
   "assets/css/examples.css",

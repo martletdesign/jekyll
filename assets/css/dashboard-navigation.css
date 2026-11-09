@@ -1,0 +1,65 @@
+/* The dashboard keeps Martlet's top navigation and left section menu.
+   Ownership belongs at the end of that independently scrolling submenu. */
+body.martlet.dashboard-page { --dashboard-header-offset:0px; }
+body.martlet.dashboard-page:has(> .site-header[data-navigation-ready]:not(.is-reflowing)) {
+  --dashboard-header-offset:calc(4.6rem + 1px);
+}
+body.martlet.dashboard-page .dash-sidebar {
+  display:flex;
+  flex-direction:column;
+  align-self:start;
+  position:sticky;
+  top:calc(var(--dashboard-header-offset) + 1rem);
+  height:calc(100dvh - var(--dashboard-header-offset) - 2rem);
+  max-height:none;
+  overflow-y:auto;
+  overscroll-behavior-y:contain;
+  scrollbar-gutter:stable;
+}
+body.martlet.dashboard-page .dash-sidebar > :is(p,button) { flex-shrink:0; }
+body.martlet.dashboard-page .dash-sidebar > nav { display:flex; flex:1 0 auto; flex-direction:column; }
+body.martlet.dashboard-page .dashboard-ownership {
+  flex:none;
+  margin-top:auto;
+  padding-top:2rem;
+  font-family:var(--martlet-font-sans);
+  font-size:.875rem;
+  line-height:1.5;
+}
+body.martlet.dashboard-page .dashboard-ownership__identity {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:.75rem;
+  padding:0;
+  color:var(--martlet-text);
+  font:inherit;
+  text-decoration:none;
+}
+body.martlet.dashboard-page .dashboard-ownership__identity img { flex:none; }
+body.martlet.dashboard-page .dashboard-ownership__identity:is(:hover,:focus-visible) { color:var(--martlet-link); text-decoration:none; }
+body.martlet.dashboard-page .dashboard-ownership p { margin:1rem 0 0; color:var(--martlet-muted); font-size:.8rem; }
+body.martlet.dashboard-page .dashboard-ownership p span { display:inline-block; }
+
+@media screen and (min-width:64.001rem) {
+  /* Keep the sticky menu clear of the header at the end of the dashboard. */
+  body.martlet.dashboard-page .dash-app { padding-bottom:1rem; }
+}
+@media(max-width:64rem) {
+  body.martlet.dashboard-page .dash-sidebar { display:block; position:static; height:auto; max-height:none; overflow:visible; }
+  body.martlet.dashboard-page .dash-sidebar > nav { max-height:60dvh; overflow-y:auto; overscroll-behavior-y:contain; scrollbar-gutter:stable; }
+  body.martlet.dashboard-page :is(.analytics-app,.dash-app)[data-ready] .dash-nav-toggle[aria-expanded=false] + nav { display:none; }
+}
+@media print {
+  body.martlet.dashboard-page .dash-sidebar { display:none; }
+}
+
+/* A dashboard has no masthead to reserve the fixed navbar's space. */
+@media screen {
+  body.martlet.dashboard-page .site-header:not([data-navigation-ready]) { position:relative; }
+  body.martlet.dashboard-page .site-header[data-navigation-ready]:not(.is-reflowing) + main { padding-top:calc(4.6rem + 1px); }
+}
+body.martlet.dashboard-page .dash-app { padding-top:2rem; }
+body.martlet.dashboard-page main :is(h1,h2,h3,h4,h5,h6) { color:var(--martlet-text-strong); }
+body.martlet.dashboard-page main :is(label,legend) { color:var(--martlet-text); }
+body.martlet.dashboard-page main .eyebrow { color:var(--martlet-muted); }
