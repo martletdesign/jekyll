@@ -27,9 +27,15 @@ parser.add_argument('--baseurl',default='')
 a=parser.parse_args(); root=a.directory.resolve(); documents={}
 for file in root.rglob('*.html'): documents[file]=Document(file.read_text())
 errors=[]; count=0
-manifest=json.loads((root/'assets/css/core-styles.json').read_text())
-for name,expected in manifest['files'].items():
-    if hashlib.sha256((root/'assets/css'/name).read_bytes()).hexdigest()!=expected:errors.append(f'{name}: differs from canonical Core export')
+manifests=list(root.rglob('assets/css/core-styles.json'))
+if not manifests:errors.append('No canonical Core stylesheet manifest found')
+canonical_styles=set()
+for manifest_path in manifests:
+    manifest=json.loads(manifest_path.read_text())
+    for name,expected in manifest['files'].items():
+        stylesheet=manifest_path.parent/name
+        canonical_styles.add(stylesheet)
+        if not stylesheet.is_file() or hashlib.sha256(stylesheet.read_bytes()).hexdigest()!=expected:errors.append(f'{stylesheet.relative_to(root)}: differs from canonical Core export')
 for file,doc in documents.items():
     if doc.inline_css:errors.append(f'{file.relative_to(root)}: inline CSS is forbidden')
     if len(doc.stylesheets)!=2 or {urlsplit(url).path.rsplit('/',1)[-1] for url in doc.stylesheets}!={'reference.css','fonts.css'}:errors.append(f'{file.relative_to(root)}: page must use only canonical reference and font stylesheets')
@@ -46,6 +52,7 @@ for file,doc in documents.items():
             errors.append(f'{relative}: lost baseurl in {link}');continue
         local=root/path.removeprefix(a.baseurl).lstrip('/')
         if local.is_dir():local=local/'index.html'
+        if link in doc.stylesheets and local not in canonical_styles:errors.append(f'{relative}: stylesheet is not a verified Core export: {link}')
         count+=1
         if not local.exists():errors.append(f'{relative}: missing {link}')
         elif target.fragment and local.suffix=='.html' and unquote(target.fragment) not in documents.get(local,Document('')).ids:
