@@ -19,7 +19,7 @@ for(const [file,exportName] of Object.entries({'reference.css':'reference.css','
 }
 const unexpected=(await readdir(directory)).filter(file=>file.endsWith('.css')&&!Object.hasOwn(expected,file));
 if(unexpected.length)throw new Error(`Local stylesheet definitions are forbidden: ${unexpected.join(', ')}`);
-const manifest=JSON.stringify({package:name,version:core.version,files:expected},null,2)+'\n';
+const manifest=JSON.stringify({package:name,version:core.version,source:pkg.dependencies[name],files:expected},null,2)+'\n';
 if(process.argv.includes('--check')){
  if(await readFile(resolve(directory,'core-styles.json'),'utf8')!==manifest)throw new Error('Core stylesheet manifest is stale');
 }else await writeFile(resolve(directory,'core-styles.json'),manifest);
