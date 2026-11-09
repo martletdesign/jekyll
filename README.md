@@ -31,3 +31,9 @@ The advanced remote R2 archive is explicitly disabled by `release-policy.json`. 
 ## Approved panoramic homepage
 
 The homepage opts into the locally hosted, approved responsive 2172 × 724 footless Martlet bird panorama. See [hero provenance and behavior](HERO-PROVENANCE.md) for original/derivative hashes, responsive cropping, dark/header behavior, fallback and review limits. The [hero composition contract](HERO-CONTRACT.md) adds distinct credited section photography and restrained compact/plain mastheads; canonical tokens and application surfaces remain intact.
+
+### Shared stylesheet ownership
+
+All reference CSS is exported by `@martlet/core@2.3.0`. Astro and Jekyll use identical `reference.css` and `fonts.css` files. Edit Core, publish it, update the exact dependency and lockfile, then run `npm run styles:sync`. `npm run styles:check` rejects edited or extra CSS assets. The generated asset manifest records the package version and SHA-256 of each file.
+
+Page templates and client code must not contain style elements, style attributes, CSS mutation calls, or local stylesheet definitions. Source and rendered-page checks enforce this. Use the Core markup classes and named data attributes instead.

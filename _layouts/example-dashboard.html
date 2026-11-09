@@ -2,8 +2,8 @@
 layout: default
 ---
 {% assign record = site.data.examples.pages | where: 'id', page.record_id | first %}
-<link rel="stylesheet" href="{{ '/assets/css/dashboard.css' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/dashboard-family.css' | relative_url }}">
+
+
 <div class="example-root dash-app" data-dashboard="{{ page.dashboard | escape }}">
   <div class="dash-layout">
     <aside class="dash-sidebar" aria-label="Dashboard workspace">
