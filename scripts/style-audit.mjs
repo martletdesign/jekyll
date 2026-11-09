@@ -17,7 +17,7 @@ export async function checkPages(directory){
   const html=await readFile(path,'utf8');
   if(/<style\b|\sstyle\s*=/i.test(html))throw new Error(`Rendered inline CSS is forbidden: ${path}`);
   const sheets=[...html.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*>/g)].map(match=>match[0]);
-  if(sheets.length!==2||!sheets.some(link=>/assets\/css\/reference\.css/.test(link))||!sheets.some(link=>/assets\/css\/fonts\.css/.test(link)))throw new Error(`Page must use only the two canonical stylesheets: ${path}: ${sheets.join(' ')}`);
+  if(sheets.length!==2||!sheets.some(link=>/assets\/css\/martlet\.css/.test(link))||!sheets.some(link=>/assets\/css\/fonts\.css/.test(link)))throw new Error(`Page must use only the two canonical stylesheets: ${path}: ${sheets.join(' ')}`);
  }
  console.log(`Audited ${count} pages: no inline CSS; only canonical stylesheets`);
 }

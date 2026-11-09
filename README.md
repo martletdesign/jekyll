@@ -16,7 +16,7 @@ Static hosting settings: build `bundle exec jekyll build --destination dist`; ou
 
 ## Complete example library
 
-Browse `/examples/` for 50 matching content recipes. This standalone export contains its content in `_data/examples.json`, composition layouts in `_layouts/example-*.html`, and reusable section/class includes in `_includes/examples/`. The Core stylesheet is copied to `assets/css/reference.css`; browser enhancements live in `assets/js/examples.js`.
+Browse `/examples/` for 50 matching content recipes. This standalone export contains its content in `_data/examples.json`, composition layouts in `_layouts/example-*.html`, and reusable section/class includes in `_includes/examples/`. The Core stylesheet is copied to `assets/css/martlet.css`; browser enhancements live in `assets/js/examples.js`.
 
 Shared recipe definitions, representative fixture data and conformance schemas remain coordinated in [design-workbench](https://github.com/k3jph/design-workbench). This repository owns the Jekyll templates, behaviors and standalone source releases; Core owns stylesheet definitions. Port shared contract changes through conformance checks rather than overwriting the independent implementation. See `docs/archetypes/` for the shared contract and porting boundaries.
 
@@ -34,6 +34,6 @@ The homepage opts into the locally hosted, approved responsive 2172 × 724 footl
 
 ### Shared stylesheet ownership
 
-All reference CSS is exported by `@martlet/core`. Astro and Jekyll use identical `reference.css` and `fonts.css` files. Edit Core, update the exact dependency and lockfile, then run `npm run styles:sync`. Development previews may pin a full Core Git commit; this does not require an npm release. Publishing a new package is a separate release decision. `npm run styles:check` rejects edited or extra CSS assets. The generated asset manifest records the package version, dependency source and SHA-256 of each file.
+All reference CSS is exported by `@martlet/core`. Astro and Jekyll use identical `martlet.css` and `fonts.css` files. Edit Core, update the exact dependency and lockfile, then run `npm run styles:sync`. Development previews may pin a full Core Git commit; this does not require an npm release. Publishing a new package is a separate release decision. `npm run styles:check` rejects edited or extra CSS assets. The generated asset manifest records the package version, dependency source and SHA-256 of each file.
 
 Page templates and client code must not contain style elements, style attributes, CSS mutation calls, or local stylesheet definitions. Source and rendered-page checks enforce this. Use the Core markup classes and named data attributes instead.

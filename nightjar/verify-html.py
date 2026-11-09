@@ -38,7 +38,7 @@ for manifest_path in manifests:
         if not stylesheet.is_file() or hashlib.sha256(stylesheet.read_bytes()).hexdigest()!=expected:errors.append(f'{stylesheet.relative_to(root)}: differs from canonical Core export')
 for file,doc in documents.items():
     if doc.inline_css:errors.append(f'{file.relative_to(root)}: inline CSS is forbidden')
-    if len(doc.stylesheets)!=2 or {urlsplit(url).path.rsplit('/',1)[-1] for url in doc.stylesheets}!={'reference.css','fonts.css'}:errors.append(f'{file.relative_to(root)}: page must use only canonical reference and font stylesheets')
+    if len(doc.stylesheets)!=2 or {urlsplit(url).path.rsplit('/',1)[-1] for url in doc.stylesheets}!={'martlet.css','fonts.css'}:errors.append(f'{file.relative_to(root)}: page must use only canonical reference and font stylesheets')
     if doc.h1!=1:errors.append(f'{file.relative_to(root)}: {doc.h1} h1 elements')
     for duplicate in doc.duplicates:errors.append(f'{file.relative_to(root)}: duplicate ID {duplicate}')
     relative=file.relative_to(root).as_posix()

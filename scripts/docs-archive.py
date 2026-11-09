@@ -98,7 +98,7 @@ try:
     if index.is_symlink() or (index.exists() and not index.is_file()):raise SystemExit('Unsafe versions index')
     if not index.exists():
       with index.open('x',encoding='utf-8') as out:
-        out.write(f'<!doctype html><html lang="en" data-{shell["family"]}="light" data-appearance="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Documentation versions</title><link rel="stylesheet" href="{base}/assets/css/fonts.css"><link rel="stylesheet" href="{base}/assets/css/reference.css"></head><body class="{shell["family"]}"><main><h1>Documentation versions</h1><p>The live version catalog is unavailable in this offline archive. Use the version links in the snapshot.</p></main></body></html>\n')
+        out.write(f'<!doctype html><html lang="en" data-{shell["family"]}="light" data-appearance="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Documentation versions</title><link rel="stylesheet" href="{base}/assets/css/fonts.css"><link rel="stylesheet" href="{base}/assets/css/martlet.css"></head><body class="{shell["family"]}"><main><h1>Documentation versions</h1><p>The live version catalog is unavailable in this offline archive. Use the version links in the snapshot.</p></main></body></html>\n')
     print(f'Built {len(files)} local documentation files for {args.version} at {target}')
 except BaseException:
   shutil.rmtree(target)
