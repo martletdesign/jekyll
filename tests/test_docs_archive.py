@@ -34,7 +34,8 @@ class DocumentationBuildTests(unittest.TestCase):
                 self.assertEqual(evidence['core'],json.loads((source/'assets/css/core-styles.json').read_text()))
                 self.assertIsNone(evidence['implementation_commit'])
                 self.assertEqual(evidence['source_shell']['legacy_package'],provenance['legacy_package'])
-                self.assertEqual(evidence['source_shell']['sha256'],provenance['source_shell_sha256'])
+                self.assertEqual(evidence['source_shell']['sha256'],evidence['core']['files']['shell.css'])
+                self.assertEqual(evidence['source_shell']['source_shell_sha256'],provenance['source_shell_sha256'])
                 recipes=json.loads((ROOT/'_data/examples.json').read_text())['pages']
                 self.assertEqual(len(recipes),50)
                 self.assertTrue(all((old/'examples'/v['id']/'index.html').is_file() for v in recipes))

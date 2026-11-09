@@ -93,7 +93,7 @@ test('stable promotion, concurrency and explicit rollback use verified immutable
  const provenance=JSON.parse(await readFile('scripts/source-shell-provenance.json','utf8')),family=provenance.family;
  const env={FAMILY:family,ARCHIVES:new MockR2(),ARCHIVE_WRITE_TOKEN:token,DEPLOY_PREFIX:'/preview'};
  const call=(path,method='GET',body,headers={})=>worker.fetch(new Request(`https://example.invalid/preview${path}`,{method,body,headers:{authorization:`Bearer ${token}`,...headers}}),env);
- const shell=await readFile('assets/css/shell.css');assert.equal(sha(shell),provenance.source_shell_sha256);
+ const shell=await readFile('assets/css/shell.css');assert.equal(sha(shell),JSON.parse(await readFile('assets/css/core-styles.json','utf8')).files['shell.css']);
  const fixture=async(version)=>{
   const html=Buffer.from('<meta name="robots" content="noindex"><h1>Fixture</h1>'),tag=`v${version}`;
   const files=[{path:'index.html',size:html.length,sha256:sha(html)},{path:'assets/css/shell.css',size:shell.length,sha256:sha(shell)}];

@@ -9,7 +9,7 @@ const core=JSON.parse(await readFile(resolve(source,'package.json'),'utf8'));
 const directory=resolve(root,"assets/css");
 await mkdir(directory,{recursive:true});
 const expected={};
-for(const [file,exportName] of Object.entries({'reference.css':'reference.css','fonts.css':'reference-fonts.css','shell.css':'reference-shell.css'})){
+for(const [file,exportName] of Object.entries({'martlet.css':'martlet.css','fonts.css':'reference-fonts.css','shell.css':'reference-shell.css'})){
  const bytes=await readFile(resolve(source,'dist',exportName));
  expected[file]=createHash('sha256').update(bytes).digest('hex');
  if(process.argv.includes('--check')){
