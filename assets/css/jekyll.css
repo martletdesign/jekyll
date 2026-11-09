@@ -460,3 +460,6 @@ html[data-appearance] body.martlet .site-header[data-navigation-ready].is-reflow
   .page-intro .eyebrow { overflow-wrap:anywhere; word-break:normal; }
   .site-header .brand span { font-size:min(1em, 10vw); }
 }
+
+/* Journal entries read as a collection of destinations. */
+body.martlet .journal-list a, body.martlet .journal-list a:hover { text-decoration:none; }
