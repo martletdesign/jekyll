@@ -1,8 +1,9 @@
 {
   "package": "@martlet/core",
   "version": "2.3.0",
+  "source": "github:martletdesign/core#ba26eb5fedd1d7cb43e6f3cb6ae7ab25c5ff1cc1",
   "files": {
-    "reference.css": "029fa7302bf2b698bf712c7b00c945d0a72e1e2777ff810c863cf9d41f67acde",
+    "reference.css": "1bf5e47fa9176afab15dd9514212f5f335974f0055a5ec85fee18fdb7c0011a7",
     "fonts.css": "80f766b73961542249d0cd82917d72ad65a9d869cfbb1566daeba5caba56560f",
     "shell.css": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45"
   }

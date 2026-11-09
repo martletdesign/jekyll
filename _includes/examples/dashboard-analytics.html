@@ -32,7 +32,7 @@
     <div><label for="analytics-start">Start date</label><input id="analytics-start" name="start" type="date" min="2026-09-03" max="2026-10-28" value="2026-10-22" required></div>
     <div><label for="analytics-end">End date</label><input id="analytics-end" name="end" type="date" min="2026-09-03" max="2026-10-28" value="2026-10-28" required></div>
     <div><label for="analytics-category">Category</label><select id="analytics-category" name="category"><option value="">All categories</option>{% for category in categories %}<option value="{{ category | escape }}">{{ category | escape }}</option>{% endfor %}</select></div>
-  </div><button class="{% include examples/button-classes.html %}" type="submit">Apply filters</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-export-analytics>Download filtered CSV</button></fieldset>
+  </div><div class="dash-form-actions"><button class="{% include examples/button-classes.html %}" type="submit">Apply filters</button><button class="{% include examples/button-classes.html secondary=true %}" type="button" data-export-analytics>Download filtered CSV</button></div></fieldset>
   <p id="analytics-error" class="dash-error" role="alert" hidden></p>
 </form>
 <p data-dashboard-fallback>Interactive dashboard controls are unavailable. Reload to try again.</p>

@@ -1984,6 +1984,7 @@ html[data-appearance=dark] .example-prose :is(blockquote,.footnotes) { color: va
 .example-prose :not(pre) > code { background: var(--ex-panel); padding: .1em .3em; }
 .example-prose math { font-size: 1.4rem; margin-block: 1rem; }
 .example-actions, .example-context { display: flex; flex-wrap: wrap; gap: .75rem; margin-block: 1.5rem; }
+.example-actions { justify-content: center; }
 .example-context { border-bottom: 1px solid var(--ex-line); padding-bottom: 1rem; }
 .example-notice { background: var(--ex-panel); border-inline-start: 3px solid var(--ex-link); padding: 1rem 1.25rem; margin-bottom: 2rem; font-size: .95rem; }
 .example-notice p:last-child { margin: 0; }
@@ -2366,7 +2367,6 @@ html[data-appearance=dark] body
 .dash-sidebar li { margin:0; }
 .dash-sidebar nav a { display:block; padding:.7rem .5rem; font-family:var(--dash-ui-font); font-size:.95rem; }
 .dash-sidebar a[aria-current=page] { font-weight:700; border-inline-start:3px solid var(--ex-link); background:var(--ex-panel); }
-.dash-sidebar__caption { color:var(--ex-muted); font-size:.9rem; border-top:1px solid var(--ex-line); padding-top:1.5rem; }
 .dash-nav-toggle { display:none !important; }
 .dash-heading { margin-bottom:2rem; }
 .example-root .dash-heading h1 { font-size:clamp(2rem,3.4vw,3rem); margin:.5rem 0 1rem; line-height:1.15; }
@@ -2401,9 +2401,11 @@ html[data-appearance=dark] body
 .dash-chart summary { cursor:pointer; font:700 .9rem/1.5 var(--dash-ui-font); padding:.5rem 0; }
 .dash-app .example-table-scroll { background:var(--ex-bg); }
 .dash-app table { font-family:var(--dash-ui-font); font-variant-numeric:tabular-nums; }
-.dash-app :is(th,td) { padding:.8rem .85rem; }
+.dash-app :is(th,td) { padding:.75rem .85rem; vertical-align:middle; }
 .dash-app tbody th { font-weight:600; }
 .dash-app table button { white-space:normal; }
+.dash-app caption { padding:.75rem .85rem; text-align:start; }
+.dash-app #people-table :is(th,td):first-child { width:3rem; min-width:3rem; }
 .dash-error { color:var(--dash-danger); border-inline-start:3px solid currentColor; padding:1rem; background:var(--ex-panel); }
 .dash-state { padding:2rem; border:1px dashed var(--ex-line); margin:1rem 0; }
 .dash-badge { display:inline-block; border:1px solid currentColor; padding:.2rem .5rem; font:700 .8rem/1.5 var(--dash-ui-font); }
@@ -2433,7 +2435,6 @@ html[data-appearance=dark] body
  .dash-app[data-ready] .dash-nav-toggle { display:inline-flex !important; }
  .dash-app[data-ready] .dash-nav-toggle[aria-expanded=false] + nav { display:none; }
  .dash-sidebar ul { display:flex; flex-wrap:wrap; gap:.5rem; }
- .dash-sidebar__caption { display:none; }
 }
 @media(max-width:42rem) {
  .dash-layout { width:calc(100% - 2rem); }
@@ -2466,10 +2467,10 @@ html[data-appearance=dark] .dash-app .eyebrow { color: var(--ex-link); }
 
 .dash-app .example-table-scroll { max-width:100%; overflow:auto; border:1px solid var(--ex-line); }
 .dash-app table { border-collapse:collapse; width:100%; }
-.dash-app :is(th,td) { text-align:start; border-bottom:1px solid var(--ex-line); min-width:7rem; }
+.dash-app :is(th,td) { text-align:start; border-bottom:1px solid var(--ex-line); min-width:7rem; vertical-align:middle; }
 
 
-.dash-app fieldset { min-width:0; border:0; padding:0; }
+.dash-app fieldset { min-width:0; border:0; margin:0; padding:0; }
 
 .dash-app [hidden] { display:none !important; }
 .admin-notice { padding:1rem; border-inline-start:3px solid var(--ex-link); background:var(--ex-panel); }
@@ -2549,14 +2550,6 @@ body.martlet.dashboard-page .dash-sidebar nav a[aria-current=page] {
   border-inline-start-color:var(--dashboard-navigation-accent);
   background:var(--martlet-panel);
   font-weight:700;
-}
-body.martlet.dashboard-page .dash-sidebar__caption {
-  display:block;
-  margin:1.5rem 0 1rem;
-  padding-top:1.5rem;
-  border-top:1px solid var(--martlet-line);
-  color:var(--martlet-muted);
-  font:.9rem/1.7 var(--martlet-font-sans);
 }
 body.martlet.dashboard-page .dash-nav-toggle { display:none; }
 @media(max-width:64rem) {
@@ -2657,7 +2650,7 @@ body.martlet.dashboard-page main :is(input,select,textarea)[aria-invalid=true] {
 body.martlet.dashboard-page main :is(label,legend) { color:var(--martlet-text); font:700 .9rem/1.5 var(--martlet-font-sans); }
 body.martlet.dashboard-page main label { display:block; margin:0 0 .5rem; }
 body.martlet.dashboard-page main legend { margin:0 0 1rem; padding:0; }
-body.martlet.dashboard-page main label.example-checkbox { display:flex; flex-direction:row; align-items:center; gap:.75rem; min-height:2.75rem; margin-block:1rem; }
+body.martlet.dashboard-page main label.example-checkbox { display:flex; flex-direction:row; align-items:center; gap:.75rem; min-height:2.75rem; margin-block:.75rem 0; }
 body.martlet.dashboard-page main :is(input[type=checkbox],input[type=radio]) { flex:0 0 1.2rem; width:1.2rem; height:1.2rem; min-width:0; min-height:0; max-width:1.2rem; margin:0; padding:0; accent-color:var(--martlet-accent); }
 body.martlet.dashboard-page main .martlet-button {
   display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
@@ -2673,5 +2666,10 @@ body.martlet.dashboard-page main .martlet-button--secondary { background:var(--m
 body.martlet.dashboard-page main .martlet-button--secondary:hover { background:var(--martlet-button-secondary-hover); color:var(--martlet-button-secondary-text); }
 body.martlet.dashboard-page main .martlet-button:disabled { background:var(--martlet-disabled-bg); color:var(--martlet-disabled-text); border-color:var(--martlet-disabled-bg); cursor:default; opacity:1; }
 body.martlet.dashboard-page main :focus-visible { outline:3px solid var(--martlet-focus-ring); outline-offset:3px; }
-body.martlet.dashboard-page main .dash-actions .martlet-button { margin:0; }
+/* Containers own command spacing; table controls stay centered in their cells. */
+body.martlet.dashboard-page main :is(.dash-actions,.dash-form-actions,.example-pagination) .martlet-button,
+body.martlet.dashboard-page main .dash-app table button { margin:0; }
+body.martlet.dashboard-page main .dash-controls .example-help { margin:.375rem 0 0; font:.875rem/1.5 var(--martlet-font-sans); color:var(--martlet-muted); }
+body.martlet.dashboard-page main .dash-form-actions { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:.75rem; margin:1rem 0 0; }
+body.martlet.dashboard-page main :is(.dash-dialog .dash-actions,.example-pagination) { justify-content:center; }
 @media(max-width:42rem) { body.martlet.dashboard-page main .martlet-button { padding-inline:min(1rem,12px); } }
