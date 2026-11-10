@@ -1,5 +1,7 @@
 name: Verify standalone Jekyll
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [develop, main]
 permissions:
@@ -29,6 +31,8 @@ jobs:
           BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
       - name: Verify hero assets and deployment boundaries without credentials
         run: |
+          python3 -m unittest discover -s tests -p 'test_release_guard.py'
+          node --test tests/automatic-release.test.cjs
           python3 -m unittest discover -s tests -p 'test_hero.py'
           python3 -m unittest discover -s tests -p 'test_deployment.py'
           python3 -m unittest discover -s tests -p 'test_hero_contract.py'
