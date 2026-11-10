@@ -18,7 +18,7 @@ def git(*args):
 
 def main():
     ref = os.environ.get('GITHUB_REF', '')
-    require(os.environ.get('GITHUB_EVENT_NAME') == 'push', 'expected tag push')
+    require(os.environ.get('GITHUB_EVENT_NAME') in ('push', 'workflow_dispatch'), 'expected tag push or dispatch')
     require(os.environ.get('GITHUB_REF_TYPE') == 'tag' and ref.startswith('refs/tags/v'), 'expected version tag')
     require(os.environ.get('GITHUB_REF_PROTECTED') == 'true', 'tag is not protected')
     version = ref.removeprefix('refs/tags/v')

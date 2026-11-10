@@ -1,0 +1,32 @@
+name: Release accepted Jekyll automatically
+on:
+  workflow_run:
+    workflows: ['Verify standalone Jekyll']
+    types: [completed]
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: jekyll-automatic-release-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  release:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            await require('./scripts/automatic-release.cjs')({github, context, core});
