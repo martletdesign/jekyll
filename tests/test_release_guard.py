@@ -34,6 +34,10 @@ class ReleaseGuardTests(unittest.TestCase):
     def guard(self, **env):
         return subprocess.run(['python3',str(SCRIPT)],cwd=self.repo,env={**self.env,**env},text=True,capture_output=True)
     def test_approved_tag(self): self.assertEqual(self.guard().returncode,0)
+    def test_dispatch_requires_protected_tag(self):
+        self.assertEqual(self.guard(GITHUB_EVENT_NAME='workflow_dispatch').returncode,0)
+        self.assertNotEqual(self.guard(GITHUB_EVENT_NAME='workflow_dispatch',GITHUB_REF_TYPE='branch',GITHUB_REF='refs/heads/main').returncode,0)
+        self.assertNotEqual(self.guard(GITHUB_EVENT_NAME='workflow_dispatch',GITHUB_REF_PROTECTED='false').returncode,0)
     def test_stale_production_tracking_ref(self):
         # Change the actual remote without updating the caller's tracking ref.
         (self.repo/'new').write_text('new production revision')

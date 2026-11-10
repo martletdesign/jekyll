@@ -1,0 +1,10 @@
+{
+  "package": "@martlet/core",
+  "version": "3.0.0",
+  "source": "3.0.0",
+  "files": {
+    "martlet.css": "2d452b90a00d7c29541acd146a703d9307cc71b017229dafc55473eba5c0bed7",
+    "fonts.css": "80f766b73961542249d0cd82917d72ad65a9d869cfbb1566daeba5caba56560f",
+    "shell.css": "d5cf12b35bac7b01cfb2c0298102454309fe979e19584c00490a21c93d500f45"
+  }
+}

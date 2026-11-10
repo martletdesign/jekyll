@@ -2,17 +2,24 @@
 layout: default
 ---
 {% assign record = site.data.examples.pages | where: 'id', page.record_id | first %}
-<link rel="stylesheet" href="{{ '/assets/css/dashboard.css' | relative_url }}">
-<link rel="stylesheet" href="{{ '/assets/css/dashboard-family.css' | relative_url }}">
+
+
 <div class="example-root dash-app" data-dashboard="{{ page.dashboard | escape }}">
   <div class="dash-layout">
     <aside class="dash-sidebar" aria-label="Dashboard workspace">
-      <p class="eyebrow">Northlight · Workspace</p>
+      <p>Northlight · Workspace</p>
       <button class="{% include examples/button-classes.html %} dash-nav-toggle" type="button" aria-controls="dashboard-nav" aria-expanded="false" hidden>Dashboard navigation</button>
       <nav id="dashboard-nav" aria-label="Dashboard navigation">
         <ul>{% for view in site.data.dashboard_navigation %}<li><a href="{{ view.url | relative_url }}"{% if page.dashboard == view.id %} aria-current="page"{% endif %}>{{ view.title | escape }}</a></li>{% endfor %}</ul>
-        <p class="dash-sidebar__caption">One dataset.<br>Two design languages.</p>
+
         <a href="{{ '/examples/' | relative_url }}">All page examples</a>
+        <div class="dashboard-ownership">
+          <a class="dashboard-ownership__identity" href="https://jameshoward.us/" aria-label="James Howard website">
+            <img src="{{ '/assets/owner.svg' | relative_url }}" alt="" width="56" height="56">
+            <span><strong>{{ site.title | escape }}</strong><br>A website of James Howard</span>
+          </a>
+          <p>Copyright © {{ site.time | date: "%Y" }} <span>James P. Howard, II</span></p>
+        </div>
       </nav>
     </aside>
     <div class="dash-main" id="dashboard-main">

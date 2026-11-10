@@ -77,7 +77,11 @@ try:
     shell=json.loads((stage/'_data/shell.json').read_text())
     provenance=json.loads((stage/'scripts/source-shell-provenance.json').read_text())
     digest=hashlib.sha256((stage/'assets/css/shell.css').read_bytes()).hexdigest()
-    if shell['sha256']!=digest or provenance['source_shell_sha256']!=digest or provenance['family']!=shell['family']:raise SystemExit('Source shell digest mismatch')
+    # Capture records describe the original shell; Core owns the current CSS.
+    if shell['sha256']!=provenance['source_shell_sha256'] or provenance['family']!=shell['family']:raise SystemExit('Source shell capture mismatch')
+    core=json.loads((stage/'assets/css/core-styles.json').read_text())
+    for name,expected in core['files'].items():
+      if hashlib.sha256((stage/'assets/css'/name).read_bytes()).hexdigest()!=expected:raise SystemExit('Core stylesheet digest mismatch: '+name)
     files=[]
     for file in sorted(target.rglob('*')):
       if file.is_symlink():raise SystemExit('Symlink in generated output')
@@ -86,7 +90,7 @@ try:
       if file.suffix=='.html' and not re.search(rb'<meta\s+name="robots"\s+content="noindex',data,re.I):raise SystemExit(f'Missing noindex: {file}')
       files.append({'path':file.relative_to(target).as_posix(),'size':len(data),'sha256':hashlib.sha256(data).hexdigest()})
     workbench=json.loads((stage/'nightjar/PROVENANCE.json').read_text())
-    evidence={'format':'local-jekyll-docs-prototype-v1','framework':'jekyll','family':shell['family'],'version':args.version,'base_path':base+'/', 'implementation_commit':None,'implementation_commit_reason':'Local prototype does not authenticate a release commit','workbench_export_commit':workbench['workbench_commit'], 'core':None,'core_reason':'This shell predates the npm core migration', 'source_shell':{**provenance,'sha256':digest,'contract_source':shell['contract_source'],'contract_sha256':shell['contract_sha256']},'files':files}
+    evidence={'format':'local-jekyll-docs-prototype-v1','framework':'jekyll','family':shell['family'],'version':args.version,'base_path':base+'/', 'implementation_commit':None,'implementation_commit_reason':'Local prototype does not authenticate a release commit','workbench_export_commit':workbench['workbench_commit'], 'core':core, 'source_shell':{**provenance,'sha256':digest,'contract_source':shell['contract_source'],'contract_sha256':shell['contract_sha256']},'files':files}
     (target/'nightjar-local-evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
     # A local, honest fallback keeps archived links usable without a deployed
     # catalog service. It lives outside immutable snapshots and is never replaced
@@ -98,7 +102,7 @@ try:
     if index.is_symlink() or (index.exists() and not index.is_file()):raise SystemExit('Unsafe versions index')
     if not index.exists():
       with index.open('x',encoding='utf-8') as out:
-        out.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Documentation versions</title></head><body><main><h1>Documentation versions</h1><p>The live version catalog is unavailable in this offline archive. Use the version links in the snapshot.</p></main></body></html>\n')
+        out.write(f'<!doctype html><html lang="en" data-{shell["family"]}="light" data-appearance="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Documentation versions</title><link rel="stylesheet" href="{base}/assets/css/fonts.css"><link rel="stylesheet" href="{base}/assets/css/martlet.css"></head><body class="{shell["family"]}"><main><h1>Documentation versions</h1><p>The live version catalog is unavailable in this offline archive. Use the version links in the snapshot.</p></main></body></html>\n')
     print(f'Built {len(files)} local documentation files for {args.version} at {target}')
 except BaseException:
   shutil.rmtree(target)
